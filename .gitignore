@@ -30,3 +30,14 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+
+#custom
+/public/upload
+/logs
+.auth_info_baileys
+.env*.local
