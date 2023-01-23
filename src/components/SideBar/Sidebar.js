@@ -7,6 +7,7 @@ import SidebarContent from "./Components/SidebarContent";
 import Image from "next/image";
 
 import { drawerWidth } from "context/AppContext";
+import { MenuContextProvider } from "context/MenuListContext";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -43,35 +44,41 @@ export default function Sidebar(props) {
   const { closeSidebar } = props;
 
   return (
-    <div>
-      <div className="sidebar-wrap h-100">
-        <div className={classes.drawerHeader}>
-          <Box className="site-logo" display="inline-flex" alignItems="center">
+    <MenuContextProvider>
+      <div>
+        <div className="sidebar-wrap h-100">
+          <div className={classes.drawerHeader}>
             <Box
-              component={Link}
-              href="/"
-              className="logo-mini"
-              lineHeight={0.8}
+              className="site-logo"
+              display="inline-flex"
+              alignItems="center"
             >
-              <Image
-                src={"/Images/hulk-light.png"}
-                alt="logo"
-                width="90"
-                height="22"
-                priority
-              />
+              <Box
+                component={Link}
+                href="/admin"
+                className="logo-mini"
+                lineHeight={0.8}
+              >
+                <Image
+                  src={"/Images/hulk-light.png"}
+                  alt="logo"
+                  width="90"
+                  height="22"
+                  priority
+                />
+              </Box>
             </Box>
-          </Box>
+          </div>
+          <Scrollbars
+            className="hulk-scroll"
+            autoHide
+            autoHideDuration={100}
+            style={{ height: "calc(100vh - 125px" }}
+          >
+            <SidebarContent closeSidebar={closeSidebar}></SidebarContent>
+          </Scrollbars>
         </div>
-        <Scrollbars
-          className="hulk-scroll"
-          autoHide
-          autoHideDuration={100}
-          style={{ height: "calc(100vh - 125px" }}
-        >
-          <SidebarContent closeSidebar={closeSidebar}></SidebarContent>
-        </Scrollbars>
       </div>
-    </div>
+    </MenuContextProvider>
   );
 }

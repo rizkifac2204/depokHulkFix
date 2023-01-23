@@ -127,7 +127,7 @@ const theme = createTheme({
       fontSize: "1rem",
       letterSpacing: "0",
       lineHeight: "1.5",
-      "@media (max-width:960px)": {
+      "@media (max-width:900px)": {
         fontSize: "0.9375rem",
       },
     },
@@ -157,7 +157,7 @@ const theme = createTheme({
       root: {
         paddingLeft: 12,
         paddingRight: 12,
-        "@media (min-width:960px)": {
+        "@media (min-width:900px)": {
           paddingLeft: 12,
           paddingRight: 12,
         },
@@ -167,7 +167,7 @@ const theme = createTheme({
         },
       },
       maxWidthLg: {
-        "@media (min-width:1280px)": {
+        "@media (min-width:1200px)": {
           maxWidth: "90%",
         },
       },
@@ -390,7 +390,7 @@ const theme = createTheme({
   "@global": {
     html: {
       fontSize: 16,
-      "@media (max-width:960px)": {
+      "@media (max-width:900px)": {
         fontSize: 15,
       },
       "@media (max-width:600px)": {

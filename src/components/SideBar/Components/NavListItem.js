@@ -8,6 +8,7 @@ import {
   Collapse,
   Icon,
   ListItemText,
+  ListItemButton,
   Box,
 } from "@mui/material";
 import formatMenuTitle from "utils/formatMenuTitle";
@@ -102,7 +103,7 @@ const styles = (theme) => ({
     },
   },
   w100: {
-    width: "100%",
+    width: "95%",
   },
   flexCenter: {
     display: "flex",
@@ -117,8 +118,9 @@ function NavListItem(props) {
   const { classes, closeSidebar, toggleMenu } = props;
   const {
     menu,
-    toggleFourthMenu,
+    parentIndex,
     toggleThirdMenu,
+    toggleFourthMenu,
     toggleThirdMenuAndCloseSidebar,
   } = props;
 
@@ -132,8 +134,7 @@ function NavListItem(props) {
   if (menu.child_routes !== null && menu.fullPageMenu === false) {
     return (
       <li>
-        <ListItem
-          component="div"
+        <ListItemButton
           onClick={() => toggleMenu()}
           className={clsx(
             classes.textWhite,
@@ -147,12 +148,10 @@ function NavListItem(props) {
           <div className={classes.w100}>
             {/* Level 1 */}
             <div className={classes.flexCenter}>
-              <Box component="span" className={classes.iconWrap}>
-                {menu.icon}
-              </Box>
+              <Box component="span">{menu.icon}</Box>
               <ListItemText
+                sx={{ pl: 1 }}
                 primary={formatMenuTitle(menu.menu_title)}
-                style={{ paddingLeft: 12 }}
               />
               {menu.isMenuOpen ? (
                 <Icon style={{ fontSize: 20, width: 25 }}>arrow_drop_up</Icon>
@@ -160,48 +159,39 @@ function NavListItem(props) {
                 <Icon style={{ fontSize: 20, width: 25 }}>arrow_drop_down</Icon>
               )}
             </div>
+
             {/* description level 1 */}
-            <>
-              {menu.desc ? (
-                <Fragment>
-                  {menu.content.length !== 0 ? (
-                    <>
-                      {menu.isMenuOpen ? null : (
-                        <Box
-                          fontSize="body1.fontSize"
-                          className={`desc-wrap ${classes.truncate} ${classes.desc}`}
-                          display="block"
-                        >
-                          {menu.content}
-                        </Box>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {menu.isMenuOpen ? null : (
-                        <Box
-                          fontSize="body1.fontSize"
-                          className={`desc-wrap ${classes.truncate} ${classes.desc}`}
-                          display="block"
-                        >
-                          {menu.child_routes
-                            .map((item, index) => {
-                              return (
-                                <Fragment key={index}>
-                                  {formatMenuTitle(item.menu_title)}
-                                </Fragment>
-                              );
-                            })
-                            .reduce((prev, curr) => [prev, ", ", curr])}
-                        </Box>
-                      )}
-                    </>
-                  )}
-                </Fragment>
-              ) : null}
-            </>
+            {menu.desc ? (
+              menu.content.length !== 0 ? (
+                menu.isMenuOpen ? null : (
+                  <Box
+                    fontSize="body1.fontSize"
+                    className={`desc-wrap ${classes.truncate} ${classes.desc}`}
+                    display="block"
+                  >
+                    {menu.content}
+                  </Box>
+                )
+              ) : menu.isMenuOpen ? null : (
+                <Box
+                  fontSize="body1.fontSize"
+                  className={`desc-wrap ${classes.truncate} ${classes.desc}`}
+                  display="block"
+                >
+                  {menu.child_routes
+                    .map((item, index) => {
+                      return (
+                        <span key={index}>
+                          {formatMenuTitle(item.menu_title)}
+                        </span>
+                      );
+                    })
+                    .reduce((prev, curr) => [prev, ", ", curr])}
+                </Box>
+              )
+            ) : null}
           </div>
-        </ListItem>
+        </ListItemButton>
 
         {/* first collapse */}
         <Collapse
@@ -223,7 +213,7 @@ function NavListItem(props) {
                   <li key={index}>
                     <ListItem
                       component="div"
-                      onClick={() => toggleThirdMenu(index)}
+                      onClick={() => toggleThirdMenu(parentIndex, index)}
                       className={clsx(
                         classes.textWhite,
                         classes.ListItem,
@@ -272,16 +262,19 @@ function NavListItem(props) {
                             return (
                               <Fragment key={fourthindex}>
                                 <ListItem
+                                  sx={
+                                    thirdMenu.isMenuOpen
+                                      ? { backgroundColor: "#4D555D" }
+                                      : null
+                                  }
                                   component="li"
-                                  onClick={() => toggleFourthMenu(fourthindex)}
-                                  className={clsx(
-                                    classes.textWhite,
-                                    classes.ListItem,
-                                    {
-                                      [classes.menuOpen]: subMenu.isMenuOpen,
-                                    },
-                                    "list-item"
-                                  )}
+                                  onClick={() =>
+                                    toggleFourthMenu(
+                                      parentIndex,
+                                      index,
+                                      fourthindex
+                                    )
+                                  }
                                 >
                                   <Link
                                     className={`link ${classes.flexCenter}`}
@@ -302,7 +295,6 @@ function NavListItem(props) {
                     </Collapse>
                   </li>
                 );
-                // })}
               }
 
               // Third child route is null
@@ -310,8 +302,12 @@ function NavListItem(props) {
                 <ListItem
                   key={index}
                   component="li"
-                  style={{ paddingTop: 0, paddingBottom: 0 }}
-                  onClick={() => toggleThirdMenuAndCloseSidebar(index)}
+                  sx={
+                    subMenu.isMenuOpen ? { backgroundColor: "#4D555D" } : null
+                  }
+                  onClick={() =>
+                    toggleThirdMenuAndCloseSidebar(parentIndex, index)
+                  }
                   className={classes.childList}
                 >
                   <Link
@@ -334,8 +330,7 @@ function NavListItem(props) {
   }
 
   return (
-    <ListItem
-      component="li"
+    <ListItemButton
       className={clsx(
         classes.textWhite,
         classes.textLink,
@@ -346,35 +341,27 @@ function NavListItem(props) {
       )}
       onClick={() => toggleAndCloseSidebar()}
     >
-      <div className={classes.w100}>
-        <Link href={menu.path}>
-          <Box className={classes.flexCenter}>
-            <Box component="span" className={classes.iconWrap}>
-              {menu.icon}
+      <Link href={menu.path}>
+        <Box className={classes.flexCenter}>
+          <Box component="span">{menu.icon}</Box>
+          <ListItemText
+            sx={{ pl: 1 }}
+            primary={formatMenuTitle(menu.menu_title)}
+          />
+        </Box>
+        {menu.desc ? (
+          menu.content.length !== 0 ? (
+            <Box
+              fontSize="body1.fontSize"
+              className={`desc-wrap ${classes.truncate} ${classes.desc}`}
+              display="block"
+            >
+              {menu.content}
             </Box>
-            <ListItemText
-              primary={formatMenuTitle(menu.menu_title)}
-              style={{ paddingLeft: 12 }}
-            />
-          </Box>
-          <Fragment>
-            {menu.desc ? (
-              <Fragment>
-                {menu.content.length !== 0 ? (
-                  <Box
-                    fontSize="body1.fontSize"
-                    className={`desc-wrap ${classes.truncate} ${classes.desc}`}
-                    display="block"
-                  >
-                    {menu.content}
-                  </Box>
-                ) : null}
-              </Fragment>
-            ) : null}
-          </Fragment>
-        </Link>
-      </div>
-    </ListItem>
+          ) : null
+        ) : null}
+      </Link>
+    </ListItemButton>
   );
 }
 

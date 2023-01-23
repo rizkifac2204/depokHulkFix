@@ -15,7 +15,7 @@ import { useRizkiContext } from "context/AppContext";
 
 function Container({ children }) {
   const [init] = useRizkiContext();
-  const { isDarkModeActive, isRtlActive, selectedThemeColor } = init;
+  const { isDarkModeActive, selectedThemeColor } = init;
   let theme = "";
   if (isDarkModeActive) {
     theme = darkTheme;

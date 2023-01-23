@@ -7,9 +7,10 @@ import { FullScreen, useFullScreenHandle } from "react-full-screen";
 // MUI
 import { Drawer, Box } from "@mui/material";
 import { withStyles } from "@mui/styles";
-
+import useWindowSize from "utils/useWindowSize";
+// context
 import { drawerWidth, useRizkiContext } from "context/AppContext";
-
+// action
 import {
   collapsedSidebarAction,
   miniSidebarAction,
@@ -20,7 +21,7 @@ import {
 
 // Components
 import Header from "components/Header/Header";
-import Sidebar from "components/SideBar";
+import Sidebar from "components/SideBar/Sidebar";
 import IconSidebar from "components/IconSidebar";
 import SidebarCustomization from "components/Customizer/Customization";
 import NotificationSidebar from "components/NotificationSidebar/NotificationSidebar";
@@ -47,7 +48,10 @@ const styles = (theme) => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: 0,
+    // ganti disini pake kondisi
+    [theme.breakpoints.up("lg")]: {
+      marginLeft: 0,
+    },
   },
   menuButton: {
     color: "red",
@@ -77,18 +81,20 @@ const styles = (theme) => ({
 });
 
 function DefaultLayout(props) {
+  const router = useRouter();
+  const { pathname } = router;
   const { children, classes } = props;
   const [init, action] = useRizkiContext();
   const scroll = useRef(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const handleFullScreen = useFullScreenHandle();
+  const size = useWindowSize();
   const {
     navCollapsed,
     isDarkModeActive,
     isMiniSidebarActive,
     isHorizontalMenuActive,
   } = init;
-
-  const handleFullScreen = useFullScreenHandle();
 
   function getScrollBarStyle() {
     if (isHorizontalMenuActive) {
@@ -103,32 +109,45 @@ function DefaultLayout(props) {
   }
 
   function renderPage() {
-    const router = useRouter();
-    const { pathname } = router;
     if (
-      pathname === "/app/chat" ||
-      pathname.startsWith("/app/email") ||
-      pathname === "/app/todo" ||
-      pathname === "/app/calendar"
-    ) {
-      return <div className="hulk-page-content">{children}</div>;
-    }
-    if (isMiniSidebarActive) {
-      return <div className="hulk-page-content">{children}</div>;
-    } else {
-      return (
-        <Scrollbars
-          autoHide
-          autoHideDuration={100}
-          universal={true}
-          ref={scroll}
-          style={getScrollBarStyle()}
-        >
-          <div className="hulk-page-content">{children}</div>
-        </Scrollbars>
-      );
-    }
+      pathname === "/admin/chat" ||
+      pathname.startsWith("/admin/email") ||
+      pathname === "/admin/todo" ||
+      pathname === "/admin/calendar"
+    )
+      if (isMiniSidebarActive)
+        return <div className="hulk-page-content">{children}</div>;
+
+    return (
+      <Scrollbars
+        className="hulk-scroll main-content"
+        autoHide
+        autoHideDuration={100}
+        universal={true}
+        ref={scroll}
+        style={getScrollBarStyle()}
+      >
+        <div className="hulk-page-content">{children}</div>
+      </Scrollbars>
+    );
   }
+
+  useEffect(() => {
+    if (size.width < 1200) {
+      miniSidebarAction(action, false);
+    }
+  }, [size]);
+
+  useEffect(() => {
+    document
+      .getElementsByClassName("hulk-page-content")[0]
+      .classList.add("fadeInUpShorter");
+    setTimeout(() => {
+      document
+        .getElementsByClassName("hulk-page-content")[0]
+        .classList.remove("fadeInUpShorter");
+    }, 1500);
+  }, []);
 
   function handleDrawerToggle() {
     setMobileOpen((prev) => !mobileOpen);
@@ -189,7 +208,7 @@ function DefaultLayout(props) {
   }
 
   return (
-    <>
+    <div>
       <FullScreen handle={handleFullScreen}>
         {isMiniSidebarActive === false ? (
           <div className={`hk-app-layout ${classes.root}`}>
@@ -215,7 +234,7 @@ function DefaultLayout(props) {
             <NotificationSidebar />
             <nav aria-label="menu-sidebar">
               <Drawer
-                sx={{ display: { xs: "block", lg: "none" } }}
+                sx={{ display: { xs: "block", lg: "none" }, zIndex: 1201 }}
                 variant="temporary"
                 anchor="left"
                 open={mobileOpen}
@@ -237,7 +256,7 @@ function DefaultLayout(props) {
                 })}
               >
                 <Drawer
-                  sx={{ display: { xs: "none", md: "block" } }}
+                  sx={{ display: { xs: "none", lg: "block" } }}
                   variant="persistent"
                   anchor="left"
                   open={navCollapsed}
@@ -263,83 +282,85 @@ function DefaultLayout(props) {
           </div>
         ) : (
           <div className={`hk-icon-layout ${classes.root}`}>
-            <SidebarCustomization
-              iconColor="#fff"
-              open={navCollapsed}
-              toggleSidebar={(e) => onToggleNavCollapsed(e)}
-              darkModeStatus={isDarkModeActive}
-              miniSidebarStatus={isMiniSidebarActive}
-              toggleDarkMode={(e) => onToggleDarkMode(e)}
-              toggleMiniSidebar={(e) => onToggleMiniSidebar(e)}
-              horizontalMenuStatus={isHorizontalMenuActive}
-              toggleHorizontalMenu={(e) => onToggleHorizontalMenu(e)}
-              chooseTheme={(e) => chooseTheme(e)}
-            />
-            <NotificationSidebar
-              iconColor="#fff"
-              open={navCollapsed}
-              toggleSidebar={(e) => onToggleNavCollapsed(e)}
-              darkModeStatus={isDarkModeActive}
-              miniSidebarStatus={isMiniSidebarActive}
-              toggleDarkMode={(e) => onToggleDarkMode(e)}
-              toggleMiniSidebar={(e) => onToggleMiniSidebar(e)}
-              horizontalMenuStatus={isHorizontalMenuActive}
-              toggleHorizontalMenu={(e) => onToggleHorizontalMenu(e)}
-            />
-            <nav aria-label="menu-sidebar" className="icon-sidebar">
-              <Drawer
-                sx={{ display: { xs: "block", lg: "none" } }}
-                variant="temporary"
-                anchor="left"
-                open={mobileOpen}
-                onClose={handleDrawerToggle}
-                classes={{
-                  paper: `${classes.bgColor} ${classes.drawer}`,
-                }}
-                ModalProps={{
-                  keepMounted: true, // Better open performance on mobile.
-                }}
-              >
-                <div>
-                  <Sidebar closeSidebar={handleDrawerToggle} />
-                </div>
-              </Drawer>
-              <div className={`icon-drawer ${classes.drawer}`}>
+            <>
+              <SidebarCustomization
+                iconColor="#fff"
+                open={navCollapsed}
+                toggleSidebar={(e) => onToggleNavCollapsed(e)}
+                darkModeStatus={isDarkModeActive}
+                miniSidebarStatus={isMiniSidebarActive}
+                toggleDarkMode={(e) => onToggleDarkMode(e)}
+                toggleMiniSidebar={(e) => onToggleMiniSidebar(e)}
+                horizontalMenuStatus={isHorizontalMenuActive}
+                toggleHorizontalMenu={(e) => onToggleHorizontalMenu(e)}
+                chooseTheme={(e) => chooseTheme(e)}
+              />
+              <NotificationSidebar
+                iconColor="#fff"
+                open={navCollapsed}
+                toggleSidebar={(e) => onToggleNavCollapsed(e)}
+                darkModeStatus={isDarkModeActive}
+                miniSidebarStatus={isMiniSidebarActive}
+                toggleDarkMode={(e) => onToggleDarkMode(e)}
+                toggleMiniSidebar={(e) => onToggleMiniSidebar(e)}
+                horizontalMenuStatus={isHorizontalMenuActive}
+                toggleHorizontalMenu={(e) => onToggleHorizontalMenu(e)}
+              />
+              <nav aria-label="menu-sidebar" className="icon-sidebar">
                 <Drawer
-                  sx={{ display: { xs: "none", md: "block" } }}
-                  variant="persistent"
+                  sx={{ display: { lg: "none", xs: "block" }, zIndex: 1201 }}
+                  variant="temporary"
                   anchor="left"
-                  open={navCollapsed}
-                  classes={{ paper: classes.drawerPaper }}
+                  open={mobileOpen}
+                  onClose={handleDrawerToggle}
+                  classes={{
+                    paper: `${classes.bgColor} ${classes.drawer}`,
+                  }}
+                  ModalProps={{
+                    keepMounted: true, // Better open performance on mobile.
+                  }}
                 >
-                  <IconSidebar />
+                  <div>
+                    <Sidebar closeSidebar={handleDrawerToggle} />
+                  </div>
                 </Drawer>
-              </div>
-            </nav>
-            <main
-              className={clsx(
-                classes.content,
-                {
-                  [classes.contentShift]: navCollapsed,
-                },
-                "hk-main"
-              )}
-            >
-              <Box className="icon-header-layout">
-                <Header
-                  toggleResponsiveSidebar={handleDrawerToggle}
-                  open={navCollapsed}
-                  toggleSidebar={(e) => onToggleNavCollapsed(e)}
-                  openHorizontal={isHorizontalMenuActive}
-                  handleFullScreen={handleFullScreen}
-                />
-              </Box>
-              <div className="hk-page">{renderPage()}</div>
-            </main>
+                <div className={`icon-drawer ${classes.drawer}`}>
+                  <Drawer
+                    sx={{ display: { xs: "none", lg: "block" } }}
+                    variant="persistent"
+                    anchor="left"
+                    open={navCollapsed}
+                    classes={{ paper: classes.drawerPaper }}
+                  >
+                    <IconSidebar />
+                  </Drawer>
+                </div>
+              </nav>
+              <main
+                className={clsx(
+                  classes.content,
+                  {
+                    [classes.contentShift]: navCollapsed,
+                  },
+                  "hk-main"
+                )}
+              >
+                <Box className="icon-header-layout">
+                  <Header
+                    toggleResponsiveSidebar={handleDrawerToggle}
+                    open={navCollapsed}
+                    toggleSidebar={(e) => onToggleNavCollapsed(e)}
+                    openHorizontal={isHorizontalMenuActive}
+                    handleFullScreen={handleFullScreen}
+                  />
+                </Box>
+                <div className="hk-page">{renderPage()}</div>
+              </main>
+            </>
           </div>
         )}
       </FullScreen>
-    </>
+    </div>
   );
 }
 

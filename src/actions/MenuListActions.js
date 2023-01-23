@@ -7,38 +7,14 @@ import {
   ONLOAD_TOGGLE_MENU,
 } from "./Types";
 
-// export const toggleMenu = (index) => ({
-//   type: TOGGLE_MENU,
-//   index,
-// });
+export const toggleMenu = (dispatch, value) =>
+  dispatch({ type: TOGGLE_MENU, value });
 
-export const toggleMenu = (index) => {
-  console.log("toggleMenu", index);
-};
+export const toggleThirdMenu = (dispatch, parent, value) =>
+  dispatch({ type: TOGGLE_THIRD_MENU, parent, value });
 
-// export const toggleThirdMenu = (index) => ({
-//   type: TOGGLE_THIRD_MENU,
-//   index,
-// });
+export const toggleFourthMenu = (dispatch, parent, child, value) =>
+  dispatch({ type: TOGGLE_FOURTH_MENU, parent, child, value });
 
-export const toggleThirdMenu = (index) => {
-  console.log("toggleThirdMenu", index);
-};
-
-// export const toggleFourthMenu = (index) => ({
-//   type: TOGGLE_FOURTH_MENU,
-//   index,
-// });
-
-export const toggleFourthMenu = (index) => {
-  console.log("toggleFourthMenu", index);
-};
-
-// export const onLoadToggleMenu = (index) => ({
-//   type: ONLOAD_TOGGLE_MENU,
-//   index,
-// });
-
-export const onLoadToggleMenu = (index) => {
-  // console.log(index);
-};
+export const onLoadToggleMenu = (dispatch, value) =>
+  dispatch({ type: ONLOAD_TOGGLE_MENU, value });

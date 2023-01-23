@@ -10,7 +10,6 @@ import {
   COLLAPSED_SIDEBAR,
   MINI_SIDEBAR,
   DARK_MODE,
-  RTL,
   HORIZONTAL_MENU,
   CHOOSE_THEME,
   SET_LANGUAGE,
@@ -105,6 +104,10 @@ const ContextProvider = ({ children }) => {
   const isFirstRun = useRef(true);
 
   // useEffect(() => {
+  //   console.log(state.navCollapsed);
+  // }, [state]);
+
+  // useEffect(() => {
   //   if (isFirstRun.current) {
   //     isFirstRun.current = false;
   //     const settingDisplay = localStorage.getItem("settingDisplay");
@@ -119,13 +122,12 @@ const ContextProvider = ({ children }) => {
   //   localStorage.setItem("settingDisplay", JSON.stringify(state));
   // }, [state.darkMode, state.primary, state.secondary]);
 
-  // useEffect(() => {
-  //   const isMobile =
-  //     window.matchMedia && window.matchMedia("(max-width: 480px)").matches;
-  //   toast.dismiss();
-  //   if (isMobile) dispatch({ type: "TOGGLE_SIDEBAR", value: false });
-  //   if (state.toggleSetting) dispatch({ type: "TOGGLE_SETTING", value: false });
-  // }, [router]);
+  useEffect(() => {
+    const isMobile =
+      window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
+    if (isMobile) dispatch({ type: COLLAPSED_SIDEBAR, value: false });
+    // // if (state.toggleSetting) dispatch({ type: "TOGGLE_SETTING", value: false });
+  }, [router]);
 
   return (
     <RizkiFach.Provider value={[state, dispatch]}>

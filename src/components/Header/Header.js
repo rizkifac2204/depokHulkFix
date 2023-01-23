@@ -36,7 +36,10 @@ const styles = (theme) => ({
     justifyContent: "space-between",
   },
   menuButton: {
-    marginLeft: "-80px",
+    // ganti disini pake kondisi
+    [theme.breakpoints.up("lg")]: {
+      marginLeft: "-70px",
+    },
     color: theme.palette.common.white,
     marginRight: theme.spacing(2),
     "& .MuiSvgIcon-root": {
@@ -125,9 +128,9 @@ function Header(props) {
     <div className="hk-header">
       <AppBar
         position="fixed"
-        color="default"
+        color="inherit"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: size.width < 1280 ? false : open,
+          [classes.appBarShift]: size.width < 1200 ? false : open,
           [classes.horizontalHead]: openHorizontal,
           [`rtl-header`]: !open,
         })}
@@ -146,7 +149,7 @@ function Header(props) {
           <Box display="flex" alignItems="center">
             {!openHorizontal ? (
               <IconButton
-                sx={{ display: { xs: "none", md: "block" } }}
+                sx={{ display: { xs: "none", lg: "block" } }}
                 color="inherit"
                 aria-label="open drawer"
                 onClick={toggleSidebar}
@@ -184,7 +187,7 @@ function Header(props) {
                 >
                   <Box
                     component={Link}
-                    href="/"
+                    href="/admin"
                     display="inline-block"
                     lineHeight={0.8}
                   >
@@ -214,24 +217,12 @@ function Header(props) {
                 </IconButton>
               </Tooltip>
             </Box>
-            {!openHorizontal ? (
-              <Box
-                pl={2}
-                className="mega-menu-wrap"
-                sx={{ display: { xs: "none", sm: "block" } }}
-              >
-                {/* <MegaMenu iconColor={classes.textLight} /> */}
-              </Box>
-            ) : null}
           </Box>
           <Box className="horizontal-icon" display="flex" alignItems="center">
             <Box className="h-btn-noti res-hide">
               <Notification iconColor={classes.textLight} />
             </Box>
-            <Box
-              sx={{ display: { xs: "none", md: "block" } }}
-              className="h-btn-full-scr res-hide"
-            >
+            <Box className="h-btn-full-scr res-hide">
               <FullScreen
                 iconColor={classes.textLight}
                 handleFullScreen={handleFullScreen}

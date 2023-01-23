@@ -2,22 +2,16 @@ import React, { Component, useState, useEffect } from "react";
 import List from "@mui/material/List";
 import NavListItem from "./NavListItem";
 import {
-  toggleThirdMenu,
-  toggleMenu,
-  toggleFourthMenu,
   onLoadToggleMenu,
+  toggleMenu,
+  toggleThirdMenu,
+  toggleFourthMenu,
 } from "actions";
-import MenuListItem from "assets/Data/MenuListItem";
+import { useListMenuContext } from "context/MenuListContext";
 
 function SidebarContent(props) {
   const { closeSidebar } = props;
-  const [navLinks, setNavLinks] = useState(MenuListItem);
-
-  useEffect(() => {
-    setTimeout(() => {
-      // setNavLinks([]);
-    }, 2000);
-  }, []);
+  const [navLinks, action] = useListMenuContext();
 
   function getPlanName(name) {
     let newName = name.replace("-", " ");
@@ -32,46 +26,30 @@ function SidebarContent(props) {
         currentIndex = i;
       }
     }
-    onLoadToggleMenuThis(currentIndex);
+    if (currentIndex) onLoadToggleMenuThis(currentIndex);
   }, []);
 
   function onLoadToggleMenuThis(index) {
-    onLoadToggleMenu(index);
-    // setNavLinks((prev) => navLinks);
-    // this.setState({
-    //   navLinks: this.props.navLinks,
-    // });
+    onLoadToggleMenu(action, index);
   }
 
   function toggleMenuThis(index) {
-    toggleMenu(index);
-    // this.setState({
-    //   navLinks: this.props.navLinks,
-    // });
+    toggleMenu(action, index);
   }
 
-  function toggleThirdMenuThis(index) {
-    toggleThirdMenu(index);
-    // this.setState({
-    //   navLinks: this.props.navLinks,
-    // });
+  function toggleThirdMenuThis(parent, index) {
+    toggleThirdMenu(action, parent, index);
   }
 
-  function toggleThirdMenuAndCloseSidebarThis(index) {
-    toggleThirdMenu(index);
-    // this.setState({
-    //   navLinks: this.props.navLinks,
-    // });
+  function toggleFourthMenuThis(parent, child, index) {
+    toggleFourthMenu(action, parent, child, index);
     if (closeSidebar) {
       closeSidebar();
     }
   }
 
-  function toggleFourthMenuThis(fourthindex) {
-    toggleFourthMenu(fourthindex);
-    // this.setState({
-    //   navLinks: this.props.navLinks,
-    // });
+  function toggleThirdMenuAndCloseSidebarThis(parent, index) {
+    toggleThirdMenu(action, parent, index);
     if (closeSidebar) {
       closeSidebar();
     }
@@ -84,12 +62,13 @@ function SidebarContent(props) {
           navLinks.map((Navlink, index) => (
             <NavListItem
               menu={Navlink}
+              parentIndex={index}
               key={index}
               toggleMenu={() => toggleMenuThis(index)}
-              toggleFourthMenu={(e) => toggleFourthMenuThis(e)}
-              toggleThirdMenu={(e) => toggleThirdMenuThis(e)}
-              toggleThirdMenuAndCloseSidebar={(e) =>
-                toggleThirdMenuAndCloseSidebarThis(e)
+              toggleThirdMenu={toggleThirdMenuThis}
+              toggleFourthMenu={toggleFourthMenuThis}
+              toggleThirdMenuAndCloseSidebar={
+                toggleThirdMenuAndCloseSidebarThis
               }
               closeSidebar={closeSidebar}
             />

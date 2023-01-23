@@ -1,3 +1,4 @@
+const path = require("path");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
@@ -8,6 +9,9 @@ const nextConfig = {
   compiler: {
     // ssr and displayName are configured by default
     styledComponents: true,
+  },
+  sassOptions: {
+    includePaths: [path.join(__dirname, "styles")],
   },
 };
 

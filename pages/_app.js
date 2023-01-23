@@ -1,5 +1,4 @@
-import "styles/globals.css";
-import "assets/scss/_style.scss";
+import "styles/_style.scss";
 
 // next
 import PropTypes from "prop-types";

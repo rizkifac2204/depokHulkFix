@@ -22,7 +22,7 @@ const MenuListItem = [
     path: "admin/simpeg",
     icon: <BadgeIcon />,
     category: "general",
-    isMenuOpen: true,
+    isMenuOpen: false,
     menu: "simpeg",
     fullPageMenu: false,
     desc: true,
@@ -48,7 +48,7 @@ const MenuListItem = [
         path: "admin/profile",
         menu_title: "dataDiri",
         icon: <AccountCircleIcon />,
-        isMenuOpen: true,
+        isMenuOpen: false,
         menu: "profile",
         fullPageMenu: false,
         third_child_routes: [
@@ -67,6 +67,34 @@ const MenuListItem = [
           {
             path: "/admin/profile/keluarga",
             menu_title: "keluarga",
+            icon: <AccountCircleIcon />,
+            fourth_child_routes: null,
+          },
+        ],
+      },
+      {
+        path: "/",
+        menu_title: "contoh",
+        icon: <AccountCircleIcon />,
+        isMenuOpen: false,
+        menu: "contoh",
+        fullPageMenu: false,
+        third_child_routes: [
+          {
+            path: "/",
+            menu_title: "contoh1",
+            icon: <AccountCircleIcon />,
+            fourth_child_routes: null,
+          },
+          {
+            path: "/",
+            menu_title: "contoh2",
+            icon: <AccountCircleIcon />,
+            fourth_child_routes: null,
+          },
+          {
+            path: "/",
+            menu_title: "contoh3",
             icon: <AccountCircleIcon />,
             fourth_child_routes: null,
           },
