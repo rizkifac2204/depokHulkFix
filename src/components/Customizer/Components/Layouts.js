@@ -75,6 +75,8 @@ export default function Layouts(props) {
     toggleHorizontalMenu,
     horizontalMenuStatus,
     chooseTheme,
+    rtlStatus,
+    toggleRtl,
   } = props;
 
   return (
@@ -138,6 +140,23 @@ export default function Layouts(props) {
               />
               <Box pl={1} fontSize={14}>
                 {miniSidebarStatus ? "On" : "Off"}
+              </Box>
+            </Box>
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="RTL" secondary="Choose right to left layout" />
+          <ListItemSecondaryAction>
+            <Box display="flex" alignItems="center">
+              <Switch
+                size="small"
+                edge="end"
+                color="primary"
+                onChange={(e) => toggleRtl(e.target.checked)}
+                checked={rtlStatus}
+              />
+              <Box pl={1} fontSize={14}>
+                {rtlStatus ? "On" : "Off"}
               </Box>
             </Box>
           </ListItemSecondaryAction>

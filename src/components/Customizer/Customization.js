@@ -1,7 +1,4 @@
-/**
- * Customizer
- */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import { Tooltip, Drawer, Button } from "@mui/material";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
@@ -37,6 +34,7 @@ export default function CustomezerDrawer(props) {
   const classes = useStyles();
   const [state, setState] = useState({
     right: false,
+    left: false,
   });
   const {
     toggleSidebar,
@@ -48,7 +46,11 @@ export default function CustomezerDrawer(props) {
     toggleHorizontalMenu,
     horizontalMenuStatus,
     chooseTheme,
+    rtlStatus,
+    toggleRtl,
   } = props;
+  const anchor = rtlStatus ? "left" : "right";
+  const direction = !rtlStatus ? "left" : "right";
   const toggleDrawer = (side, open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -66,7 +68,7 @@ export default function CustomezerDrawer(props) {
           variant="contained"
           aria-label="settings"
           className={`custom-btn ${classes.CustomezerBtn}`}
-          onClick={toggleDrawer("right", true)}
+          onClick={toggleDrawer(anchor, true)}
           color="primary"
         >
           <DisplaySettingsIcon color={props.iconColor} />
@@ -75,9 +77,10 @@ export default function CustomezerDrawer(props) {
       <Drawer
         className={`${classes.drawer} ${classes.drawerWrap}`}
         sx={{ zIndex: 1201 }}
-        anchor="right"
-        open={state.right}
-        onClose={toggleDrawer("right", false)}
+        anchor={anchor}
+        open={state[anchor]}
+        onClose={toggleDrawer(anchor, false)}
+        SlideProps={{ direction: direction }}
       >
         <div className="customizer-wrap">
           <Layouts
@@ -90,6 +93,8 @@ export default function CustomezerDrawer(props) {
             toggleHorizontalMenu={toggleHorizontalMenu}
             horizontalMenuStatus={horizontalMenuStatus}
             chooseTheme={chooseTheme}
+            rtlStatus={rtlStatus}
+            toggleRtl={toggleRtl}
           />
         </div>
       </Drawer>

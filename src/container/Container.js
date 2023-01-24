@@ -12,10 +12,12 @@ import DefaultLayout from "./DefaultLayout";
 import ClientOnly from "utils/ClientOnly";
 
 import { useRizkiContext } from "context/AppContext";
+import { useEffect } from "react";
 
-function Container({ children }) {
+function Container(props) {
+  const { children, fullPage } = props;
   const [init] = useRizkiContext();
-  const { isDarkModeActive, selectedThemeColor } = init;
+  const { isDarkModeActive, selectedThemeColor, isRtlActive } = init;
   let theme = "";
   if (isDarkModeActive) {
     theme = darkTheme;
@@ -31,11 +33,22 @@ function Container({ children }) {
     }
   }
 
+  useEffect(() => {
+    if (isRtlActive) {
+      document.getElementsByTagName("BODY")[0].setAttribute("dir", "rtl");
+      theme.direction = "rtl";
+    } else {
+      document.getElementsByTagName("BODY")[0].setAttribute("dir", "ltr");
+      // document.getElementsByTagName("BODY")[0].removeAttribute("dir");
+      theme.direction = "ltr";
+    }
+  }, [isRtlActive]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <ClientOnly>
-        <DefaultLayout>{children}</DefaultLayout>
+        {fullPage ? children : <DefaultLayout>{children}</DefaultLayout>}
       </ClientOnly>
     </ThemeProvider>
   );

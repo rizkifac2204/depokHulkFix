@@ -52,7 +52,7 @@ export default function VerticalTabs() {
   return (
     <>
       <SmallTitleBar title={"Contoh"} center={false} />
-      <Container>
+      <Container maxWidth="xl">
         <Box px={{ xs: "12px", lg: 0 }}>
           <div className="page-space  payment-int-wrap">
             <CustomCard cardClasses="border-t border-l border-r">

@@ -3,7 +3,7 @@ import AppConfig from "constants/AppConfig";
 
 const theme = createTheme({
   palette: {
-    type: "dark",
+    mode: "dark",
     common: {
       black: AppConfig.darkThemeColors.black,
       white: AppConfig.darkThemeColors.white,
@@ -118,7 +118,8 @@ const theme = createTheme({
     },
     body1: {
       color: AppConfig.darkThemeColors.textSecondary,
-      fontSize: "0.75rem",
+      // custom 0.75 -> 1
+      fontSize: "1rem",
       letterSpacing: "0",
       lineHeight: "1.5",
     },

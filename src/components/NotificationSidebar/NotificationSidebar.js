@@ -31,7 +31,9 @@ const styles = (theme) => ({
 function NotificationSidebar(props) {
   const { classes } = props;
   const [init, action] = useRizkiContext();
-  const { notificationSidebar } = init;
+  const { notificationSidebar, isRtlActive } = init;
+  const anchor = isRtlActive ? "left" : "right";
+  const direction = !isRtlActive ? "left" : "right";
 
   const toggleDrawer = () => (event) => {
     if (
@@ -57,10 +59,11 @@ function NotificationSidebar(props) {
       </Tooltip>
       <Drawer
         className={classes.drawer}
-        anchor="right"
+        anchor={anchor}
         open={notificationSidebar}
         onClose={toggleDrawer()}
         sx={{ zIndex: 1201 }}
+        SlideProps={{ direction: direction }}
       >
         <Tabs />
       </Drawer>

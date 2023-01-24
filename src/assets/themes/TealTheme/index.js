@@ -4,11 +4,11 @@ import AppConfig from "constants/AppConfig";
 
 const theme = createTheme({
   palette: {
+    mode: "light",
     common: {
       black: AppConfig.tealThemeColors.black,
       white: AppConfig.tealThemeColors.white,
     },
-    type: "light",
     primary: {
       contrastText: AppConfig.tealThemeColors.white,
       dark: "rgba(2, 132, 132,0.8)",
@@ -119,7 +119,8 @@ const theme = createTheme({
     },
     body1: {
       color: AppConfig.tealThemeColors.textSecondary,
-      fontSize: "0.75rem",
+      // custom 0.75 -> 1
+      fontSize: "1rem",
       letterSpacing: "0",
       lineHeight: "1.5",
     },

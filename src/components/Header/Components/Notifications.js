@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Divider,
   IconButton,
@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-
 // components
 import NotificationsTabs from "./NotificationsTabs";
 
@@ -40,6 +39,7 @@ export default function Notifications(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const containerRef = useRef(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -50,7 +50,7 @@ export default function Notifications(props) {
   };
 
   return (
-    <div>
+    <div ref={containerRef}>
       <Tooltip title="Notifications" placement="bottom">
         <IconButton
           aria-describedby={open ? "notifications" : null}
@@ -63,6 +63,7 @@ export default function Notifications(props) {
         </IconButton>
       </Tooltip>
       <Popover
+        container={containerRef.current}
         id="notifications"
         open={open}
         anchorEl={anchorEl}

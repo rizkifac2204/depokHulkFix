@@ -1120,17 +1120,17 @@ table {
     //  overflow-x: hidden !important;
   }
 }
-@media (min-width: 1279px) {
+@media (min-width: 1199px) {
   .geo-table {
     padding-left: 1rem;
   }
 }
-@media (max-width: 1279px) {
+@media (max-width: 1199px) {
   .ham-menu {
     color: $dark !important;
   }
 }
-@media (max-width: 959px) {
+@media (max-width: 899px) {
   .preview-panel {
     text-align: center;
     .preview-content {

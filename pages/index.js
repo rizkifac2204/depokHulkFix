@@ -1,12 +1,3 @@
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
+import Login from "./login";
 
-function Index() {
-  return (
-    <Card>
-      <CardContent>OK</CardContent>
-    </Card>
-  );
-}
-
-export default Index;
+export default Login;

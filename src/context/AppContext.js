@@ -14,6 +14,7 @@ import {
   CHOOSE_THEME,
   SET_LANGUAGE,
   NOTIFICATION_SIDEBAR,
+  RTL,
 } from "actions/Types";
 
 function reducer(state, action) {
@@ -32,6 +33,8 @@ function reducer(state, action) {
       return { ...state, selectedThemeColor: action.value };
     case NOTIFICATION_SIDEBAR:
       return { ...state, notificationSidebar: action.value };
+    case RTL:
+      return { ...state, isRtlActive: action.value };
     default:
       throw new Error();
   }
@@ -102,10 +105,6 @@ const ContextProvider = ({ children }) => {
   };
   const [state, dispatch] = useReducer(reducer, initialState);
   const isFirstRun = useRef(true);
-
-  // useEffect(() => {
-  //   console.log(state.navCollapsed);
-  // }, [state]);
 
   // useEffect(() => {
   //   if (isFirstRun.current) {

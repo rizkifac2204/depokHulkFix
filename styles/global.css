@@ -1,0 +1,15 @@
+#nprogress {
+  position: relative;
+  z-index: 9999;
+}
+
+#nprogress .bar {
+  background: red !important;
+}
+#nprogress .spinner .spinner-icon {
+  border-left-color: rgb(255, 53, 3);
+}
+
+.Toastify__toast-container {
+  --toastify-z-index: 10000;
+}

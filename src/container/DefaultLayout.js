@@ -17,6 +17,7 @@ import {
   horizontalMenuAction,
   chooseThemeAction,
   darkModeAction,
+  rtlAction,
 } from "actions";
 
 // Components
@@ -48,7 +49,7 @@ const styles = (theme) => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    // ganti disini pake kondisi
+    // cutom (ganti disini pake kondisi)
     [theme.breakpoints.up("lg")]: {
       marginLeft: 0,
     },
@@ -94,6 +95,7 @@ function DefaultLayout(props) {
     isDarkModeActive,
     isMiniSidebarActive,
     isHorizontalMenuActive,
+    isRtlActive,
   } = init;
 
   function getScrollBarStyle() {
@@ -134,7 +136,15 @@ function DefaultLayout(props) {
 
   useEffect(() => {
     if (size.width < 1200) {
-      miniSidebarAction(action, false);
+      collapsedSidebarAction(action, false);
+      if (isHorizontalMenuActive) {
+        document.body.classList.remove("horizontal-layout");
+        horizontalMenuAction(action, false);
+      }
+      if (isMiniSidebarActive) {
+        document.body.classList.remove("icon-layout-wrap");
+        miniSidebarAction(action, false);
+      }
     }
   }, [size]);
 
@@ -207,6 +217,15 @@ function DefaultLayout(props) {
     chooseThemeAction(action, theme);
   }
 
+  function onToggleRtl(isTrue) {
+    if (isTrue) {
+      document.body.classList.add("rtl-layout");
+    } else {
+      document.body.classList.remove("rtl-layout");
+    }
+    rtlAction(action, isTrue);
+  }
+
   return (
     <div>
       <FullScreen handle={handleFullScreen}>
@@ -230,13 +249,16 @@ function DefaultLayout(props) {
               horizontalMenuStatus={isHorizontalMenuActive}
               toggleHorizontalMenu={(e) => onToggleHorizontalMenu(e)}
               chooseTheme={(e) => chooseTheme(e)}
+              rtlStatus={isRtlActive}
+              toggleRtl={(e) => onToggleRtl(e)}
             />
             <NotificationSidebar />
             <nav aria-label="menu-sidebar">
               <Drawer
                 sx={{ display: { xs: "block", lg: "none" }, zIndex: 1201 }}
                 variant="temporary"
-                anchor="left"
+                anchor={isRtlActive ? "right" : "left"}
+                SlideProps={{ direction: isRtlActive ? "left" : "right" }}
                 open={mobileOpen}
                 onClose={handleDrawerToggle}
                 classes={{
@@ -294,6 +316,8 @@ function DefaultLayout(props) {
                 horizontalMenuStatus={isHorizontalMenuActive}
                 toggleHorizontalMenu={(e) => onToggleHorizontalMenu(e)}
                 chooseTheme={(e) => chooseTheme(e)}
+                rtlStatus={isRtlActive}
+                toggleRtl={(e) => onToggleRtl(e)}
               />
               <NotificationSidebar
                 iconColor="#fff"
@@ -305,12 +329,15 @@ function DefaultLayout(props) {
                 toggleMiniSidebar={(e) => onToggleMiniSidebar(e)}
                 horizontalMenuStatus={isHorizontalMenuActive}
                 toggleHorizontalMenu={(e) => onToggleHorizontalMenu(e)}
+                rtlStatus={isRtlActive}
+                toggleRtl={(e) => onToggleRtl(e)}
               />
               <nav aria-label="menu-sidebar" className="icon-sidebar">
                 <Drawer
                   sx={{ display: { lg: "none", xs: "block" }, zIndex: 1201 }}
+                  anchor={isRtlActive ? "right" : "left"}
+                  SlideProps={{ direction: isRtlActive ? "left" : "right" }}
                   variant="temporary"
-                  anchor="left"
                   open={mobileOpen}
                   onClose={handleDrawerToggle}
                   classes={{
