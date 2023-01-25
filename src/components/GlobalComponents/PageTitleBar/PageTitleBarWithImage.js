@@ -2,8 +2,9 @@
  * Page title component
  */
 import React, { Fragment } from "react";
-import { Button, Grid, Typography, Box, Container, Link } from "@mui/material";
+import { Button, Grid, Typography, Box, Container } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 
 const PageTitleBarWithImage = (props) => {
   const { title, desc, buttonLink, buttonText } = props;
@@ -45,16 +46,14 @@ const PageTitleBarWithImage = (props) => {
                     {buttonLink ? (
                       <Button
                         variant="outlined"
-                        color="default"
+                        // color="default"
                         component={Link}
-                        to={buttonLink}
+                        href={buttonLink}
                       >
                         {buttonText}
                       </Button>
                     ) : (
-                      <Button variant="outlined" color="default">
-                        {buttonText}
-                      </Button>
+                      <Button variant="outlined">{buttonText}</Button>
                     )}
                   </Fragment>
                 ) : (
@@ -69,10 +68,11 @@ const PageTitleBarWithImage = (props) => {
                 textAlign="right"
               >
                 <Image
-                  className="img-fluid"
                   alt="titlebar-thumb"
-                  width="300"
+                  width={300}
+                  height={200}
                   src={`/Images/${props.image}`}
+                  priority
                 />
               </Box>
             </Grid>

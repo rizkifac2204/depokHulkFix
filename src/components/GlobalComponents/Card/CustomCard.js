@@ -5,6 +5,7 @@ function CustomCard({
   cardClasses,
   title = null,
   showDivider = false,
+  caption = null,
 }) {
   return (
     <Card
@@ -17,8 +18,9 @@ function CustomCard({
       className={`${cardClasses ? cardClasses : ""}`}
     >
       {title ? <Typography variant="h6">{title}</Typography> : null}
+      {caption ? <Typography variant="caption">{caption}</Typography> : null}
       {showDivider ? <Divider /> : null}
-      <CardContent>{children}</CardContent>
+      {children}
     </Card>
   );
 }

@@ -7,7 +7,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 const MenuListItem = [
   {
     menu_title: "dashboard",
-    path: "/",
+    path: "/admin",
     icon: <DashboardIcon />,
     category: "general",
     isMenuOpen: false,
@@ -46,8 +46,8 @@ const MenuListItem = [
       },
       {
         path: "admin/profile",
-        menu_title: "dataDiri",
-        icon: <AccountCircleIcon />,
+        menu_title: "profile",
+        icon: <></>,
         isMenuOpen: false,
         menu: "profile",
         fullPageMenu: false,
@@ -55,19 +55,19 @@ const MenuListItem = [
           {
             path: "/admin/profile",
             menu_title: "profile",
-            icon: <AccountCircleIcon />,
+            icon: <></>,
             fourth_child_routes: null,
           },
           {
-            path: "/admin/profile/riwayat",
-            menu_title: "riwayat",
-            icon: <AccountCircleIcon />,
+            path: "/admin/profile/setting",
+            menu_title: "settingProfile",
+            icon: <></>,
             fourth_child_routes: null,
           },
           {
-            path: "/admin/profile/keluarga",
-            menu_title: "keluarga",
-            icon: <AccountCircleIcon />,
+            path: "/admin/profile/data",
+            menu_title: "riwayatDanKeluarga",
+            icon: <></>,
             fourth_child_routes: null,
           },
         ],
@@ -75,7 +75,7 @@ const MenuListItem = [
       {
         path: "/",
         menu_title: "contoh",
-        icon: <AccountCircleIcon />,
+        icon: <></>,
         isMenuOpen: false,
         menu: "contoh",
         fullPageMenu: false,
@@ -83,19 +83,19 @@ const MenuListItem = [
           {
             path: "/",
             menu_title: "contoh1",
-            icon: <AccountCircleIcon />,
+            icon: <></>,
             fourth_child_routes: null,
           },
           {
             path: "/",
             menu_title: "contoh2",
-            icon: <AccountCircleIcon />,
+            icon: <></>,
             fourth_child_routes: null,
           },
           {
             path: "/",
             menu_title: "contoh3",
-            icon: <AccountCircleIcon />,
+            icon: <></>,
             fourth_child_routes: null,
           },
         ],
