@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import { useEffect } from "react";
 import List from "@mui/material/List";
 import NavListItem from "./NavListItem";
 import {
@@ -8,10 +8,12 @@ import {
   toggleFourthMenu,
 } from "actions";
 import { useListMenuContext } from "context/MenuListContext";
+import { useAuthContext } from "context/AuthContext";
 
 function SidebarContent(props) {
   const { closeSidebar } = props;
   const [navLinks, action] = useListMenuContext();
+  const { user } = useAuthContext();
 
   function getPlanName(name) {
     let newName = name.replace("-", " ");
@@ -55,24 +57,33 @@ function SidebarContent(props) {
     }
   }
 
+  if (!user) return null;
   return (
     <div>
       <List className="menu-wrap" style={{ padding: 0 }}>
         {navLinks &&
-          navLinks.map((Navlink, index) => (
-            <NavListItem
-              menu={Navlink}
-              parentIndex={index}
-              key={index}
-              toggleMenu={() => toggleMenuThis(index)}
-              toggleThirdMenu={toggleThirdMenuThis}
-              toggleFourthMenu={toggleFourthMenuThis}
-              toggleThirdMenuAndCloseSidebar={
-                toggleThirdMenuAndCloseSidebarThis
-              }
-              closeSidebar={closeSidebar}
-            />
-          ))}
+          navLinks.map((Navlink, index) => {
+            // hidden jika tidak ada akses level
+            if (
+              Navlink.limit_access_level &&
+              !Navlink.limit_access_level.includes(user.level)
+            )
+              return <div key={index}></div>;
+            return (
+              <NavListItem
+                menu={Navlink}
+                parentIndex={index}
+                key={index}
+                toggleMenu={() => toggleMenuThis(index)}
+                toggleThirdMenu={toggleThirdMenuThis}
+                toggleFourthMenu={toggleFourthMenuThis}
+                toggleThirdMenuAndCloseSidebar={
+                  toggleThirdMenuAndCloseSidebarThis
+                }
+                closeSidebar={closeSidebar}
+              />
+            );
+          })}
       </List>
     </div>
   );

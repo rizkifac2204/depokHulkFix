@@ -40,6 +40,7 @@ function ProfileDetail() {
             alt="user images"
             width={300}
             height={300}
+            priority
           />
         </div>
         <Typography variant="h6" style={{ marginBottom: "5px" }}>

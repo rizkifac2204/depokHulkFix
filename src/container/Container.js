@@ -11,8 +11,14 @@ import violetTheme from "assets/themes/VioletTheme";
 import DefaultLayout from "./DefaultLayout";
 import ClientOnly from "utils/ClientOnly";
 
+// Tanstack
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 import { useRizkiContext } from "context/AppContext";
 import { useEffect } from "react";
+
+const queryClient = new QueryClient();
 
 function Container(props) {
   const { children, fullPage } = props;
@@ -47,9 +53,12 @@ function Container(props) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <ClientOnly>
-        {fullPage ? children : <DefaultLayout>{children}</DefaultLayout>}
-      </ClientOnly>
+      <QueryClientProvider client={queryClient}>
+        <ClientOnly>
+          {fullPage ? children : <DefaultLayout>{children}</DefaultLayout>}
+        </ClientOnly>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

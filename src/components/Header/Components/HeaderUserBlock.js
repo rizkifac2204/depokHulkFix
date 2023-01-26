@@ -12,6 +12,9 @@ import {
   Tooltip,
   Avatar,
 } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
+
+import { useAuthContext } from "context/AuthContext";
 
 const styles = (theme) => ({
   root: {
@@ -45,6 +48,7 @@ function HeaderUserBlock(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const { classes } = props;
+  const { user, logout } = useAuthContext();
 
   function handleClick(event) {
     setAnchorEl(event.currentTarget);
@@ -54,11 +58,7 @@ function HeaderUserBlock(props) {
     setAnchorEl(null);
   }
 
-  function logoutUser() {
-    setAnchorEl(null);
-    console.log("logout");
-    // hulkLogoutUserFirebase();
-  }
+  if (!user) return <Skeleton variant="circular" width={40} height={40} />;
 
   return (
     <div>
@@ -70,11 +70,7 @@ function HeaderUserBlock(props) {
           style={{ padding: "6px" }}
           onClick={handleClick}
         >
-          <Avatar
-            alt="user-thumb"
-            className={classes.avatar}
-            src={`/Images/avatars/user-4.jpg`}
-          />
+          <Avatar alt={user.name} className={classes.avatar} src={user.image} />
         </IconButton>
       </Tooltip>
       <Popover
@@ -99,20 +95,21 @@ function HeaderUserBlock(props) {
             <ListSubheader component="div" id="nested-list-subheader">
               <div className="dropdown-header user-info  text-center">
                 <Avatar
-                  alt="user-thumb"
+                  alt={user.name}
                   className={classes.large}
-                  src={`/Images/avatars/user-4.jpg`}
+                  src={user.image}
                 />
-                <Typography variant="body2">Abigail Doe</Typography>
-                <Typography variant="subtitle2">Associate Manager</Typography>
+                <Typography variant="body2">{user.name}</Typography>
+                <Typography variant="subtitle2">{user.nama_level}</Typography>
                 <Button
                   className="btn primary-bg-btn"
                   component={Link}
-                  href="/app/user-settings"
+                  href="/admin/profile/setting"
                   variant="outlined"
                   color="primary"
+                  onClick={handleClose}
                 >
-                  Manage your account
+                  Pengaturan Akun
                 </Button>
               </div>
             </ListSubheader>
@@ -122,7 +119,7 @@ function HeaderUserBlock(props) {
             component="div"
             className="top-dropdown-menu--item d-block text-center"
           >
-            <Button variant="contained" color="primary" onClick={logoutUser}>
+            <Button variant="contained" color="primary" onClick={logout}>
               Sign out
             </Button>
           </ListItem>

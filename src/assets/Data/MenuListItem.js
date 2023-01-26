@@ -2,7 +2,6 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import BadgeIcon from "@mui/icons-material/Badge";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const MenuListItem = [
   {
@@ -16,6 +15,7 @@ const MenuListItem = [
     desc: true,
     content: "",
     child_routes: null,
+    limit_access_level: [1, 2, 3, 4, 5, 6],
   },
   {
     menu_title: "simpeg",
@@ -43,6 +43,7 @@ const MenuListItem = [
         isMenuOpen: false,
         fullPageMenu: false,
         third_child_routes: null,
+        limit_access_level: [1, 2, 3, 4, 5, 6],
       },
       {
         path: "admin/profile",
@@ -69,6 +70,7 @@ const MenuListItem = [
             menu_title: "riwayatDanKeluarga",
             icon: <></>,
             fourth_child_routes: null,
+            limit_access_level: [1, 2, 3, 4, 5, 6],
           },
         ],
       },

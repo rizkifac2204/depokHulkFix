@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import formatMenuTitle from "utils/formatMenuTitle";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useAuthContext } from "context/AuthContext";
 
 const styles = (theme) => ({
   textWhite: {
@@ -114,7 +115,7 @@ const styles = (theme) => ({
 });
 
 function NavListItem(props) {
-  const [thirdMenuOpen, setThirdMenuOpen] = useState(false);
+  const { user } = useAuthContext();
   const { classes, closeSidebar, toggleMenu } = props;
   const {
     menu,
@@ -159,7 +160,6 @@ function NavListItem(props) {
                 <Icon style={{ fontSize: 20, width: 25 }}>arrow_drop_down</Icon>
               )}
             </div>
-
             {/* description level 1 */}
             {menu.desc ? (
               menu.content.length !== 0 ? (
@@ -204,6 +204,13 @@ function NavListItem(props) {
         >
           <List component="ul" className="sub-menu">
             {menu.child_routes.map((subMenu, index) => {
+              // hidden jika tidak ada akses level
+              if (
+                subMenu.limit_access_level &&
+                !subMenu.limit_access_level.includes(user.level)
+              )
+                return <div key={index}></div>;
+
               // Third child route is not null
               if (
                 subMenu.third_child_routes !== null &&
@@ -259,6 +266,13 @@ function NavListItem(props) {
                       <List component="ul" className="sub-menu">
                         {subMenu.third_child_routes.map(
                           (thirdMenu, fourthindex) => {
+                            // hidden jika tidak ada akses level
+                            if (
+                              thirdMenu.limit_access_level &&
+                              !thirdMenu.limit_access_level.includes(user.level)
+                            )
+                              return <div key={fourthindex}></div>;
+
                             return (
                               <Fragment key={fourthindex}>
                                 <ListItem

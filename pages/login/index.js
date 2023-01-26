@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import axios from "axios";
 import { toast } from "react-toastify";
 import {
   Grid,
@@ -41,17 +42,29 @@ function Login() {
       toast.error("Mohon Isi Data Yang Diperlukan", { autoClose: 2000 });
       return;
     }
-    setTimeout(() => {
-      if (username !== "admin" || password !== "admin") {
+    axios
+      .post(`/api/auth/loginCredential`, {
+        username: username,
+        password: password,
+      })
+      .then((res) => {
+        toast.success("Mengalihkan Halaman", { autoClose: 2000 });
+        setTimeout(() => {
+          router.push("/admin");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err.response);
         setError(true);
+
+        const msg = err.response.data.message
+          ? err.response.data.message
+          : "Terjadi Kesalahan";
+        toast.error(msg, { autoClose: 2000 });
+      })
+      .then(() => {
         setLoading(false);
-        toast.error("User Tidak Ditemukan", { autoClose: 2000 });
-        return;
-      }
-      setLoading(false);
-      toast.success("Mengalihkan Halaman", { autoClose: 2000 });
-      router.push("/admin");
-    }, 2000);
+      });
   }
 
   function onUsernameChanged() {
@@ -87,6 +100,7 @@ function Login() {
                       width="100"
                       height="25"
                       src={`/Images/hulk-light.png`}
+                      priority
                     />
                   ) : (
                     <Image
@@ -94,6 +108,7 @@ function Login() {
                       width="100"
                       height="25"
                       src={`/Images/hulk-dark.png`}
+                      priority
                     />
                   )}
                 </div>

@@ -21,6 +21,7 @@ Router.events.on("routeChangeComplete", () => NProgress.done());
 Router.events.on("routeChangeError", () => NProgress.done());
 
 // context
+import { AuthContextProvider } from "context/AuthContext";
 import { ContextProvider } from "context/AppContext";
 
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -44,11 +45,13 @@ export default function App({
         Anda Gunakan {`(recomended : Google Chrome, Firefox, Edge, Opera)`}
       </noscript>
       <ToastContainer />
-      <ContextProvider>
-        <Container fullPage={Component.fullPage}>
-          <Component {...pageProps} />
-        </Container>
-      </ContextProvider>
+      <AuthContextProvider>
+        <ContextProvider>
+          <Container fullPage={Component.fullPage}>
+            <Component {...pageProps} />
+          </Container>
+        </ContextProvider>
+      </AuthContextProvider>
     </CacheProvider>
   );
 }
