@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import axios from "axios";

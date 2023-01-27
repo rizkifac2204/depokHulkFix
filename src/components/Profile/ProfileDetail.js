@@ -1,12 +1,20 @@
 import { makeStyles } from "@mui/styles";
 import { Typography, Fab, Box, Divider } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+// icons
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
+// utils
+import { formatedDate } from "utils/formatDate";
 
 //component
 import { SocialIcons } from "components/GlobalComponents/SocialIcons";
+import Wait from "components/GlobalComponents/Wait";
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -29,30 +37,64 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProfileDetail() {
+function ProfileDetail({ profile }) {
   const classes = useStyles();
+
+  const {
+    data: alamat,
+    isError,
+    isLoading,
+  } = useQuery({
+    queryKey: ["profile", "alamat"],
+    queryFn: ({ signal }) =>
+      axios
+        .get(`/api/profile/alamat`, { signal })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw new Error(err.response.data.message);
+        }),
+  });
+
+  if (!profile) return null;
+
   return (
     <div className="">
-      <Box py={3} className="user-detail">
+      <Box className="user-detail" sx={{ pb: 2 }}>
         <div className="user-avatar">
           <Image
-            src={"/Images/avatars/user-4.jpg"}
-            alt="user images"
+            src={
+              profile.foto_admin
+                ? `/foto/${profile.foto_admin}`
+                : "/Images/avatar-4.jpg"
+            }
+            alt={profile.nama_admin}
             width={300}
             height={300}
             priority
           />
         </div>
         <Typography variant="h6" style={{ marginBottom: "5px" }}>
-          Nama Profile
+          {profile.nama_admin}
         </Typography>
         <Box mb={2} fontSize="subtitle2.fontSize" color="text.secondary">
-          Level Profile
+          {profile.nama_level}
         </Box>
-        <Fab className={classes.fab} size="small" aria-label="phone">
+        <Fab
+          className={classes.fab}
+          size="small"
+          aria-label="email"
+          component={Link}
+          href={`tel:${profile.telp_admin}`}
+        >
           <LocalPhoneOutlinedIcon />
         </Fab>
-        <Fab className={classes.fab} size="small" aria-label="email">
+        <Fab
+          className={classes.fab}
+          size="small"
+          aria-label="email"
+          component={Link}
+          href={`mailto:${profile.email_admin}`}
+        >
           <EmailOutlinedIcon />
         </Fab>
       </Box>
@@ -63,49 +105,35 @@ function ProfileDetail() {
             Informasi Utama
           </Box>
           <Box mb={2}>
-            <Typography variant="subtitle2">Email Address</Typography>
+            <Typography variant="subtitle2">Email</Typography>
             <Typography variant="subtitle2" color="textPrimary">
-              ethen@example.com
+              {profile.email_admin}
             </Typography>
           </Box>
           <Box mb={2}>
             <Typography variant="subtitle2">Phone No.</Typography>
             <Typography variant="subtitle2" color="textPrimary">
-              +01 234 567 8910
+              {profile.telp_admin}
             </Typography>
           </Box>
           <Box>
-            <Typography variant="subtitle2">Address</Typography>
+            <Typography variant="subtitle2">Update Terakhir</Typography>
             <Typography variant="subtitle2" color="textPrimary">
-              3420, Pataya Street, Singapure
+              {formatedDate(profile.updated_at, true)}
             </Typography>
           </Box>
         </Box>
         <Divider />
-        <Box
-          display="flex"
-          py={2}
-          px={{ xs: 0, md: "12px" }}
-          justifyContent="space-between"
-        >
-          <Box textAlign="center">
-            <Typography variant="subtitle2">Followers</Typography>
-            <Typography variant="body2" color="textPrimary">
-              1,238
+        <Box display="flex" py={2} justifyContent="space-between">
+          {isLoading && <Wait loading={true} minHeight={100} />}
+          {isError && "An error has occurred"}
+          {alamat ? (
+            <Typography align="center">
+              {alamat.alamat} RT {alamat.rt || "-"} RW {alamat.rw || "-"},
+              Kel/Desa. {alamat.kelurahan || "-"}, Kec.{" "}
+              {alamat.kecamatan || "-"}, {alamat.kabkota} {alamat.provinsi}
             </Typography>
-          </Box>
-          <Box textAlign="center">
-            <Typography variant="subtitle2">Following</Typography>
-            <Typography variant="body2" color="textPrimary">
-              1,008
-            </Typography>
-          </Box>
-          <Box textAlign="center">
-            <Typography variant="subtitle2">Posts</Typography>
-            <Typography variant="body2" color="textPrimary">
-              638
-            </Typography>
-          </Box>
+          ) : null}
         </Box>
         <Divider />
         <Box className={classes.socialIcons} py={3} textAlign="center">

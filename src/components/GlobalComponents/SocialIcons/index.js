@@ -4,7 +4,10 @@
 import React, { Fragment } from "react";
 import { makeStyles } from "@mui/styles";
 import Link from "next/link";
-import { Fab, Box } from "@mui/material";
+import { Fab, Box, Icon } from "@mui/material";
+
+// icons
+import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 
 const useStyles = makeStyles({
   root: {
@@ -38,45 +41,43 @@ export function SocialIcons() {
   const classes = useStyles();
 
   return (
-    <>
-      <Box className={classes.root}>
-        <Fab
-          size="small"
-          className={`${classes.fab} ${classes.facebook}`}
-          disableRipple
-          component={Link}
-          href="#"
-        >
-          <i className="fab fa-facebook-square"></i>
-        </Fab>
-        <Fab
-          size="small"
-          className={`${classes.fab} ${classes.twitter}`}
-          disableRipple
-          component={Link}
-          href="#"
-        >
-          <i className="fab fa-twitter"></i>
-        </Fab>
-        <Fab
-          size="small"
-          className={`${classes.fab} ${classes.linked}`}
-          disableRipple
-          component={Link}
-          href="#"
-        >
-          <i className="fab fa-linkedin"></i>
-        </Fab>
-        <Fab
-          size="small"
-          className={`${classes.fab} ${classes.insta}`}
-          disableRipple
-          component={Link}
-          href="#"
-        >
-          <i className="fab fa-instagram"></i>
-        </Fab>
-      </Box>
-    </>
+    <Box className={classes.root}>
+      <Fab
+        size="small"
+        className={`${classes.fab} ${classes.facebook}`}
+        disableRipple
+        component={Link}
+        href="#"
+      >
+        <Icon>facebook</Icon>
+      </Fab>
+      <Fab
+        size="small"
+        className={`${classes.fab} ${classes.twitter}`}
+        disableRipple
+        component={Link}
+        href="#"
+      >
+        <Icon>facebook</Icon>
+      </Fab>
+      <Fab
+        size="small"
+        className={`${classes.fab} ${classes.linked}`}
+        disableRipple
+        component={Link}
+        href="#"
+      >
+        <Icon>facebook</Icon>
+      </Fab>
+      <Fab
+        size="small"
+        className={`${classes.fab} ${classes.insta}`}
+        disableRipple
+        component={Link}
+        href="#"
+      >
+        <Icon>facebook</Icon>
+      </Fab>
+    </Box>
   );
 }

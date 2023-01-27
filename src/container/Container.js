@@ -50,6 +50,22 @@ function Container(props) {
     }
   }, [isRtlActive]);
 
+  // useEffect(() => {
+  //   // if (selectedThemeColor === "light-theme") {
+  //   //   theme = lightTheme;
+  //   // } else if (selectedThemeColor === "teal-theme") {
+  //   //   theme = tealTheme;
+  //   // } else if (selectedThemeColor === "violet-theme") {
+  //   //   theme = violetTheme;
+  //   // } else {
+  //   //   theme = lightTheme;
+  //   // }
+  // }, [selectedThemeColor]);
+
+  // // useEffect(() => {
+  // //   console.log(theme.palette.primary);
+  // // }, [theme]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

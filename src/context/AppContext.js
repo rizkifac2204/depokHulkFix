@@ -106,26 +106,38 @@ const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const isFirstRun = useRef(true);
 
-  // useEffect(() => {
-  //   if (isFirstRun.current) {
-  //     isFirstRun.current = false;
-  //     const settingDisplay = localStorage.getItem("settingDisplay");
-  //     if (settingDisplay) {
-  //       const setting = JSON.parse(settingDisplay);
-  //       dispatch({ type: "DARKMODE", value: setting.darkMode });
-  //       dispatch({ type: "CHANGE_PRIMARY_COLOR", value: setting.primary });
-  //       dispatch({ type: "CHANGE_SECONDARY_COLOR", value: setting.secondary });
-  //     }
-  //     return;
-  //   }
-  //   localStorage.setItem("settingDisplay", JSON.stringify(state));
-  // }, [state.darkMode, state.primary, state.secondary]);
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      const settingDisplay = localStorage.getItem("settingDisplay");
+      if (settingDisplay) {
+        const setting = JSON.parse(settingDisplay);
+        setTimeout(() => {
+          dispatch({ type: DARK_MODE, value: setting.isDarkModeActive });
+          // dispatch({
+          //   type: HORIZONTAL_MENU,
+          //   value: setting.isHorizontalMenuActive,
+          // });
+          // dispatch({ type: MINI_SIDEBAR, value: setting.isMiniSidebarActive });
+          // dispatch({ type: RTL, value: setting.isRtlActive });
+          dispatch({ type: CHOOSE_THEME, value: setting.selectedThemeColor });
+        }, 4000);
+      }
+      return;
+    }
+    localStorage.setItem("settingDisplay", JSON.stringify(state));
+  }, [
+    state.isDarkModeActive,
+    // state.isHorizontalMenuActive,
+    // state.isMiniSidebarActive,
+    // state.isRtlActive,
+    state.selectedThemeColor,
+  ]);
 
   useEffect(() => {
     const isMobile =
       window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
     if (isMobile) dispatch({ type: COLLAPSED_SIDEBAR, value: false });
-    // // if (state.toggleSetting) dispatch({ type: "TOGGLE_SETTING", value: false });
   }, [router]);
 
   return (

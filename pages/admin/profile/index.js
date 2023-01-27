@@ -1,4 +1,8 @@
-import { Grid, Box, Container } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import LinearProgress from "@mui/material/LinearProgress";
+import Alert from "@mui/material/Alert";
 
 import ProfileUmum from "components/Profile/ProfileUmum";
 import ProfileDetail from "components/Profile/ProfileDetail";
@@ -9,7 +13,12 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 function Profile() {
-  const query = useQuery({
+  const {
+    data: profile,
+    isError,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["profile"],
     queryFn: ({ signal }) =>
       axios
@@ -20,9 +29,14 @@ function Profile() {
         }),
   });
 
-  if (query.isLoading) return "Loading...";
-
-  if (query.error) return "An error has occurred: " + query.error;
+  if (isLoading) return <LinearProgress sx={{ height: "4px" }} />;
+  if (isError)
+    return (
+      <Alert
+        sx={{ mt: 2 }}
+        severity="error"
+      >{`An error has occurred: ${error.message}`}</Alert>
+    );
 
   return (
     <div className="hk-user-profile">
@@ -30,7 +44,7 @@ function Profile() {
         <Box px={{ xs: "12px", lg: 0 }} className="page-space">
           <Grid container spacing={3}>
             <Grid item xs={12} sm={4} md={3}>
-              <ProfileDetail />
+              <ProfileDetail profile={profile} />
             </Grid>
             <Grid item xs={12} sm={8} md={6}>
               <ProfileUmum />

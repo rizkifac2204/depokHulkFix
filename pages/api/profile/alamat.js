@@ -6,7 +6,7 @@ export default Handler().get(async (req, res) => {
   try {
     const result = await db
       .select("*")
-      .from("user_main")
+      .from("user_alamat")
       .where("user_id", req.session.user.id)
       .first();
 
