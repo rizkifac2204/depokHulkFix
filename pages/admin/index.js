@@ -1,4 +1,5 @@
 import * as React from "react";
+import Head from "next/head";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,6 +11,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 function Dashboard() {
   return (
     <div>
+      <Head>
+        <title>{`Dashboard - BWS Depok Apps`}</title>
+      </Head>
       Dashboard
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">

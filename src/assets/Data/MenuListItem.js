@@ -1,7 +1,6 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import BadgeIcon from "@mui/icons-material/Badge";
-import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
-import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
 const MenuListItem = [
   {
@@ -15,13 +14,49 @@ const MenuListItem = [
     desc: true,
     content: "",
     child_routes: null,
-    limit_access_level: [1, 2, 3, 4, 5, 6],
+  },
+  {
+    menu_title: "profile",
+    path: "/admin/profile",
+    icon: <AccountCircleOutlinedIcon />,
+    category: "general",
+    isMenuOpen: false,
+    menu: "profile",
+    fullPageMenu: false,
+    desc: true,
+    content: "",
+    child_routes: [
+      {
+        path: "/admin/profile",
+        menu_title: "profile",
+        icon: <></>,
+        isMenuOpen: false,
+        fullPageMenu: false,
+        third_child_routes: null,
+      },
+      {
+        path: "/admin/profile/setting",
+        menu_title: "settingProfile",
+        icon: <></>,
+        isMenuOpen: false,
+        fullPageMenu: false,
+        third_child_routes: null,
+      },
+      {
+        path: "/admin/profile/data",
+        menu_title: "riwayatDanKeluarga",
+        icon: <></>,
+        isMenuOpen: false,
+        fullPageMenu: false,
+        third_child_routes: null,
+      },
+    ],
   },
   {
     menu_title: "simpeg",
-    path: "admin/simpeg",
+    path: "/admin/simpeg",
     icon: <BadgeIcon />,
-    category: "general",
+    category: "sdmo",
     isMenuOpen: false,
     menu: "simpeg",
     fullPageMenu: false,
@@ -30,8 +65,8 @@ const MenuListItem = [
     child_routes: [
       {
         path: "/admin/simpeg",
-        menu_title: "semuaDataPegawai",
-        icon: <PeopleOutlineIcon />,
+        menu_title: "dataPegawai",
+        icon: <></>,
         isMenuOpen: false,
         fullPageMenu: false,
         third_child_routes: null,
@@ -39,68 +74,11 @@ const MenuListItem = [
       {
         path: "/admin/simpeg/add",
         menu_title: "tambahPegawai",
-        icon: <PersonAddAltIcon />,
+        icon: <></>,
         isMenuOpen: false,
         fullPageMenu: false,
         third_child_routes: null,
         limit_access_level: [1, 2, 3, 4, 5, 6],
-      },
-      {
-        path: "admin/profile",
-        menu_title: "profile",
-        icon: <></>,
-        isMenuOpen: false,
-        menu: "profile",
-        fullPageMenu: false,
-        third_child_routes: [
-          {
-            path: "/admin/profile",
-            menu_title: "profile",
-            icon: <></>,
-            fourth_child_routes: null,
-          },
-          {
-            path: "/admin/profile/setting",
-            menu_title: "settingProfile",
-            icon: <></>,
-            fourth_child_routes: null,
-          },
-          {
-            path: "/admin/profile/data",
-            menu_title: "riwayatDanKeluarga",
-            icon: <></>,
-            fourth_child_routes: null,
-            limit_access_level: [1, 2, 3, 4, 5, 6],
-          },
-        ],
-      },
-      {
-        path: "/",
-        menu_title: "contoh",
-        icon: <></>,
-        isMenuOpen: false,
-        menu: "contoh",
-        fullPageMenu: false,
-        third_child_routes: [
-          {
-            path: "/",
-            menu_title: "contoh1",
-            icon: <></>,
-            fourth_child_routes: null,
-          },
-          {
-            path: "/",
-            menu_title: "contoh2",
-            icon: <></>,
-            fourth_child_routes: null,
-          },
-          {
-            path: "/",
-            menu_title: "contoh3",
-            icon: <></>,
-            fourth_child_routes: null,
-          },
-        ],
       },
     ],
   },

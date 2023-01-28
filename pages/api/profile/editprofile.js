@@ -45,14 +45,18 @@ export default Handler().put(
       const cek = await db("user").where("id", id).first();
       if (!cek) {
         if (req.file) DeleteUpload(req.file.destination, filename);
-        return res.status(401).json({ message: "User Tidak Terdeteksi" });
+        return res
+          .status(401)
+          .json({ message: "User Tidak Terdeteksi", type: "error" });
       }
 
       // jika password tidak sama
       const match = await bcrypt.compare(passwordConfirm, cek.password);
       if (!match) {
         if (req.file) DeleteUpload(req.file.destination, filename);
-        return res.status(401).json({ message: "Password Anda Salah" });
+        return res
+          .status(401)
+          .json({ message: "Password Anda Salah", type: "error" });
       }
 
       //cek jika ada email yang sama
@@ -63,6 +67,7 @@ export default Handler().put(
       if (cekEmailSama) {
         if (req.file) DeleteUpload(req.file.destination, filename);
         return res.status(401).json({
+          type: "error",
           message:
             "Email yang anda masukan sudah di pakai user lain, silakan masukan email pengganti",
         });
@@ -84,7 +89,7 @@ export default Handler().put(
 
       if (!proses) {
         if (req.file) DeleteUpload(req.file.destination, filename);
-        return res.status(400).json({ message: "Gagal Proses" });
+        return res.status(400).json({ message: "Gagal Proses", type: "error" });
       }
 
       if (proses) {
@@ -94,7 +99,7 @@ export default Handler().put(
       res.json({ message: "Berhasil Mengubah Data Profile" });
     } catch (error) {
       getLogger.error(error);
-      res.status(500).json({ message: "Terjadi Kesalahan..." });
+      res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
     }
   }
 );

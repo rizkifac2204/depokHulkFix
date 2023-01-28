@@ -109,29 +109,103 @@ const ContextProvider = ({ children }) => {
   useEffect(() => {
     if (isFirstRun.current) {
       isFirstRun.current = false;
-      const settingDisplay = localStorage.getItem("settingDisplay");
+      const settingDisplay = localStorage.getItem("settingDisplayDepokApps");
       if (settingDisplay) {
         const setting = JSON.parse(settingDisplay);
         setTimeout(() => {
+          // DARKMODE
+          if (setting.isDarkModeActive) {
+            document.body.classList.remove("light-theme");
+            document.body.classList.add("dark-theme");
+          } else {
+            document.body.classList.remove("dark-theme");
+            document.body.classList.add("light-theme");
+          }
           dispatch({ type: DARK_MODE, value: setting.isDarkModeActive });
-          // dispatch({
-          //   type: HORIZONTAL_MENU,
-          //   value: setting.isHorizontalMenuActive,
-          // });
-          // dispatch({ type: MINI_SIDEBAR, value: setting.isMiniSidebarActive });
-          // dispatch({ type: RTL, value: setting.isRtlActive });
+
+          // CHOOSE_THEME
+          document.body.classList.remove(
+            "light-theme",
+            "teal-theme",
+            "violet-theme"
+          );
+          document.body.classList.add(setting.selectedThemeColor);
           dispatch({ type: CHOOSE_THEME, value: setting.selectedThemeColor });
-        }, 4000);
+
+          // HORIZONTAL_MENU
+          if (setting.isHorizontalMenuActive) {
+            document.body.classList.add("horizontal-layout");
+            dispatch({ type: MINI_SIDEBAR, value: false });
+            dispatch({
+              type: HORIZONTAL_MENU,
+              value: true,
+            });
+            dispatch({
+              type: COLLAPSED_SIDEBAR,
+              value: false,
+            });
+          } else {
+            if (document.body.classList.contains("horizontal-layout")) {
+              document.body.classList.remove("horizontal-layout");
+              dispatch({
+                type: HORIZONTAL_MENU,
+                value: false,
+              });
+            }
+            if (setting.isMiniSidebarActive === false) {
+              dispatch({
+                type: COLLAPSED_SIDEBAR,
+                value: true,
+              });
+            }
+          }
+
+          // MINI_SIDEBAR
+          if (setting.isMiniSidebarActive) {
+            document.body.classList.add("icon-layout-wrap");
+            document.body.classList.remove("horizontal-layout");
+            dispatch({
+              type: HORIZONTAL_MENU,
+              value: false,
+            });
+            dispatch({ type: MINI_SIDEBAR, value: true });
+            dispatch({
+              type: COLLAPSED_SIDEBAR,
+              value: true,
+            });
+          } else {
+            document.body.classList.remove("icon-layout-wrap");
+            // miniSidebarAction(action, false);
+            dispatch({
+              type: MINI_SIDEBAR,
+              value: false,
+            });
+            if (setting.isHorizontalMenuActive === false) {
+              dispatch({
+                type: COLLAPSED_SIDEBAR,
+                value: true,
+              });
+            }
+          }
+
+          // RTL
+          if (setting.isRtlActive) {
+            document.body.classList.add("rtl-layout");
+          } else {
+            document.body.classList.remove("rtl-layout");
+          }
+          dispatch({ type: RTL, value: setting.isRtlActive });
+        }, 2000);
       }
       return;
     }
-    localStorage.setItem("settingDisplay", JSON.stringify(state));
+    localStorage.setItem("settingDisplayDepokApps", JSON.stringify(state));
   }, [
     state.isDarkModeActive,
-    // state.isHorizontalMenuActive,
-    // state.isMiniSidebarActive,
-    // state.isRtlActive,
     state.selectedThemeColor,
+    state.isHorizontalMenuActive,
+    state.isMiniSidebarActive,
+    state.isRtlActive,
   ]);
 
   useEffect(() => {

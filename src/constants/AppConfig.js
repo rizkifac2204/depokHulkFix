@@ -1,10 +1,6 @@
-/**
- * App Config File
- */
-
 const AppConfig = {
-  brandName: "Hulk",
-  copyRightText: "Copyright © 2021 IRON Network, All Rights Reserved.",
+  brandName: "Bawaslu Depok Apps",
+  copyRightText: "Copyright © 2023 BAWASLU DEPOK, All Rights Reserved.",
   navCollapsed: true,
   mobileSidebarToggle: false,
   isDarkModeActive: false,

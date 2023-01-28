@@ -10,6 +10,6 @@ export default Handler().get(async (req, res) => {
     res.json(data);
   } catch (error) {
     getLogger.error(error);
-    res.status(500).json({ message: "Terjadi Kesalahan..." });
+    res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
   }
 });

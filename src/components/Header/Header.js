@@ -192,7 +192,7 @@ function Header(props) {
                     lineHeight={0.8}
                   >
                     <Image
-                      src={`/Images/hulk-light.png`}
+                      src={`/Pictures/logo-light.png`}
                       alt="site-logo"
                       width="95"
                       height="25"

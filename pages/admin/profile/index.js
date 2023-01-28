@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -40,6 +41,9 @@ function Profile() {
 
   return (
     <div className="hk-user-profile">
+      <Head>
+        <title>{`Profile - BWS Depok Apps`}</title>
+      </Head>
       <Container>
         <Box px={{ xs: "12px", lg: 0 }} className="page-space">
           <Grid container spacing={3}>

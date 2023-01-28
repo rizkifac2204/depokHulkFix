@@ -1,6 +1,3 @@
-/**
- * Layouts
- */
 import React from "react";
 import { makeStyles } from "@mui/styles";
 import {
@@ -91,9 +88,9 @@ export default function Layouts(props) {
               alignItems="center"
               justifyContent="space-between"
             >
-              App Layout
+              Tampilan
               <Tooltip
-                title="Hulk coming with various layouts. You can customize it as per your requirements. To see the demo please check the options below"
+                title="Menyesuaikan Tampilan Yang Kamu Suka"
                 placement="bottom"
               >
                 <Box component="span" color="text.secondary" fontSize={20}>
@@ -107,7 +104,7 @@ export default function Layouts(props) {
         <ListItem className="opt-horizontal-menu res-hide">
           <ListItemText
             primary="Horizontal Menu"
-            secondary="Top header layout"
+            secondary="Menu Pada Header"
           />
           <ListItemSecondaryAction className="res-hide">
             <Box display="flex" alignItems="center">
@@ -125,10 +122,7 @@ export default function Layouts(props) {
           </ListItemSecondaryAction>
         </ListItem>
         <ListItem className="opt-icon-menu res-hide">
-          <ListItemText
-            primary="Mini Sidebar"
-            secondary="Sidebar in minified"
-          />
+          <ListItemText primary="Mini Sidebar" secondary="Mengecilkan Menu" />
           <ListItemSecondaryAction className="res-hide">
             <Box display="flex" alignItems="center">
               <Switch
@@ -145,7 +139,7 @@ export default function Layouts(props) {
           </ListItemSecondaryAction>
         </ListItem>
         <ListItem>
-          <ListItemText primary="RTL" secondary="Choose right to left layout" />
+          <ListItemText primary="RTL" secondary="Tampilan Dari Kanan Ke Kiri" />
           <ListItemSecondaryAction>
             <Box display="flex" alignItems="center">
               <Switch
@@ -172,11 +166,8 @@ export default function Layouts(props) {
               alignItems="center"
               justifyContent="space-between"
             >
-              Choose Theme Mode
-              <Tooltip
-                title="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                placement="bottom"
-              >
+              Pilih Tema
+              <Tooltip title="Memilih Tema Cerah Atau Gelap" placement="bottom">
                 <Box component="span" color="text.secondary" fontSize={20}>
                   <HelpOutlineIcon />
                 </Box>
@@ -186,7 +177,7 @@ export default function Layouts(props) {
         }
       >
         <ListItem>
-          <ListItemText primary="Dark Mode" secondary="Dark theme layout" />
+          <ListItemText primary="Dark Mode" secondary="Aktifkan Tema Gelap" />
           <ListItemSecondaryAction>
             <Box display="flex" alignItems="center">
               <Switch
@@ -213,11 +204,8 @@ export default function Layouts(props) {
               alignItems="center"
               justifyContent="space-between"
             >
-              Choose Theme Color
-              <Tooltip
-                title="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                placement="bottom"
-              >
+              Pilih Warna Tampilan
+              <Tooltip title="Menyesuaikan Warna Tampilan." placement="bottom">
                 <Box component="span" color="text.secondary" fontSize={20}>
                   <HelpOutlineIcon />
                 </Box>

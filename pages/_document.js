@@ -4,7 +4,6 @@ import createEmotionServer from "@emotion/server/create-instance";
 import createEmotionCache from "utils/createEmotionCache";
 
 import theme from "../src/assets/themes/LightTheme";
-import darkTheme from "../src/assets/themes/DarkTheme";
 
 export default class MyDocument extends Document {
   render() {
@@ -13,7 +12,7 @@ export default class MyDocument extends Document {
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
-          <link rel="shortcut icon" href="/favicon.ico" />
+          <link rel="shortcut icon" href="/logo.ico" />
           <meta name="emotion-insertion-point" content="" />
           {this.props.emotionStyleTags}
           <link

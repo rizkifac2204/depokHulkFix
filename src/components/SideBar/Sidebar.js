@@ -60,7 +60,7 @@ export default function Sidebar(props) {
                 lineHeight={0.8}
               >
                 <Image
-                  src={"/Images/hulk-light.png"}
+                  src={"/Pictures/logo-light.png"}
                   alt="logo"
                   width="90"
                   height="22"

@@ -12,7 +12,6 @@ import Alert from "@mui/material/Alert";
 import FormHelperText from "@mui/material/FormHelperText";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -20,8 +19,14 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import ContentLayout from "components/GlobalComponents/ContentLayout";
 import Wait from "components/GlobalComponents/Wait";
 
+const validationSchema = yup.object({
+  status_pegawai: yup.string("Masukan Status").required("Harus Diisi"),
+  jabatan: yup.string("Masukan Jabatan").required("Harus Diisi"),
+  passwordConfirm: yup.string().required("Password Harus Diisi"),
+});
+
 const useHandleSubmitMutation = () => {
-  return useMutation((formPayload) => {
+  return useMutation(async (formPayload) => {
     return axios
       .put(`/api/profile/umum`, formPayload)
       .then((res) => res.data)
@@ -38,7 +43,7 @@ const handleSubmit = (values, setSubmitting, mutate, queryClient) => {
   mutate(values, {
     onSuccess: (response) => {
       toast.success(response.message);
-      queryClient.invalidateQueries(["profile"]);
+      queryClient.invalidateQueries(["profile", "umum"]);
     },
     onError: (error) => {
       toast.error(error.message);
@@ -133,12 +138,25 @@ function ProfileFormUmum() {
 
   const formik = useFormik({
     initialValues: umum
-      ? { ...umum, passwordConfirm: "" }
+      ? {
+          status_pegawai: umum.status_pegawai || "",
+          jabatan: umum.jabatan || "",
+          agama: umum.agama || "",
+          jenis_kelamin: umum.jenis_kelamin || "",
+          tempat_lahir: umum.tempat_lahir || "",
+          tanggal_lahir: umum.tanggal_lahir || "",
+          golongan_darah: umum.golongan_darah || "",
+          status_nikah: umum.status_nikah || "",
+          gelar_depan: umum.gelar_depan || "",
+          gelar_belakang: umum.gelar_belakang || "",
+          hobi: umum.hobi || "",
+          keahlian: umum.keahlian || "",
+          passwordConfirm: "",
+        }
       : {
           status_pegawai: "",
           jabatan: "",
           agama: "",
-          telp_admin: "",
           jenis_kelamin: "",
           tempat_lahir: "",
           tanggal_lahir: "",
@@ -151,6 +169,7 @@ function ProfileFormUmum() {
           passwordConfirm: "",
         },
     enableReinitialize: true,
+    validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting }) =>
       handleSubmit(values, setSubmitting, mutate, queryClient),
   });
@@ -169,12 +188,13 @@ function ProfileFormUmum() {
       <form onSubmit={formik.handleSubmit}>
         {/* input status_pegawai  */}
         <Box mb={3}>
-          <ContentLayout title="Status Pegawai">
+          <ContentLayout title="Status Pegawai *">
             {isLoadingStatusPegawai && "Loading..."}
             {isErrorStatusPegawai && "Gagal Mengambil Data"}
             {status_pegawai ? (
               <FormControl
                 fullWidth
+                required
                 variant="standard"
                 error={Boolean(formik.errors.status_pegawai)}
               >
@@ -199,12 +219,13 @@ function ProfileFormUmum() {
         </Box>
         {/* input jabatan  */}
         <Box mb={3}>
-          <ContentLayout title="Jabatan">
+          <ContentLayout title="Jabatan *">
             {isLoadingJabatan && "Loading..."}
             {isErrorJabatan && "Gagal Mengambil Data"}
             {jabatan ? (
               <FormControl
                 fullWidth
+                required
                 variant="standard"
                 error={Boolean(formik.errors.jabatan)}
               >
@@ -466,7 +487,7 @@ function ProfileFormUmum() {
         </Box>
         {/* input konfirmasi  */}
         <Box mb={3}>
-          <ContentLayout title="Password Lama">
+          <ContentLayout title="Password Lama *">
             <FormControl fullWidth>
               <TextField
                 required
@@ -499,7 +520,7 @@ function ProfileFormUmum() {
               color="primary"
               className="primary-bg-btn"
             >
-              Simpan
+              {formik.isSubmitting ? "Memproses ..." : "Simpan"}
             </Button>
           </ContentLayout>
         </Box>

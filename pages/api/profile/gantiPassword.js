@@ -12,13 +12,18 @@ export default Handler().put(async (req, res) => {
     const hashBaru = bcrypt.hashSync(baru, salt);
     // cek exist
     const cek = await db("user").where("id", id).first();
-    if (!cek) return res.status(401).json({ message: "User Tidak Terdeteksi" });
+    if (!cek)
+      return res
+        .status(401)
+        .json({ message: "User Tidak Terdeteksi", type: "error" });
 
     // jika tidak sama
     const match = await bcrypt.compare(lama, cek.password);
 
     if (!match)
-      return res.status(401).json({ message: "Password Lama Anda Salah" });
+      return res
+        .status(401)
+        .json({ message: "Password Lama Anda Salah", type: "error" });
     // proses
     const proses = await db("user")
       .where("id", id)
@@ -30,6 +35,6 @@ export default Handler().put(async (req, res) => {
     res.json({ message: "Berhasil Merubah Password", type: "success" });
   } catch (error) {
     getLogger.error(error);
-    res.status(500).json({ message: "Terjadi Kesalahan..." });
+    res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
   }
 });

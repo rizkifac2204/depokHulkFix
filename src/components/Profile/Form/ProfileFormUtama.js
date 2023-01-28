@@ -41,10 +41,7 @@ const useStyles = makeStyles((theme) => ({
 const validationSchema = yup.object({
   nama_admin: yup.string("Masukan Nama").required("Harus Diisi"),
   telp_admin: yup.string("Masukan Telp/HP").required("Telp Harus Diisi"),
-  email_admin: yup
-    .string("Masukan Email")
-    .email("Email Tidak Valid")
-    .required("Email Harus Diisi"),
+  email_admin: yup.string("Masukan Email").email("Email Tidak Valid"),
   username: yup.string().required("Username Harus Diisi"),
   passwordConfirm: yup.string().required("Password Harus Diisi"),
   file: yup
@@ -76,7 +73,7 @@ const validationSchema = yup.object({
 });
 
 const useHandleSubmitMutation = () => {
-  return useMutation((formPayload) => {
+  return useMutation(async (formPayload) => {
     return axios
       .put(`/api/profile/editprofile`, formPayload, {
         headers: {
@@ -147,7 +144,15 @@ function ProfileFormUtama() {
 
   const formik = useFormik({
     initialValues: profile
-      ? { ...profile, passwordConfirm: "" }
+      ? {
+          foto_admin: profile.foto_admin || "",
+          nama_level: profile.nama_level || "",
+          nama_admin: profile.nama_admin || "",
+          telp_admin: profile.telp_admin || "",
+          email_admin: profile.email_admin || "",
+          username: profile.username || "",
+          passwordConfirm: "",
+        }
       : {
           foto_admin: "",
           nama_level: "",
@@ -211,7 +216,7 @@ function ProfileFormUtama() {
         </Box>
         {/* input level  */}
         <Box mb={3}>
-          <ContentLayout title="Level User">
+          <ContentLayout title="Level User *">
             <FormControl fullWidth>
               <TextField
                 disabled
@@ -225,7 +230,7 @@ function ProfileFormUtama() {
         </Box>
         {/* input nama  */}
         <Box mb={3}>
-          <ContentLayout title="Nama">
+          <ContentLayout title="Nama *">
             <FormControl fullWidth>
               <TextField
                 required
@@ -247,7 +252,7 @@ function ProfileFormUtama() {
         </Box>
         {/* input telp  */}
         <Box mb={3}>
-          <ContentLayout title="Telp / HP">
+          <ContentLayout title="Telp / HP *">
             <FormControl fullWidth>
               <TextField
                 required
@@ -272,7 +277,6 @@ function ProfileFormUtama() {
           <ContentLayout title="Email">
             <FormControl fullWidth>
               <TextField
-                required
                 variant="standard"
                 name="email_admin"
                 placeholder="Email"
@@ -293,7 +297,7 @@ function ProfileFormUtama() {
         </Box>
         {/* input username  */}
         <Box mb={3}>
-          <ContentLayout title="Username">
+          <ContentLayout title="Username *">
             <FormControl fullWidth>
               <TextField
                 required
@@ -313,7 +317,7 @@ function ProfileFormUtama() {
         </Box>
         {/* input konfirmasi  */}
         <Box mb={3}>
-          <ContentLayout title="Password Lama">
+          <ContentLayout title="Password Lama *">
             <FormControl fullWidth>
               <TextField
                 required
@@ -346,7 +350,7 @@ function ProfileFormUtama() {
               color="primary"
               className="primary-bg-btn"
             >
-              Simpan
+              {formik.isSubmitting ? "Memproses ..." : "Simpan"}
             </Button>
           </ContentLayout>
         </Box>

@@ -1,17 +1,23 @@
 import { useState } from "react";
-import { Box, Typography, AppBar, Tabs, Tab, Container } from "@mui/material";
+import Head from "next/head";
+import { Box, Typography, Tabs, Tab, Container } from "@mui/material";
 // ICON
 import EngineeringOutlinedIcon from "@mui/icons-material/EngineeringOutlined";
 import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
 import PaymentOutlinedIcon from "@mui/icons-material/PaymentOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import LockPersonIcon from "@mui/icons-material/LockPerson";
 // Components
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
 import PageTitleBarWithImage from "components/GlobalComponents/PageTitleBar/PageTitleBarWithImage";
 
 import ProfileFormUtama from "components/Profile/Form/ProfileFormUtama";
 import ProfileFormUmum from "components/Profile/Form/ProfileFormUmum";
+import ProfileFormAlamat from "components/Profile/Form/ProfileFormAlamat";
+import ProfileFormBadan from "components/Profile/Form/ProfileFormBadan";
+import ProfileFormNomor from "components/Profile/Form/ProfileFormNomor";
+import ProfileFormPassword from "components/Profile/Form/ProfileFormPassword";
 
 function TabPanel(props) {
   const { children, value, index, dir, ...other } = props;
@@ -45,6 +51,9 @@ function ProfileSetting(props) {
   };
   return (
     <div className="hk-user-settings">
+      <Head>
+        <title>{`Profile Setting - BWS Depok Apps`}</title>
+      </Head>
       <Box className={` white-btn-color`}>
         <PageTitleBarWithImage
           title={`Settings Profile`}
@@ -96,6 +105,12 @@ function ProfileSetting(props) {
                   label="Informasi Lainnya"
                   {...a11yProps(4)}
                 />
+                <Tab
+                  icon={<LockPersonIcon />}
+                  iconPosition="start"
+                  label="Keamanan"
+                  {...a11yProps(5)}
+                />
               </Tabs>
               <TabPanel value={value} index={0}>
                 <Box pt={3}>
@@ -108,13 +123,24 @@ function ProfileSetting(props) {
                 </Box>
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <Box pt={3}>Form C</Box>
+                <Box pt={3}>
+                  <ProfileFormAlamat />
+                </Box>
               </TabPanel>
               <TabPanel value={value} index={3}>
-                <Box pt={3}>Form D</Box>
+                <Box pt={3}>
+                  <ProfileFormBadan />
+                </Box>
               </TabPanel>
               <TabPanel value={value} index={4}>
-                <Box pt={3}>Form E</Box>
+                <Box pt={3}>
+                  <ProfileFormNomor />
+                </Box>
+              </TabPanel>
+              <TabPanel value={value} index={5}>
+                <Box pt={3}>
+                  <ProfileFormPassword />
+                </Box>
               </TabPanel>
             </Box>
           </CustomCard>

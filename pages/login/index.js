@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import axios from "axios";
@@ -87,6 +88,9 @@ function Login() {
 
   return (
     <div>
+      <Head>
+        <title>{`Sign In`}</title>
+      </Head>
       {loading && <LinearProgress sx={{ height: "4px" }} />}
       <div className="session-wrapper">
         <Grid container justify="center" alignItems="center">
@@ -99,7 +103,7 @@ function Login() {
                       alt="img"
                       width="100"
                       height="25"
-                      src={`/Images/hulk-light.png`}
+                      src={`/Pictures/logo-light.png`}
                       priority
                     />
                   ) : (
@@ -107,7 +111,7 @@ function Login() {
                       alt="img"
                       width="100"
                       height="25"
-                      src={`/Images/hulk-dark.png`}
+                      src={`/Pictures/logo-dark.png`}
                       priority
                     />
                   )}

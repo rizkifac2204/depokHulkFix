@@ -4,40 +4,46 @@ import MenuListItem from "assets/Data/MenuListItem";
 import NavMenuItem from "./NavMenuItem";
 
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import WidgetsIcon from "@mui/icons-material/Widgets";
-import ViewModuleIcon from "@mui/icons-material/ViewModule";
-import TouchAppIcon from "@mui/icons-material/TouchApp";
+import CorporateFareIcon from "@mui/icons-material/CorporateFare";
+import CastConnectedOutlinedIcon from "@mui/icons-material/CastConnectedOutlined";
+import DataArrayOutlinedIcon from "@mui/icons-material/DataArrayOutlined";
+import BalanceOutlinedIcon from "@mui/icons-material/BalanceOutlined";
 
 function HorizontalMenu(props) {
   const [state, setState] = useState({
     navLinks: MenuListItem,
     general: null,
-    modules: null,
-    components: null,
-    application: null,
+    sdmo: null,
+    pph: null,
+    ppdatin: null,
+    hukumsengketa: null,
   });
-  const { general, modules, components, application } = state;
+  const { general, sdmo, pph, ppdatin, hukumsengketa } = state;
 
   function setCategory() {
     let category1 = state.navLinks.filter((item, i) => {
       return item.category === "general";
     });
     let category2 = state.navLinks.filter((item, i) => {
-      return item.category === "modules";
+      return item.category === "sdmo";
     });
     let category3 = state.navLinks.filter((item, i) => {
-      return item.category === "components";
+      return item.category === "pph";
     });
     let category4 = state.navLinks.filter((item, i) => {
-      return item.category === "applications";
+      return item.category === "ppdatin";
+    });
+    let category5 = state.navLinks.filter((item, i) => {
+      return item.category === "hukumsengketa";
     });
 
     setState({
       ...state,
       general: category1,
-      modules: category2,
-      components: category3,
-      application: category4,
+      sdmo: category2,
+      pph: category3,
+      ppdatin: category4,
+      hukumsengketa: category5,
     });
   }
 
@@ -58,38 +64,48 @@ function HorizontalMenu(props) {
         </li>
         <li className="nav-item menu-item-has-child">
           <span>
-            <ViewModuleIcon />
-            <span className="menu-title">Modules</span>
+            <CorporateFareIcon />
+            <span className="menu-title">SDMO</span>
           </span>
           <ul className="list-unstyled sub-menu">
-            {modules &&
-              modules.map((menu, key) => <NavMenuItem menu={menu} key={key} />)}
+            {sdmo &&
+              sdmo.map((menu, key) => <NavMenuItem menu={menu} key={key} />)}
           </ul>
         </li>
         <li className="nav-item menu-item-has-child">
           <span>
-            <WidgetsIcon />
+            <CastConnectedOutlinedIcon />
             <span className="menu-title">
-              <span className="menu-title">Components</span>
+              <span className="menu-title">PPH</span>
             </span>
           </span>
           <ul className="list-unstyled sub-menu">
-            {components &&
-              components.map((menu, key) => (
-                <NavMenuItem menu={menu} key={key} />
-              ))}
+            {pph &&
+              pph.map((menu, key) => <NavMenuItem menu={menu} key={key} />)}
           </ul>
         </li>
         <li className="nav-item menu-item-has-child">
           <span>
-            <TouchAppIcon />
+            <DataArrayOutlinedIcon />
             <span className="menu-title">
-              <span className="menu-title">applications</span>
+              <span className="menu-title">PPDATIN</span>
             </span>
           </span>
           <ul className="list-unstyled sub-menu">
-            {application &&
-              application.map((menu, key) => (
+            {ppdatin &&
+              ppdatin.map((menu, key) => <NavMenuItem menu={menu} key={key} />)}
+          </ul>
+        </li>
+        <li className="nav-item menu-item-has-child">
+          <span>
+            <BalanceOutlinedIcon />
+            <span className="menu-title">
+              <span className="menu-title">HUKUMSENGKETA</span>
+            </span>
+          </span>
+          <ul className="list-unstyled sub-menu">
+            {hukumsengketa &&
+              hukumsengketa.map((menu, key) => (
                 <NavMenuItem menu={menu} key={key} />
               ))}
           </ul>

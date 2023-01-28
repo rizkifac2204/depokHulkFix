@@ -119,7 +119,12 @@ function HeaderUserBlock(props) {
             component="div"
             className="top-dropdown-menu--item d-block text-center"
           >
-            <Button variant="contained" color="primary" onClick={logout}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={logout}
+              className="primary-bg-btn"
+            >
               Sign out
             </Button>
           </ListItem>
