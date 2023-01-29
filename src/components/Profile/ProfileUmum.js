@@ -6,6 +6,9 @@ import Alert from "@mui/material/Alert";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
+// utils
+import { formatedDate } from "utils/formatDate";
+
 // component
 import Wait from "components/GlobalComponents/Wait";
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
@@ -92,7 +95,9 @@ function ProfileUmum() {
             <Box mb={2}>
               <Typography variant="h6">Tanggal Lahir</Typography>
               <Typography variant="body2">
-                {umum.tanggal_lahir || "-"}
+                {umum.tanggal_lahir
+                  ? formatedDate(umum.tanggal_lahir, true)
+                  : "-"}
               </Typography>
             </Box>
 

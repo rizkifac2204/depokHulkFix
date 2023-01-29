@@ -214,6 +214,15 @@ const ContextProvider = ({ children }) => {
     if (isMobile) dispatch({ type: COLLAPSED_SIDEBAR, value: false });
   }, [router]);
 
+  useEffect(() => {
+    if (state.isRtlActiveisRtlActive) {
+      document.getElementsByTagName("BODY")[0].setAttribute("dir", "rtl");
+    } else {
+      document.getElementsByTagName("BODY")[0].setAttribute("dir", "ltr");
+      // document.getElementsByTagName("BODY")[0].removeAttribute("dir");
+    }
+  }, [state.isRtlActive]);
+
   return (
     <RizkiFach.Provider value={[state, dispatch]}>
       {children}

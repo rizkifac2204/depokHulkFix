@@ -1,5 +1,3 @@
-import { format } from "date-fns";
-
 const namaBulan = (bulan, singkat = false) => {
   switch (bulan) {
     case 0:

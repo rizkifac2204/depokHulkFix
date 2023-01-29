@@ -1,6 +1,10 @@
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// or for Moment.js
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+
 // themes
 import darkTheme from "src/assets/themes/DarkTheme";
 import lightTheme from "assets/themes/LightTheme";
@@ -39,39 +43,14 @@ function Container(props) {
     }
   }
 
-  useEffect(() => {
-    if (isRtlActive) {
-      document.getElementsByTagName("BODY")[0].setAttribute("dir", "rtl");
-      theme.direction = "rtl";
-    } else {
-      document.getElementsByTagName("BODY")[0].setAttribute("dir", "ltr");
-      // document.getElementsByTagName("BODY")[0].removeAttribute("dir");
-      theme.direction = "ltr";
-    }
-  }, [isRtlActive]);
-
-  // useEffect(() => {
-  //   // if (selectedThemeColor === "light-theme") {
-  //   //   theme = lightTheme;
-  //   // } else if (selectedThemeColor === "teal-theme") {
-  //   //   theme = tealTheme;
-  //   // } else if (selectedThemeColor === "violet-theme") {
-  //   //   theme = violetTheme;
-  //   // } else {
-  //   //   theme = lightTheme;
-  //   // }
-  // }, [selectedThemeColor]);
-
-  // // useEffect(() => {
-  // //   console.log(theme.palette.primary);
-  // // }, [theme]);
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <ClientOnly>
-          {fullPage ? children : <DefaultLayout>{children}</DefaultLayout>}
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            {fullPage ? children : <DefaultLayout>{children}</DefaultLayout>}
+          </LocalizationProvider>
         </ClientOnly>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

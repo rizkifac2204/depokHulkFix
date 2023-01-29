@@ -2,6 +2,7 @@ import db from "libs/db";
 import Handler from "middlewares/Handler";
 import bcrypt from "bcryptjs";
 import getLogger from "middlewares/getLogger";
+import moment from "moment";
 
 export default Handler()
   .get(async (req, res) => {
@@ -37,6 +38,9 @@ export default Handler()
         keahlian,
         passwordConfirm,
       } = req.body;
+      const formatedTanggalLahir = tanggal_lahir
+        ? moment(tanggal_lahir).format("MM/DD/YYYY")
+        : null;
 
       const cek = await db("user").where("id", id).first();
       if (!cek)
@@ -58,7 +62,7 @@ export default Handler()
         agama,
         jenis_kelamin,
         tempat_lahir,
-        tanggal_lahir,
+        tanggal_lahir: formatedTanggalLahir,
         golongan_darah,
         status_nikah,
         gelar_depan,

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
@@ -15,6 +16,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 // components
 import ContentLayout from "components/GlobalComponents/ContentLayout";
 import Wait from "components/GlobalComponents/Wait";
@@ -23,6 +25,7 @@ const validationSchema = yup.object({
   status_pegawai: yup.string("Masukan Status").required("Harus Diisi"),
   jabatan: yup.string("Masukan Jabatan").required("Harus Diisi"),
   passwordConfirm: yup.string().required("Password Harus Diisi"),
+  tanggal_lahir: yup.date(),
 });
 
 const useHandleSubmitMutation = () => {
@@ -144,7 +147,7 @@ function ProfileFormUmum() {
           agama: umum.agama || "",
           jenis_kelamin: umum.jenis_kelamin || "",
           tempat_lahir: umum.tempat_lahir || "",
-          tanggal_lahir: umum.tanggal_lahir || "",
+          tanggal_lahir: umum.tanggal_lahir ? new Date(umum.tanggal_lahir) : "",
           golongan_darah: umum.golongan_darah || "",
           status_nikah: umum.status_nikah || "",
           gelar_depan: umum.gelar_depan || "",
@@ -173,6 +176,8 @@ function ProfileFormUmum() {
     onSubmit: (values, { setSubmitting }) =>
       handleSubmit(values, setSubmitting, mutate, queryClient),
   });
+
+  const [value, setValue] = useState("1992-04-22");
 
   if (isLoading) return <Wait loading={true} />;
   if (isError)
@@ -376,20 +381,27 @@ function ProfileFormUmum() {
         <Box mb={3}>
           <ContentLayout title="Tanggal Lahir">
             <FormControl fullWidth>
-              <TextField
-                variant="standard"
-                name="tanggal_lahir"
-                placeholder="Tanggal Lahir"
+              <MobileDatePicker
+                inputFormat="DD-MM-YYYY"
                 value={formik.values.tanggal_lahir}
-                onChange={formik.handleChange}
+                onChange={(value) => {
+                  formik.setFieldValue("tanggal_lahir", new Date(value));
+                }}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.tanggal_lahir &&
-                  Boolean(formik.errors.tanggal_lahir)
-                }
-                helperText={
-                  formik.touched.tanggal_lahir && formik.errors.tanggal_lahir
-                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="standard"
+                    helperText={
+                      formik.touched.tanggal_lahir &&
+                      formik.errors.tanggal_lahir
+                    }
+                    error={
+                      formik.touched.tanggal_lahir &&
+                      Boolean(formik.errors.tanggal_lahir)
+                    }
+                  />
+                )}
               />
             </FormControl>
           </ContentLayout>

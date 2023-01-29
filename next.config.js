@@ -6,13 +6,13 @@ const nextConfig = {
     NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   },
   reactStrictMode: true,
-  compiler: {
-    // ssr and displayName are configured by default
-    styledComponents: true,
-  },
-  sassOptions: {
-    includePaths: [path.join(__dirname, "styles")],
-  },
+  // compiler: {
+  //   // ssr and displayName are configured by default
+  //   styledComponents: true,
+  // },
+  // sassOptions: {
+  //   includePaths: [path.join(__dirname, "styles")],
+  // },
 };
 
 module.exports = nextConfig;

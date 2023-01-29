@@ -13,10 +13,15 @@ import {
   Box,
   Typography,
 } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useRizkiContext } from "context/AppContext";
 
 function Login() {
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const [init] = useRizkiContext();
   const { isDarkModeActive } = init;
@@ -29,6 +34,11 @@ function Login() {
     blankUsername: false,
     blankPassword: false,
   });
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   function onUserLogin(e) {
     e.preventDefault();
@@ -154,9 +164,27 @@ function Login() {
                       label="Password"
                       placeholder="Please enter your login password."
                       className=""
-                      type="password"
                       error={formErrors.blankPassword || error ? true : false}
                       onChange={onPasswordChanged.bind(this)}
+                      type={showPassword ? "text" : "password"}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                            >
+                              {showPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
                     />
                     {formErrors.blankPassword && (
                       <Box

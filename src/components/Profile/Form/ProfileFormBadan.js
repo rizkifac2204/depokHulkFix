@@ -12,6 +12,7 @@ import Alert from "@mui/material/Alert";
 import FormHelperText from "@mui/material/FormHelperText";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import InputAdornment from "@mui/material/InputAdornment";
 // components
 import ContentLayout from "components/GlobalComponents/ContentLayout";
 import Wait from "components/GlobalComponents/Wait";
@@ -174,6 +175,11 @@ function ProfileFormBadan() {
                 onBlur={formik.handleBlur}
                 error={formik.touched.tinggi && Boolean(formik.errors.tinggi)}
                 helperText={formik.touched.tinggi && formik.errors.tinggi}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">cm</InputAdornment>
+                  ),
+                }}
               />
             </FormControl>
           </ContentLayout>
@@ -191,6 +197,11 @@ function ProfileFormBadan() {
                 onBlur={formik.handleBlur}
                 error={formik.touched.berat && Boolean(formik.errors.berat)}
                 helperText={formik.touched.berat && formik.errors.berat}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">kg</InputAdornment>
+                  ),
+                }}
               />
             </FormControl>
           </ContentLayout>
