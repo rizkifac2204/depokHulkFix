@@ -123,7 +123,7 @@ function ProfileSidebarData() {
                 pt: 2.5,
                 pb: keluargaOpen ? 1 : 2.5,
                 "&:hover, &:focus": {
-                  "& svg": { opacity: keluargaOpen ? 1 : 0 },
+                  "& svg": { opacity: 1 },
                 },
               }}
             >
@@ -190,7 +190,7 @@ function ProfileSidebarData() {
                 pt: 2.5,
                 pb: riwayatOpen ? 1 : 2.5,
                 "&:hover, &:focus": {
-                  "& svg": { opacity: riwayatOpen ? 1 : 0 },
+                  "& svg": { opacity: 1 },
                 },
               }}
             >

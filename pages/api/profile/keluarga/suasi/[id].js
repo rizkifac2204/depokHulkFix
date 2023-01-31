@@ -1,6 +1,7 @@
 import db from "libs/db";
 import Handler from "middlewares/Handler";
 import getLogger from "middlewares/getLogger";
+import moment from "moment";
 
 export default Handler()
   .get(async (req, res) => {
@@ -40,8 +41,12 @@ export default Handler()
       const dataForEdit = {
         nama,
         tempat_lahir,
-        tanggal_lahir,
-        tanggal_nikah,
+        tanggal_lahir: tanggal_lahir
+          ? moment(tanggal_lahir).format("MM/DD/YYYY")
+          : null,
+        tanggal_nikah: tanggal_nikah
+          ? moment(tanggal_nikah).format("MM/DD/YYYY")
+          : null,
         pekerjaan,
         keterangan,
         validasi: 0,

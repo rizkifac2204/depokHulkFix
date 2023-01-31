@@ -100,7 +100,7 @@ function LayoutRiwayatDanKeluarga(props) {
           </nav>
 
           <main className={classes.content}>
-            <Box height="100%" className={classes.contentWrap}>
+            <Box height="100vh" className={classes.contentWrap}>
               <IconButton
                 size="small"
                 aria-label="open drawer"
