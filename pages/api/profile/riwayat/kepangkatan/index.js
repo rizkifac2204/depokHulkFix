@@ -1,6 +1,7 @@
 import db from "libs/db";
 import Handler from "middlewares/Handler";
 import getLogger from "middlewares/getLogger";
+import moment from "moment";
 
 export default Handler()
   .get(async (req, res) => {
@@ -29,6 +30,13 @@ export default Handler()
         dasar_peraturan,
       } = req.body;
 
+      // required
+      if (!pangkat)
+        return res.status(400).json({
+          message: "Pangkat Wajib Diisi",
+          type: "error",
+        });
+
       const dataForInsert = {
         user_id,
         validasi: 0,
@@ -39,7 +47,7 @@ export default Handler()
         gaji_pokok,
         sk_pejabat,
         no_sk,
-        tanggal_sk,
+        tanggal_sk: tanggal_sk ? moment(tanggal_sk).format("MM/DD/YYYY") : null,
         dasar_peraturan,
       };
 

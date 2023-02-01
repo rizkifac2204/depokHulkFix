@@ -1,6 +1,7 @@
 import db from "libs/db";
 import Handler from "middlewares/Handler";
 import getLogger from "middlewares/getLogger";
+import moment from "moment";
 
 export default Handler()
   .get(async (req, res) => {
@@ -25,14 +26,25 @@ export default Handler()
         tanggal_berikutnya,
       } = req.body;
 
+      // required
+      if (!no_sk_kgb)
+        return res.status(400).json({
+          message: "Nomor SK KGB Wajib Diisi",
+          type: "error",
+        });
+
       const dataForInsert = {
         user_id,
         validasi: 0,
         no_sk_kgb,
-        tanggal_sk,
+        tanggal_sk: tanggal_sk ? moment(tanggal_sk).format("MM/DD/YYYY") : null,
         gaji_poko_baru,
-        tanggal_mulai,
-        tanggal_berikutnya,
+        tanggal_mulai: tanggal_mulai
+          ? moment(tanggal_mulai).format("MM/DD/YYYY")
+          : null,
+        tanggal_berikutnya: tanggal_berikutnya
+          ? moment(tanggal_berikutnya).format("MM/DD/YYYY")
+          : null,
       };
 
       // proses simpan

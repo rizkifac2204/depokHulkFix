@@ -27,6 +27,13 @@ export default Handler()
         keterangan,
       } = req.body;
 
+      // required
+      if (!nama)
+        return res.status(400).json({
+          message: "Nama Wajib Diisi",
+          type: "error",
+        });
+
       const dataForInsert = {
         user_id,
         nama,

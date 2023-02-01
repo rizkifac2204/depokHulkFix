@@ -1,11 +1,10 @@
-import Head from "next/head";
 import { useState } from "react";
 import { Box, Drawer, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { withStyles } from "@mui/styles";
 import ProfileSidebarData from "./ProfileSidebarData";
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -64,9 +63,6 @@ function LayoutRiwayatDanKeluarga(props) {
 
   return (
     <>
-      <Head>
-        <title>{`Profile Data - BWS Depok Apps`}</title>
-      </Head>
       <Box className="hk-mail-wrapper">
         <div className={classes.root}>
           <nav className={classes.drawer} aria-label="mailbox folders">

@@ -30,6 +30,13 @@ export default Handler()
       const { id } = req.query;
       const { negara, tujuan, lamanya, membiayai } = req.body;
 
+      // required
+      if (!negara)
+        return res.status(400).json({
+          message: "Negara Wajib Diisi",
+          type: "error",
+        });
+
       const dataForEdit = {
         validasi: 0,
         negara,

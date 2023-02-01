@@ -31,6 +31,19 @@ export default Handler()
       const { pendidikan, nama, jurusan, tahun_ijazah, tempat, pimpinan } =
         req.body;
 
+      // required
+      if (!pendidikan)
+        return res.status(400).json({
+          message: "Pendidikan Wajib Diisi",
+          type: "error",
+        });
+      // required
+      if (!nama)
+        return res.status(400).json({
+          message: "Nama Tempat Belajar Wajib Diisi",
+          type: "error",
+        });
+
       const dataForEdit = {
         validasi: 0,
         pendidikan,

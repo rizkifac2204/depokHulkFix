@@ -30,6 +30,13 @@ export default Handler()
       const { id } = req.query;
       const { penghargaan, tahun_perolehan, nama } = req.body;
 
+      // required
+      if (!penghargaan)
+        return res.status(400).json({
+          message: "Nama Penghargaan Wajib Diisi",
+          type: "error",
+        });
+
       const dataForEdit = {
         validasi: 0,
         penghargaan,

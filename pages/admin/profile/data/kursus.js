@@ -20,14 +20,12 @@ import Head from "next/head";
 import LayoutRiwayatDanKeluarga from "components/Profile/Components/LayoutRiwayatDanKeluarga";
 import SmallTitleBar from "components/GlobalComponents/PageTitleBar/SmallTitleBar";
 import EditToolbar from "components/Profile/Components/EditToolbar";
-import { formatedDate } from "utils/formatDate";
 
 const initialStructure = {
   nama: "",
-  tempat_lahir: "",
-  tanggal_lahir: "",
-  tanggal_nikah: "",
-  pekerjaan: "",
+  lama: "",
+  tahun_ijazah: "",
+  tempat: "",
   keterangan: "",
   validasi: 0,
   isNew: true,
@@ -37,14 +35,14 @@ async function postData(values) {
   const { isNew, id } = values;
   if (!isNew) {
     try {
-      const res = await axios.put(`/api/profile/keluarga/suasi/${id}`, values);
+      const res = await axios.put(`/api/profile/riwayat/kursus/${id}`, values);
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.message || "Terjadi Kesalahan");
     }
   } else {
     try {
-      const res = await axios.post(`/api/profile/keluarga/suasi`, values);
+      const res = await axios.post(`/api/profile/riwayat/kursus`, values);
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.message || "Terjadi Kesalahan");
@@ -55,7 +53,7 @@ async function postData(values) {
 async function deleteData(id) {
   if (id) {
     try {
-      const res = await axios.delete(`/api/profile/keluarga/suasi/${id}`);
+      const res = await axios.delete(`/api/profile/riwayat/kursus/${id}`);
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.message || "Terjadi Kesalahan");
@@ -63,13 +61,13 @@ async function deleteData(id) {
   }
 }
 
-function ProfileSuasi() {
+function ProfileKursus() {
   const { data, isLoading } = useQuery({
     initialData: [],
-    queryKey: ["profile", "keluarga", "suasi"],
+    queryKey: ["profile", "riwayat", "kursus"],
     queryFn: ({ signal }) =>
       axios
-        .get(`/api/profile/keluarga/suasi`, { signal })
+        .get(`/api/profile/riwayat/kursus`, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);
@@ -88,7 +86,7 @@ function ProfileSuasi() {
       setRows(
         rows.map((row) => (row.id === id ? { ...row, isNew: false } : row))
       );
-      queryClient.invalidateQueries(["profile", "keluarga", "suasi"]);
+      queryClient.invalidateQueries(["profile", "riwayat", "kursus"]);
     },
     onError: (err, variables) => {
       const { id } = variables;
@@ -102,7 +100,7 @@ function ProfileSuasi() {
     onSuccess: (data, variable, context) => {
       toast.success(data.message || "Sukses");
       setRows(rows.filter((row) => row.id !== variable));
-      queryClient.invalidateQueries(["profile", "keluarga", "suasi"]);
+      queryClient.invalidateQueries(["profile", "riwayat", "kursus"]);
     },
     onError: (err, variables) => {
       toast.error(err.message);
@@ -152,7 +150,7 @@ function ProfileSuasi() {
   const columns = [
     {
       field: "nama",
-      headerName: "Nama",
+      headerName: "Nama Kursus",
       editable: true,
       flex: 1,
       minWidth: 150,
@@ -172,42 +170,34 @@ function ProfileSuasi() {
       ),
     },
     {
-      field: "tempat_lahir",
-      headerName: "Tempat Lahir",
+      field: "lama",
+      headerName: "Lama Kursus",
       editable: true,
       minWidth: 150,
     },
     {
-      field: "tanggal_lahir",
-      headerName: "Tanggal Lahir",
-      type: "date",
+      field: "tahun_ijazah",
+      headerName: "Tahun Ijazah",
+      type: "number",
       editable: true,
-      width: 150,
+      width: 90,
       valueFormatter: (params) => {
-        if (!params.value) return "";
-        return formatedDate(params.value);
+        if (!Boolean(params.value)) return "";
+        const valueFormatted = params.value.toString();
+        return `${valueFormatted}`;
       },
     },
     {
-      field: "tanggal_nikah",
-      headerName: "Tanggal Nikah",
-      type: "date",
+      field: "tempat",
+      headerName: "Tempat Kursus",
       editable: true,
-      width: 150,
-      valueFormatter: (params) => {
-        if (!params.value) return "";
-        return formatedDate(params.value);
-      },
-    },
-    {
-      field: "pekerjaan",
-      headerName: "Pekerjaan",
-      editable: true,
+      minWidth: 150,
     },
     {
       field: "keterangan",
       headerName: "Keterangan",
       editable: true,
+      minWidth: 150,
     },
     {
       field: "actions",
@@ -257,10 +247,10 @@ function ProfileSuasi() {
   return (
     <>
       <Head>
-        <title>{`Profile Data Suami/Istri - BWS Depok Apps`}</title>
+        <title>{`Profile Riwayat Kursus - BWS Depok Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
-        <SmallTitleBar title="Data Suami / Istri" />
+        <SmallTitleBar title="Data Riwayat Kursus" />
         <Box
           sx={{
             height: 500,
@@ -298,4 +288,4 @@ function ProfileSuasi() {
   );
 }
 
-export default ProfileSuasi;
+export default ProfileKursus;

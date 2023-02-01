@@ -23,12 +23,11 @@ import EditToolbar from "components/Profile/Components/EditToolbar";
 import { formatedDate } from "utils/formatDate";
 
 const initialStructure = {
-  nama: "",
-  tempat_lahir: "",
-  tanggal_lahir: "",
-  tanggal_nikah: "",
-  pekerjaan: "",
-  keterangan: "",
+  no_sk_kgb: "",
+  tanggal_sk: "",
+  gaji_poko_baru: "",
+  tanggal_mulai: "",
+  tanggal_berikutnya: "",
   validasi: 0,
   isNew: true,
 };
@@ -37,14 +36,14 @@ async function postData(values) {
   const { isNew, id } = values;
   if (!isNew) {
     try {
-      const res = await axios.put(`/api/profile/keluarga/suasi/${id}`, values);
+      const res = await axios.put(`/api/profile/riwayat/gaji/${id}`, values);
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.message || "Terjadi Kesalahan");
     }
   } else {
     try {
-      const res = await axios.post(`/api/profile/keluarga/suasi`, values);
+      const res = await axios.post(`/api/profile/riwayat/gaji`, values);
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.message || "Terjadi Kesalahan");
@@ -55,7 +54,7 @@ async function postData(values) {
 async function deleteData(id) {
   if (id) {
     try {
-      const res = await axios.delete(`/api/profile/keluarga/suasi/${id}`);
+      const res = await axios.delete(`/api/profile/riwayat/gaji/${id}`);
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.message || "Terjadi Kesalahan");
@@ -63,13 +62,13 @@ async function deleteData(id) {
   }
 }
 
-function ProfileSuasi() {
+function ProfileGaji() {
   const { data, isLoading } = useQuery({
     initialData: [],
-    queryKey: ["profile", "keluarga", "suasi"],
+    queryKey: ["profile", "riwayat", "gaji"],
     queryFn: ({ signal }) =>
       axios
-        .get(`/api/profile/keluarga/suasi`, { signal })
+        .get(`/api/profile/riwayat/gaji`, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);
@@ -88,7 +87,7 @@ function ProfileSuasi() {
       setRows(
         rows.map((row) => (row.id === id ? { ...row, isNew: false } : row))
       );
-      queryClient.invalidateQueries(["profile", "keluarga", "suasi"]);
+      queryClient.invalidateQueries(["profile", "riwayat", "gaji"]);
     },
     onError: (err, variables) => {
       const { id } = variables;
@@ -102,7 +101,7 @@ function ProfileSuasi() {
     onSuccess: (data, variable, context) => {
       toast.success(data.message || "Sukses");
       setRows(rows.filter((row) => row.id !== variable));
-      queryClient.invalidateQueries(["profile", "keluarga", "suasi"]);
+      queryClient.invalidateQueries(["profile", "riwayat", "gaji"]);
     },
     onError: (err, variables) => {
       toast.error(err.message);
@@ -151,8 +150,8 @@ function ProfileSuasi() {
 
   const columns = [
     {
-      field: "nama",
-      headerName: "Nama",
+      field: "no_sk_kgb",
+      headerName: "Nomor SK",
       editable: true,
       flex: 1,
       minWidth: 150,
@@ -167,19 +166,13 @@ function ProfileSuasi() {
               <CloseIcon />
             </Tooltip>
           )}
-          {params.row.nama}
+          {params.row.no_sk_kgb}
         </>
       ),
     },
     {
-      field: "tempat_lahir",
-      headerName: "Tempat Lahir",
-      editable: true,
-      minWidth: 150,
-    },
-    {
-      field: "tanggal_lahir",
-      headerName: "Tanggal Lahir",
+      field: "tanggal_sk",
+      headerName: "Tanggal SK",
       type: "date",
       editable: true,
       width: 150,
@@ -189,8 +182,14 @@ function ProfileSuasi() {
       },
     },
     {
-      field: "tanggal_nikah",
-      headerName: "Tanggal Nikah",
+      field: "gaji_poko_baru",
+      headerName: "Gaji Poko Baru",
+      editable: true,
+      width: 80,
+    },
+    {
+      field: "tanggal_mulai",
+      headerName: "Tanggal Mulai",
       type: "date",
       editable: true,
       width: 150,
@@ -200,14 +199,15 @@ function ProfileSuasi() {
       },
     },
     {
-      field: "pekerjaan",
-      headerName: "Pekerjaan",
+      field: "tanggal_berikutnya",
+      headerName: "Tanggal Berikutnya",
+      type: "date",
       editable: true,
-    },
-    {
-      field: "keterangan",
-      headerName: "Keterangan",
-      editable: true,
+      width: 150,
+      valueFormatter: (params) => {
+        if (!params.value) return "";
+        return formatedDate(params.value);
+      },
     },
     {
       field: "actions",
@@ -257,10 +257,10 @@ function ProfileSuasi() {
   return (
     <>
       <Head>
-        <title>{`Profile Data Suami/Istri - BWS Depok Apps`}</title>
+        <title>{`Profile Riwayat Gaji - BWS Depok Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
-        <SmallTitleBar title="Data Suami / Istri" />
+        <SmallTitleBar title="Data Riwayat Gaji" />
         <Box
           sx={{
             height: 500,
@@ -298,4 +298,4 @@ function ProfileSuasi() {
   );
 }
 
-export default ProfileSuasi;
+export default ProfileGaji;

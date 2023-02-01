@@ -19,6 +19,13 @@ export default Handler()
       const { id: user_id } = req.session.user;
       const { penghargaan, tahun_perolehan, nama } = req.body;
 
+      // required
+      if (!penghargaan)
+        return res.status(400).json({
+          message: "Nama Penghargaan Wajib Diisi",
+          type: "error",
+        });
+
       const dataForInsert = {
         user_id,
         validasi: 0,

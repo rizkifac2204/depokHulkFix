@@ -52,14 +52,19 @@ const keluarga = [
 
 const riwayat = [
   {
-    icon: <AttachMoneyOutlinedIcon />,
-    label: "Gaji",
-    path: "/admin/profile/data/gaji",
+    icon: <SchoolOutlinedIcon />,
+    label: "Pendidikan",
+    path: "/admin/profile/data/pendidikan",
   },
   {
-    icon: <AssistantOutlinedIcon />,
-    label: "Jabatan",
-    path: "/admin/profile/data/jabatan",
+    icon: <CorporateFareOutlinedIcon />,
+    label: "Organisasi",
+    path: "/admin/profile/data/organisasi",
+  },
+  {
+    icon: <CastForEducationOutlinedIcon />,
+    label: "Kursus",
+    path: "/admin/profile/data/kursus",
   },
   {
     icon: <TravelExploreOutlinedIcon />,
@@ -72,19 +77,14 @@ const riwayat = [
     path: "/admin/profile/data/kepangkatan",
   },
   {
-    icon: <CastForEducationOutlinedIcon />,
-    label: "Kursus",
-    path: "/admin/profile/data/kursus",
+    icon: <AssistantOutlinedIcon />,
+    label: "Jabatan",
+    path: "/admin/profile/data/jabatan",
   },
   {
-    icon: <CorporateFareOutlinedIcon />,
-    label: "Organisasi",
-    path: "/admin/profile/data/organisasi",
-  },
-  {
-    icon: <SchoolOutlinedIcon />,
-    label: "Pendidikan",
-    path: "/admin/profile/data/pendidikan",
+    icon: <AttachMoneyOutlinedIcon />,
+    label: "Gaji",
+    path: "/admin/profile/data/gaji",
   },
   {
     icon: <ThumbUpAltOutlinedIcon />,
@@ -138,7 +138,7 @@ function ProfileSidebarData() {
                 secondary={
                   keluargaOpen
                     ? null
-                    : "Data Suami/Istri, Data Anak, Data Orang Tua Saudara"
+                    : "Data Suami/Istri, Data Anak, Data Orang Tua, Saudara"
                 }
                 secondaryTypographyProps={{
                   noWrap: true,
@@ -205,7 +205,7 @@ function ProfileSidebarData() {
                 secondary={
                   riwayatOpen
                     ? null
-                    : "Pendidikan, Kepangkatan, Organisasi, Tanda Jasa, Kursus"
+                    : "Pendidikan, Organisasi, Kepangkatan, Tanda Jasa, Kursus"
                 }
                 secondaryTypographyProps={{
                   noWrap: true,

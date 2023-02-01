@@ -31,6 +31,13 @@ export default Handler()
       const { nama, jenjang, kedudukan, tahun, sampai, tempat, pimpinan } =
         req.body;
 
+      // required
+      if (!nama)
+        return res.status(400).json({
+          message: "Nama Organisasi Wajib Diisi",
+          type: "error",
+        });
+
       const dataForEdit = {
         validasi: 0,
         nama,

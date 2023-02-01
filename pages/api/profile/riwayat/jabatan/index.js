@@ -27,6 +27,13 @@ export default Handler()
         tgl_sk_jabatan,
       } = req.body;
 
+      // required
+      if (!golongan)
+        return res.status(400).json({
+          message: "Golongan Wajib Diisi",
+          type: "error",
+        });
+
       const dataForInsert = {
         user_id,
         validasi: 0,

@@ -19,6 +19,13 @@ export default Handler()
       const { id: user_id } = req.session.user;
       const { negara, tujuan, lamanya, membiayai } = req.body;
 
+      // required
+      if (!negara)
+        return res.status(400).json({
+          message: "Negara Wajib Diisi",
+          type: "error",
+        });
+
       const dataForInsert = {
         user_id,
         validasi: 0,

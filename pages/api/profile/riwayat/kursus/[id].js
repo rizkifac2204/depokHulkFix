@@ -30,6 +30,13 @@ export default Handler()
       const { id } = req.query;
       const { nama, lama, tahun_ijazah, tempat, keterangan } = req.body;
 
+      // required
+      if (!nama)
+        return res.status(400).json({
+          message: "Nama Kursus Wajib Diisi",
+          type: "error",
+        });
+
       const dataForEdit = {
         validasi: 0,
         nama,

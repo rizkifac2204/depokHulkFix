@@ -24,9 +24,7 @@ import { formatedDate } from "utils/formatDate";
 
 const initialStructure = {
   nama: "",
-  tempat_lahir: "",
   tanggal_lahir: "",
-  tanggal_nikah: "",
   pekerjaan: "",
   keterangan: "",
   validasi: 0,
@@ -37,14 +35,17 @@ async function postData(values) {
   const { isNew, id } = values;
   if (!isNew) {
     try {
-      const res = await axios.put(`/api/profile/keluarga/suasi/${id}`, values);
+      const res = await axios.put(
+        `/api/profile/keluarga/orangtua/${id}`,
+        values
+      );
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.message || "Terjadi Kesalahan");
     }
   } else {
     try {
-      const res = await axios.post(`/api/profile/keluarga/suasi`, values);
+      const res = await axios.post(`/api/profile/keluarga/orangtua`, values);
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.message || "Terjadi Kesalahan");
@@ -55,7 +56,7 @@ async function postData(values) {
 async function deleteData(id) {
   if (id) {
     try {
-      const res = await axios.delete(`/api/profile/keluarga/suasi/${id}`);
+      const res = await axios.delete(`/api/profile/keluarga/orangtua/${id}`);
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.message || "Terjadi Kesalahan");
@@ -63,13 +64,13 @@ async function deleteData(id) {
   }
 }
 
-function ProfileSuasi() {
+function ProfileOrangTua() {
   const { data, isLoading } = useQuery({
     initialData: [],
-    queryKey: ["profile", "keluarga", "suasi"],
+    queryKey: ["profile", "keluarga", "orangtua"],
     queryFn: ({ signal }) =>
       axios
-        .get(`/api/profile/keluarga/suasi`, { signal })
+        .get(`/api/profile/keluarga/orangtua`, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);
@@ -88,7 +89,7 @@ function ProfileSuasi() {
       setRows(
         rows.map((row) => (row.id === id ? { ...row, isNew: false } : row))
       );
-      queryClient.invalidateQueries(["profile", "keluarga", "suasi"]);
+      queryClient.invalidateQueries(["profile", "keluarga", "orangtua"]);
     },
     onError: (err, variables) => {
       const { id } = variables;
@@ -102,7 +103,7 @@ function ProfileSuasi() {
     onSuccess: (data, variable, context) => {
       toast.success(data.message || "Sukses");
       setRows(rows.filter((row) => row.id !== variable));
-      queryClient.invalidateQueries(["profile", "keluarga", "suasi"]);
+      queryClient.invalidateQueries(["profile", "keluarga", "orangtua"]);
     },
     onError: (err, variables) => {
       toast.error(err.message);
@@ -172,12 +173,6 @@ function ProfileSuasi() {
       ),
     },
     {
-      field: "tempat_lahir",
-      headerName: "Tempat Lahir",
-      editable: true,
-      minWidth: 150,
-    },
-    {
       field: "tanggal_lahir",
       headerName: "Tanggal Lahir",
       type: "date",
@@ -189,24 +184,15 @@ function ProfileSuasi() {
       },
     },
     {
-      field: "tanggal_nikah",
-      headerName: "Tanggal Nikah",
-      type: "date",
-      editable: true,
-      width: 150,
-      valueFormatter: (params) => {
-        if (!params.value) return "";
-        return formatedDate(params.value);
-      },
-    },
-    {
       field: "pekerjaan",
       headerName: "Pekerjaan",
+      minWidth: 180,
       editable: true,
     },
     {
       field: "keterangan",
       headerName: "Keterangan",
+      minWidth: 180,
       editable: true,
     },
     {
@@ -257,10 +243,10 @@ function ProfileSuasi() {
   return (
     <>
       <Head>
-        <title>{`Profile Data Suami/Istri - BWS Depok Apps`}</title>
+        <title>{`Profile Data Orang Tua - BWS Depok Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
-        <SmallTitleBar title="Data Suami / Istri" />
+        <SmallTitleBar title="Data Orang Tua" />
         <Box
           sx={{
             height: 500,
@@ -298,4 +284,4 @@ function ProfileSuasi() {
   );
 }
 
-export default ProfileSuasi;
+export default ProfileOrangTua;
