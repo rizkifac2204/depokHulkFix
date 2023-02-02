@@ -1,6 +1,5 @@
 import { makeStyles } from "@mui/styles";
 import { Typography, Fab, Box, Divider } from "@mui/material";
-import Image from "next/image";
 import Link from "next/link";
 
 import { useQuery } from "@tanstack/react-query";
@@ -9,12 +8,16 @@ import axios from "axios";
 // icons
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 // utils
 import { formatedDate } from "utils/formatDate";
 
 //component
 import { SocialIcons } from "components/GlobalComponents/SocialIcons";
 import Wait from "components/GlobalComponents/Wait";
+import Thumb from "components/GlobalComponents/Thumb";
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -37,18 +40,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProfileDetail({ profile }) {
+function ProfileDetail({ profile, isUser }) {
   const classes = useStyles();
+  let url, queryKey;
+
+  if (isUser) {
+    url = `/api/simpeg/${profile.id}/alamat`;
+    queryKey = ["user", profile.id, "alamat"];
+  } else {
+    url = `/api/profile/alamat`;
+    queryKey = ["profile", "alamat"];
+  }
 
   const {
     data: alamat,
     isError,
     isLoading,
   } = useQuery({
-    queryKey: ["profile", "alamat"],
+    queryKey: queryKey,
     queryFn: ({ signal }) =>
       axios
-        .get(`/api/profile/alamat`, { signal })
+        .get(url, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);
@@ -61,17 +73,7 @@ function ProfileDetail({ profile }) {
     <div className="">
       <Box className="user-detail" sx={{ pb: 2 }}>
         <div className="user-avatar">
-          <Image
-            src={
-              profile.foto_admin
-                ? `/foto/${profile.foto_admin}`
-                : "/Images/avatar-4.jpg"
-            }
-            alt={profile.nama_admin}
-            width={300}
-            height={300}
-            priority
-          />
+          <Thumb file={profile.foto_admin} alt={profile.nama_admin} />
         </div>
         <Typography variant="h6" style={{ marginBottom: "5px" }}>
           {profile.nama_admin}
@@ -79,6 +81,55 @@ function ProfileDetail({ profile }) {
         <Box mb={2} fontSize="subtitle2.fontSize" color="text.secondary">
           {profile.nama_level}
         </Box>
+        {isUser ? (
+          <>
+            {profile.myself ? (
+              <Fab
+                className={classes.fab}
+                size="small"
+                aria-label="detail"
+                component={Link}
+                href={`/admin/profile`}
+              >
+                <VisibilityOutlinedIcon />
+              </Fab>
+            ) : (
+              <Fab
+                className={classes.fab}
+                size="small"
+                aria-label="detail"
+                component={Link}
+                href={`/admin/simpeg/${profile.id}`}
+              >
+                <VisibilityOutlinedIcon />
+              </Fab>
+            )}
+
+            {!profile.myself && profile.editable && (
+              <>
+                <Fab
+                  className={classes.fab}
+                  size="small"
+                  aria-label="Edit"
+                  component={Link}
+                  href={`/admin/simpeg/${profile.id}/edit`}
+                >
+                  <EditOutlinedIcon />
+                </Fab>
+                <Fab
+                  className={classes.fab}
+                  size="small"
+                  aria-label="delete"
+                  onClick={() => {
+                    console.log(profile.id);
+                  }}
+                >
+                  <DeleteOutlineOutlinedIcon />
+                </Fab>
+              </>
+            )}
+          </>
+        ) : null}
         <Fab
           className={classes.fab}
           size="small"

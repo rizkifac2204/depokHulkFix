@@ -29,6 +29,7 @@ const Handler = async (req, res) => {
       bawaslu_id: checkUser.bawaslu_id,
       email_admin: checkUser.email_admin,
       name: checkUser.nama_admin,
+      verifikator: checkUser.verifikator,
       image: image,
     },
     process.env.JWT_SECRET_KEY

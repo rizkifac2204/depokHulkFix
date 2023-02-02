@@ -23,17 +23,26 @@ function Item(props) {
   );
 }
 
-function ProfileNomor() {
+function ProfileNomor({ profile, isUser }) {
+  let url, queryKey;
+  if (isUser) {
+    url = `/api/simpeg/${profile.id}/nomor`;
+    queryKey = ["user", profile.id, "nomor"];
+  } else {
+    url = `/api/profile/nomor`;
+    queryKey = ["profile", "nomor"];
+  }
+
   const {
     data: nomor,
     isError,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["profile", "nomor"],
+    queryKey: queryKey,
     queryFn: ({ signal }) =>
       axios
-        .get(`/api/profile/nomor`, { signal })
+        .get(url, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);

@@ -23,17 +23,27 @@ function Item(props) {
   );
 }
 
-function ProfileBadan() {
+function ProfileBadan({ profile, isUser }) {
+  let url, queryKey;
+
+  if (isUser) {
+    url = `/api/simpeg/${profile.id}/badan`;
+    queryKey = ["user", profile.id, "badan"];
+  } else {
+    url = `/api/profile/badan`;
+    queryKey = ["profile", "badan"];
+  }
+
   const {
     data: badan,
     isError,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["profile", "badan"],
+    queryKey: queryKey,
     queryFn: ({ signal }) =>
       axios
-        .get(`/api/profile/badan`, { signal })
+        .get(url, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);

@@ -13,17 +13,26 @@ import { formatedDate } from "utils/formatDate";
 import Wait from "components/GlobalComponents/Wait";
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
 
-function ProfileUmum() {
+function ProfileUmum({ profile, isUser }) {
+  let url, queryKey;
+  if (isUser) {
+    url = `/api/simpeg/${profile.id}/umum`;
+    queryKey = ["user", profile.id, "umum"];
+  } else {
+    url = `/api/profile/umum`;
+    queryKey = ["profile", "umum"];
+  }
+
   const {
     data: umum,
     isError,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["profile", "umum"],
+    queryKey: queryKey,
     queryFn: ({ signal }) =>
       axios
-        .get(`/api/profile/umum`, { signal })
+        .get(url, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);

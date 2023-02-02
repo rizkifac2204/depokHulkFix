@@ -35,6 +35,7 @@ const LoginCredential = async (req, res) => {
       bawaslu_id: checkUser.bawaslu_id,
       email_admin: checkUser.email_admin,
       name: checkUser.nama_admin,
+      verifikator: checkUser.verifikator,
       image: null,
     },
     process.env.JWT_SECRET_KEY

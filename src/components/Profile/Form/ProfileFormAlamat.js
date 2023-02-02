@@ -224,9 +224,7 @@ function ProfileFormAlamat() {
     setSelectedProvinsi(selected[0]);
 
     if (selected.length !== 0) {
-      if (
-        alamat.provinsi.toLowerCase() !== selected[0].provinsi.toLowerCase()
-      ) {
+      if (alamat.provinsi !== selected[0].provinsi) {
         formik.setFieldValue("kabkota", "");
         formik.setFieldValue("kecamatan", "");
         formik.setFieldValue("kelurahan", "");
@@ -251,7 +249,7 @@ function ProfileFormAlamat() {
     setSelectedKabkota(selected[0]);
 
     if (selected.length !== 0) {
-      if (alamat.kabkota.toLowerCase() !== selected[0].kabkota.toLowerCase()) {
+      if (alamat.kabkota !== selected[0].kabkota) {
         formik.setFieldValue("kecamatan", "");
         formik.setFieldValue("kelurahan", "");
       } else {
@@ -275,9 +273,7 @@ function ProfileFormAlamat() {
     setSelectedKecamatan(selected[0]);
 
     if (selected.length !== 0) {
-      if (
-        alamat.kecamatan.toLowerCase() !== selected[0].kecamatan.toLowerCase()
-      ) {
+      if (alamat.kecamatan !== selected[0].kecamatan) {
         formik.setFieldValue("kelurahan", "");
       } else {
         formik.setFieldValue("kelurahan", alamat.kelurahan);

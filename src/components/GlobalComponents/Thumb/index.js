@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import Avatar from "@mui/material/Avatar";
 import axios from "axios";
+import Image from "next/image";
+import Box from "@mui/material/Box";
+import Skeleton from "@mui/material/Skeleton";
 
 export default function Thumb({ file, altText = "Pemohon" }) {
   const [loading, setLoading] = useState(false);
-  const [thumb, setThumb] = useState(undefined);
+  const [thumb, setThumb] = useState("/Images/avatar-4.jpg");
   const [alt, setAlt] = useState(altText);
 
   useEffect(() => {
@@ -35,12 +37,18 @@ export default function Thumb({ file, altText = "Pemohon" }) {
     }
   }, [file, altText]);
 
-  if (!file) {
-    return null;
-  }
-  if (loading) {
-    return <p>loading...</p>;
-  }
+  if (!file) return null;
+  if (loading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Skeleton variant="circular" width={120} height={120} />
+      </Box>
+    );
 
-  return <Avatar src={thumb} alt={alt} />;
+  return <Image src={thumb} alt={alt} width={120} height={120} priority />;
 }

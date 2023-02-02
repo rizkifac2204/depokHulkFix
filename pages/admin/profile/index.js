@@ -51,14 +51,14 @@ function Profile() {
               <ProfileDetail profile={profile} />
             </Grid>
             <Grid item xs={12} sm={8} md={6}>
-              <ProfileUmum />
+              <ProfileUmum profile={profile} />
             </Grid>
             <Grid item xs={12} sm={12} md={3}>
               <Box mb={3}>
-                <ProfileBadan />
+                <ProfileBadan profile={profile} />
               </Box>
               <Box mb={3}>
-                <ProfileNomor />
+                <ProfileNomor profile={profile} />
               </Box>
             </Grid>
           </Grid>
