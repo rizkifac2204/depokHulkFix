@@ -60,24 +60,26 @@ export default Handler().put(
       }
 
       //cek jika ada email yang sama
-      const cekEmailSama = await db("user")
-        .where("id", "!=", id)
-        .andWhere("email_admin", email_admin)
-        .first();
-      if (cekEmailSama) {
-        if (req.file) DeleteUpload(req.file.destination, filename);
-        return res.status(401).json({
-          type: "error",
-          message:
-            "Email yang anda masukan sudah di pakai user lain, silakan masukan email pengganti",
-        });
+      if (email_admin) {
+        const cekEmailSama = await db("user")
+          .where("id", "!=", id)
+          .andWhere("email_admin", email_admin)
+          .first();
+        if (cekEmailSama) {
+          if (req.file) DeleteUpload(req.file.destination, filename);
+          return res.status(401).json({
+            type: "error",
+            message:
+              "Email yang anda masukan sudah di pakai user lain, silakan masukan email pengganti",
+          });
+        }
       }
 
       const forUser = {
         foto_admin: filename,
         nama_admin,
-        telp_admin,
-        email_admin,
+        telp_admin: telp_admin || null,
+        email_admin: email_admin || null,
         username,
       };
       const proses = await db("user")

@@ -30,8 +30,8 @@ export default Handler()
         user_id,
         validasi: 0,
         penghargaan,
-        tahun_perolehan,
-        nama,
+        tahun_perolehan: tahun_perolehan || null,
+        nama: nama || null,
       };
 
       // proses simpan

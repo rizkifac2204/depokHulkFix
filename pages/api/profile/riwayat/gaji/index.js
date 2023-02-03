@@ -38,7 +38,7 @@ export default Handler()
         validasi: 0,
         no_sk_kgb,
         tanggal_sk: tanggal_sk ? moment(tanggal_sk).format("MM/DD/YYYY") : null,
-        gaji_poko_baru,
+        gaji_poko_baru: gaji_poko_baru || null,
         tanggal_mulai: tanggal_mulai
           ? moment(tanggal_mulai).format("MM/DD/YYYY")
           : null,

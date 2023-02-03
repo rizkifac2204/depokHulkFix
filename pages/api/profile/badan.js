@@ -51,16 +51,16 @@ export default Handler()
           .json({ message: "Password Anda Salah", type: "error" });
 
       const forBadan = {
-        tinggi,
-        berat,
-        ukuran_celana,
-        ukuran_baju,
-        ukuran_sepatu,
-        bentuk_wajah,
-        jenis_rambut,
-        warna_kulit,
-        ciri_khas,
-        cacat,
+        tinggi: tinggi || null,
+        berat: berat || null,
+        ukuran_celana: ukuran_celana || null,
+        ukuran_baju: ukuran_baju || null,
+        ukuran_sepatu: ukuran_sepatu || null,
+        bentuk_wajah: bentuk_wajah || null,
+        jenis_rambut: jenis_rambut || null,
+        warna_kulit: warna_kulit || null,
+        ciri_khas: ciri_khas || null,
+        cacat: cacat || null,
       };
 
       const cekExist = await db(`user_badan`).where("user_id", id).first();

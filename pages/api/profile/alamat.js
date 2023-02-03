@@ -49,14 +49,14 @@ export default Handler()
           .json({ message: "Password Anda Salah", type: "error" });
 
       const forAlamat = {
-        alamat,
-        rt,
-        rw,
-        provinsi,
-        kabkota,
-        kecamatan,
-        kelurahan,
-        kode_pos,
+        alamat: alamat || null,
+        rt: rt || null,
+        rw: rw || null,
+        provinsi: provinsi || null,
+        kabkota: kabkota || null,
+        kecamatan: kecamatan || null,
+        kelurahan: kelurahan || null,
+        kode_pos: kode_pos || null,
       };
 
       const cekExist = await db(`user_alamat`).where("user_id", id).first();

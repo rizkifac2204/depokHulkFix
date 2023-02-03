@@ -30,10 +30,10 @@ export default Handler()
         user_id,
         validasi: 0,
         nama,
-        lama,
-        tahun_ijazah,
-        tempat,
-        keterangan,
+        lama: lama || null,
+        tahun_ijazah: tahun_ijazah || null,
+        tempat: tempat || null,
+        keterangan: keterangan || null,
       };
 
       // proses simpan

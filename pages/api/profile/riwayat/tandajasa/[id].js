@@ -40,8 +40,8 @@ export default Handler()
       const dataForEdit = {
         validasi: 0,
         penghargaan,
-        tahun_perolehan,
-        nama,
+        tahun_perolehan: tahun_perolehan || null,
+        nama: nama || null,
       };
 
       const proses = await db("user_riwayat_tandajasa")

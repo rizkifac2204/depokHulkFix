@@ -43,8 +43,8 @@ export default Handler()
         tanggal_lahir: tanggal_lahir
           ? moment(tanggal_lahir).format("MM/DD/YYYY")
           : null,
-        pekerjaan,
-        keterangan,
+        pekerjaan: pekerjaan || null,
+        keterangan: keterangan || null,
         validasi: 0,
       };
 

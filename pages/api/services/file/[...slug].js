@@ -4,6 +4,12 @@ const fs = require("fs");
 var mime = require("mime-types");
 import getLogger from "middlewares/getLogger";
 
+export const config = {
+  api: {
+    responseLimit: false,
+  },
+};
+
 export default HandlerPublic().get(async (req, res) => {
   const _path = req.query.slug.join("/");
   if (!_path)

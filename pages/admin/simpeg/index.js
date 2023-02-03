@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 // library
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { toast } from "react-toastify";
 // MUI
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -12,7 +13,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LinearProgress from "@mui/material/LinearProgress";
 import Alert from "@mui/material/Alert";
-import { GridRowModes, DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 // ICON
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -21,7 +22,19 @@ import { CustomToolbar } from "components/GlobalComponents/TableComponents";
 import ProfileDetail from "components/Profile/ProfileDetail";
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
 
+async function deleteData(id) {
+  if (id) {
+    try {
+      const res = await axios.delete(`/api/simpeg/${id}`);
+      return res.data;
+    } catch (err) {
+      throw new Error(err?.response?.data?.message || "Terjadi Kesalahan");
+    }
+  }
+}
+
 function Simpeg() {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const theme = useTheme();
   const hideOnLg = useMediaQuery(theme.breakpoints.up("lg"));
@@ -50,8 +63,22 @@ function Simpeg() {
     setDetail(users[0]);
   }, [users]);
 
+  const { mutate: mutateDelete, isLoading: isLoadingDelete } = useMutation({
+    mutationFn: deleteData,
+    onSuccess: (data, variable, context) => {
+      toast.success(data.message || "Sukses");
+      queryClient.invalidateQueries(["users"]);
+    },
+    onError: (err, variables) => {
+      toast.error(err.message);
+    },
+  });
+
   const handleDeleteClick = (id) => {
-    console.log(id);
+    const ask = confirm("Yakin Hapus Data?");
+    if (ask) {
+      mutateDelete(id);
+    }
   };
 
   if (isLoading) return <LinearProgress sx={{ height: "4px" }} />;
@@ -148,7 +175,11 @@ function Simpeg() {
             <Grid item lg={3}>
               {Object.keys(detail).length !== 0 ? (
                 <Box pt={3} sx={{ display: { xs: "none", lg: "block" } }}>
-                  <ProfileDetail profile={detail} isUser={true} />
+                  <ProfileDetail
+                    profile={detail}
+                    isUser={true}
+                    handleDeleteClick={() => handleDeleteClick(detail.id)}
+                  />
                 </Box>
               ) : null}
             </Grid>

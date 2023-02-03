@@ -51,14 +51,14 @@ export default Handler()
       const dataForEdit = {
         validasi: 0,
         pangkat,
-        jenis,
-        golongan,
-        terhitung_mulai,
-        gaji_pokok,
-        sk_pejabat,
-        no_sk,
+        jenis: jenis || null,
+        golongan: golongan || null,
+        terhitung_mulai: terhitung_mulai || null,
+        gaji_pokok: gaji_pokok || null,
+        sk_pejabat: sk_pejabat || null,
+        no_sk: no_sk || null,
         tanggal_sk: tanggal_sk ? moment(tanggal_sk).format("MM/DD/YYYY") : null,
-        dasar_peraturan,
+        dasar_peraturan: dasar_peraturan || null,
       };
 
       const proses = await db("user_riwayat_kepangkatan")

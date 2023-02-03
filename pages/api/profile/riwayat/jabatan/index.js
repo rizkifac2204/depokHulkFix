@@ -38,12 +38,12 @@ export default Handler()
         user_id,
         validasi: 0,
         golongan,
-        jabatan,
-        tahun_mulai,
-        gaji_jabatan,
-        sk_jabatan,
-        no_sk_jabatan,
-        tgl_sk_jabatan,
+        jabatan: jabatan || null,
+        tahun_mulai: tahun_mulai || null,
+        gaji_jabatan: gaji_jabatan || null,
+        sk_jabatan: sk_jabatan || null,
+        no_sk_jabatan: no_sk_jabatan || null,
+        tgl_sk_jabatan: tgl_sk_jabatan || null,
       };
 
       // proses simpan

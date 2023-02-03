@@ -38,9 +38,6 @@ export default Handler()
         keahlian,
         passwordConfirm,
       } = req.body;
-      const formatedTanggalLahir = tanggal_lahir
-        ? moment(tanggal_lahir).format("MM/DD/YYYY")
-        : null;
 
       const cek = await db("user").where("id", id).first();
       if (!cek)
@@ -57,18 +54,20 @@ export default Handler()
           .json({ message: "Password Anda Salah", type: "error" });
 
       const forUmum = {
-        status_pegawai,
-        jabatan,
-        agama,
-        jenis_kelamin,
-        tempat_lahir,
-        tanggal_lahir: formatedTanggalLahir,
-        golongan_darah,
-        status_nikah,
-        gelar_depan,
-        gelar_belakang,
-        hobi,
-        keahlian,
+        status_pegawai: status_pegawai || null,
+        jabatan: jabatan || null,
+        agama: agama || null,
+        jenis_kelamin: jenis_kelamin || null,
+        tempat_lahir: tempat_lahir || null,
+        tanggal_lahir: tanggal_lahir
+          ? moment(tanggal_lahir).format("MM/DD/YYYY")
+          : null,
+        golongan_darah: golongan_darah || null,
+        status_nikah: status_nikah || null,
+        gelar_depan: gelar_depan || null,
+        gelar_belakang: gelar_belakang || null,
+        hobi: hobi || null,
+        keahlian: keahlian || null,
       };
 
       const cekExist = await db(`user_umum`).where("user_id", id).first();

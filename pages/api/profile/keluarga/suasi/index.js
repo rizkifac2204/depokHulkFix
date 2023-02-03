@@ -37,15 +37,15 @@ export default Handler()
       const dataForInsert = {
         user_id,
         nama,
-        tempat_lahir,
+        tempat_lahir: tempat_lahir || null,
         tanggal_lahir: tanggal_lahir
           ? moment(tanggal_lahir).format("MM/DD/YYYY")
           : null,
         tanggal_nikah: tanggal_nikah
           ? moment(tanggal_nikah).format("MM/DD/YYYY")
           : null,
-        pekerjaan,
-        keterangan,
+        pekerjaan: pekerjaan || null,
+        keterangan: keterangan || null,
         validasi: 0,
       };
 

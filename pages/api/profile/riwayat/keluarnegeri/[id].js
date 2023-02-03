@@ -40,9 +40,9 @@ export default Handler()
       const dataForEdit = {
         validasi: 0,
         negara,
-        tujuan,
-        lamanya,
-        membiayai,
+        tujuan: tujuan || null,
+        lamanya: lamanya || null,
+        membiayai: membiayai || null,
       };
 
       const proses = await db("user_riwayat_keluarnegeri")

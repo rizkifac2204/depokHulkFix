@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProfileDetail({ profile, isUser }) {
+function ProfileDetail({ profile, isUser, handleDeleteClick }) {
   const classes = useStyles();
   let url, queryKey;
 
@@ -120,9 +120,7 @@ function ProfileDetail({ profile, isUser }) {
                   className={classes.fab}
                   size="small"
                   aria-label="delete"
-                  onClick={() => {
-                    console.log(profile.id);
-                  }}
+                  onClick={handleDeleteClick}
                 >
                   <DeleteOutlineOutlinedIcon />
                 </Fab>

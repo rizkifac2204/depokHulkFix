@@ -41,12 +41,12 @@ export default Handler()
       const dataForEdit = {
         validasi: 0,
         nama,
-        jenjang,
-        kedudukan,
-        tahun,
-        sampai,
-        tempat,
-        pimpinan,
+        jenjang: jenjang || null,
+        kedudukan: kedudukan || null,
+        tahun: tahun || null,
+        sampai: sampai || null,
+        tempat: tempat || null,
+        pimpinan: pimpinan || null,
       };
 
       const proses = await db("user_riwayat_organisasi")

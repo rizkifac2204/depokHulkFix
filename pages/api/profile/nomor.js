@@ -50,15 +50,15 @@ export default Handler()
           .json({ message: "Password Anda Salah", type: "error" });
 
       const forNomor = {
-        no_nip,
-        no_ktp,
-        no_karpeg,
-        no_bpjs_ketenagakerjaan,
-        no_bpjs_kesehatan,
-        no_taspen,
-        no_karis,
-        no_npwp,
-        no_kontrak,
+        no_nip: no_nip || null,
+        no_ktp: no_ktp || null,
+        no_karpeg: no_karpeg || null,
+        no_bpjs_ketenagakerjaan: no_bpjs_ketenagakerjaan || null,
+        no_bpjs_kesehatan: no_bpjs_kesehatan || null,
+        no_taspen: no_taspen || null,
+        no_karis: no_karis || null,
+        no_npwp: no_npwp || null,
+        no_kontrak: no_kontrak || null,
       };
 
       const cekExist = await db(`user_nomor`).where("user_id", id).first();

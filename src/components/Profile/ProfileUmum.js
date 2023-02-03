@@ -58,51 +58,51 @@ function ProfileUmum({ profile, isUser }) {
         <Grid container mt={4}>
           <Grid item xs={12} lg={6}>
             <Box mb={2}>
-              <Typography variant="h6">Status</Typography>
+              <Typography variant="subtitle2">Status</Typography>
               <Typography variant="body2">
                 {umum.status_pegawai || "-"}
               </Typography>
             </Box>
 
             <Box mb={2}>
-              <Typography variant="h6">Jabatan</Typography>
+              <Typography variant="subtitle2">Jabatan</Typography>
               <Typography variant="body2">{umum.jabatan || "-"}</Typography>
             </Box>
 
             <Box mb={2}>
-              <Typography variant="h6">Gelar Depan</Typography>
+              <Typography variant="subtitle2">Gelar Depan</Typography>
               <Typography variant="body2">{umum.gelar_depan || "-"}</Typography>
             </Box>
 
             <Box mb={2}>
-              <Typography variant="h6">Gelar Belakang</Typography>
+              <Typography variant="subtitle2">Gelar Belakang</Typography>
               <Typography variant="body2">
                 {umum.gelar_belakang || "-"}
               </Typography>
             </Box>
 
             <Box mb={2}>
-              <Typography variant="h6">Jenis Kelamin</Typography>
+              <Typography variant="subtitle2">Jenis Kelamin</Typography>
               <Typography variant="body2">
                 {umum.jenis_kelamin || "-"}
               </Typography>
             </Box>
 
             <Box mb={2}>
-              <Typography variant="h6">Agama</Typography>
+              <Typography variant="subtitle2">Agama</Typography>
               <Typography variant="body2">{umum.agama || "-"}</Typography>
             </Box>
           </Grid>
           <Grid item xs={12} lg={6}>
             <Box mb={2}>
-              <Typography variant="h6">Tempat Lahir</Typography>
+              <Typography variant="subtitle2">Tempat Lahir</Typography>
               <Typography variant="body2">
                 {umum.tempat_lahir || "-"}
               </Typography>
             </Box>
 
             <Box mb={2}>
-              <Typography variant="h6">Tanggal Lahir</Typography>
+              <Typography variant="subtitle2">Tanggal Lahir</Typography>
               <Typography variant="body2">
                 {umum.tanggal_lahir
                   ? formatedDate(umum.tanggal_lahir, true)
@@ -111,26 +111,26 @@ function ProfileUmum({ profile, isUser }) {
             </Box>
 
             <Box mb={2}>
-              <Typography variant="h6">Golongan Darah</Typography>
+              <Typography variant="subtitle2">Golongan Darah</Typography>
               <Typography variant="body2">
                 {umum.golongan_darah || "-"}
               </Typography>
             </Box>
 
             <Box mb={2}>
-              <Typography variant="h6">Status Nikah</Typography>
+              <Typography variant="subtitle2">Status Nikah</Typography>
               <Typography variant="body2">
                 {umum.status_nikah || "-"}
               </Typography>
             </Box>
 
             <Box mb={2}>
-              <Typography variant="h6">Hobi</Typography>
+              <Typography variant="subtitle2">Hobi</Typography>
               <Typography variant="body2">{umum.hobi || "-"}</Typography>
             </Box>
 
             <Box mb={2}>
-              <Typography variant="h6">Keahlian</Typography>
+              <Typography variant="subtitle2">Keahlian</Typography>
               <Typography variant="body2">{umum.keahlian || "-"}</Typography>
             </Box>
           </Grid>

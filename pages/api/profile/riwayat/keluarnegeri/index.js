@@ -30,9 +30,9 @@ export default Handler()
         user_id,
         validasi: 0,
         negara,
-        tujuan,
-        lamanya,
-        membiayai,
+        tujuan: tujuan || null,
+        lamanya: lamanya || null,
+        membiayai: membiayai || null,
       };
 
       // proses simpan

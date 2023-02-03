@@ -38,6 +38,7 @@ next-env.d.ts
 
 #custom
 /public/upload
+/public/foto
 /logs
 .auth_info_baileys
 .env*.local

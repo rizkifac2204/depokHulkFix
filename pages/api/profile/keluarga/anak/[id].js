@@ -48,14 +48,14 @@ export default Handler()
 
       const dataForEdit = {
         nama,
-        jenis_kelamin,
-        tempat_lahir,
+        jenis_kelamin: jenis_kelamin || null,
+        tempat_lahir: tempat_lahir || null,
         tanggal_lahir: tanggal_lahir
           ? moment(tanggal_lahir).format("MM/DD/YYYY")
           : null,
-        anak_ke,
-        pekerjaan,
-        keterangan,
+        anak_ke: anak_ke || null,
+        pekerjaan: pekerjaan || null,
+        keterangan: keterangan || null,
         validasi: 0,
       };
 

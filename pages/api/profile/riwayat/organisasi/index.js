@@ -31,12 +31,12 @@ export default Handler()
         user_id,
         validasi: 0,
         nama,
-        jenjang,
-        kedudukan,
-        tahun,
-        sampai,
-        tempat,
-        pimpinan,
+        jenjang: jenjang || null,
+        kedudukan: kedudukan || null,
+        tahun: tahun || null,
+        sampai: sampai || null,
+        tempat: tempat || null,
+        pimpinan: pimpinan || null,
       };
 
       // proses simpan

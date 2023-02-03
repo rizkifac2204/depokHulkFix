@@ -31,12 +31,12 @@ export default Handler()
       const dataForInsert = {
         user_id,
         nama,
-        jenis_kelamin,
+        jenis_kelamin: jenis_kelamin || null,
         tanggal_lahir: tanggal_lahir
           ? moment(tanggal_lahir).format("MM/DD/YYYY")
           : null,
-        pekerjaan,
-        keterangan,
+        pekerjaan: pekerjaan || null,
+        keterangan: keterangan || null,
         validasi: 0,
       };
 

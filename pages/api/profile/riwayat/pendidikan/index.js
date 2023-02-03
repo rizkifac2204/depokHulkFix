@@ -38,10 +38,10 @@ export default Handler()
         validasi: 0,
         pendidikan,
         nama,
-        jurusan,
-        tahun_ijazah,
-        tempat,
-        pimpinan,
+        jurusan: jurusan || null,
+        tahun_ijazah: tahun_ijazah || null,
+        tempat: tempat || null,
+        pimpinan: pimpinan || null,
       };
 
       // proses simpan
