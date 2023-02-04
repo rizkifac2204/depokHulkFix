@@ -27,7 +27,7 @@ export default Handler()
   })
   .put(async (req, res) => {
     try {
-      const { id: user_id } = req.session.user;
+      const { id: user_id, verifikator } = req.session.user;
       const { id } = req.query;
       const { nama, tanggal_lahir, pekerjaan, keterangan } = req.body;
 
@@ -45,7 +45,7 @@ export default Handler()
           : null,
         pekerjaan: pekerjaan || null,
         keterangan: keterangan || null,
-        validasi: 0,
+        validasi: verifikator,
       };
 
       const proses = await db("user_keluarga_orangtua")

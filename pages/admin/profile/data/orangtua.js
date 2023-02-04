@@ -66,7 +66,6 @@ async function deleteData(id) {
 
 function ProfileOrangTua() {
   const { data, isLoading } = useQuery({
-    initialData: [],
     queryKey: ["profile", "keluarga", "orangtua"],
     queryFn: ({ signal }) =>
       axios
@@ -259,10 +258,9 @@ function ProfileOrangTua() {
             },
           }}
         >
-          {isLoading && "LOADING"}
           <DataGrid
             loading={isLoading || isLoadingMutate || isLoadingDelete}
-            rows={rows}
+            rows={rows || []}
             columns={columns}
             editMode="row"
             rowModesModel={rowModesModel}

@@ -13,6 +13,7 @@ import {
   Avatar,
 } from "@mui/material";
 import Skeleton from "@mui/material/Skeleton";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
 import { useAuthContext } from "context/AuthContext";
 
@@ -62,7 +63,7 @@ function HeaderUserBlock(props) {
 
   return (
     <div>
-      <Tooltip title="User Profile" placement="bottom">
+      <Tooltip title={user.name} placement="bottom">
         <IconButton
           aria-describedby={open ? "simple-popper" : null}
           variant="contained"
@@ -70,7 +71,11 @@ function HeaderUserBlock(props) {
           style={{ padding: "6px" }}
           onClick={handleClick}
         >
-          <Avatar alt={user.name} className={classes.avatar} src={user.image} />
+          <Avatar
+            alt={user.name}
+            className={classes.avatar}
+            src={user.image ? user.image : user.name}
+          />
         </IconButton>
       </Tooltip>
       <Popover
@@ -120,10 +125,10 @@ function HeaderUserBlock(props) {
             className="top-dropdown-menu--item d-block text-center"
           >
             <Button
-              variant="contained"
               color="primary"
               onClick={logout}
               className="primary-bg-btn"
+              endIcon={<LogoutOutlinedIcon />}
             >
               Sign out
             </Button>

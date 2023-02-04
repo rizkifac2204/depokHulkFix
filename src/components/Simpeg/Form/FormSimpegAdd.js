@@ -443,11 +443,18 @@ function FormSimpegAdd() {
                     onChange={formik.handleChange}
                   >
                     <MenuItem value="">Pilih</MenuItem>
-                    {kelurahan.map((i, idx) => (
-                      <MenuItem key={idx} value={i.id}>
-                        {i.kelurahan}
-                      </MenuItem>
-                    ))}
+                    {kelurahan
+                      .filter((item) => {
+                        if (user.level === 5)
+                          return item.kecamatan_id == user.bawaslu_id;
+                        if (user.level === 6) return item.id == user.bawaslu_id;
+                        return item;
+                      })
+                      .map((i, idx) => (
+                        <MenuItem key={idx} value={i.id}>
+                          {i.kelurahan}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
               ) : null}

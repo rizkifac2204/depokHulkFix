@@ -17,7 +17,7 @@ export default Handler()
   })
   .post(async (req, res) => {
     try {
-      const { id: user_id } = req.session.user;
+      const { id: user_id, verifikator } = req.session.user;
       const {
         no_sk_kgb,
         tanggal_sk,
@@ -35,7 +35,7 @@ export default Handler()
 
       const dataForInsert = {
         user_id,
-        validasi: 0,
+        validasi: verifikator,
         no_sk_kgb,
         tanggal_sk: tanggal_sk ? moment(tanggal_sk).format("MM/DD/YYYY") : null,
         gaji_poko_baru: gaji_poko_baru || null,

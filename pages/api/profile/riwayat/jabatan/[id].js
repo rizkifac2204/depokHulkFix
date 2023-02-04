@@ -26,7 +26,7 @@ export default Handler()
   })
   .put(async (req, res) => {
     try {
-      const { id: user_id } = req.session.user;
+      const { id: user_id, verifikator } = req.session.user;
       const { id } = req.query;
       const {
         golongan,
@@ -46,7 +46,7 @@ export default Handler()
         });
 
       const dataForEdit = {
-        validasi: 0,
+        validasi: verifikator,
         golongan,
         jabatan: jabatan || null,
         tahun_mulai: tahun_mulai || null,

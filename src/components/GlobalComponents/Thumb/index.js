@@ -6,7 +6,7 @@ import Skeleton from "@mui/material/Skeleton";
 
 export default function Thumb({ file, altText = "Pemohon" }) {
   const [loading, setLoading] = useState(false);
-  const [thumb, setThumb] = useState("/Images/avatar-4.jpg");
+  const [thumb, setThumb] = useState("/Pictures/avatar-4.jpg");
   const [alt, setAlt] = useState(altText);
 
   useEffect(() => {
@@ -37,7 +37,16 @@ export default function Thumb({ file, altText = "Pemohon" }) {
     }
   }, [file, altText]);
 
-  if (!file) return null;
+  if (!file)
+    return (
+      <Image
+        src={`/Pictures/avatar-4.jpg`}
+        alt={"Akun"}
+        width={120}
+        height={120}
+        priority
+      />
+    );
   if (loading)
     return (
       <Box

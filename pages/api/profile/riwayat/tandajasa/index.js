@@ -16,7 +16,7 @@ export default Handler()
   })
   .post(async (req, res) => {
     try {
-      const { id: user_id } = req.session.user;
+      const { id: user_id, verifikator } = req.session.user;
       const { penghargaan, tahun_perolehan, nama } = req.body;
 
       // required
@@ -28,7 +28,7 @@ export default Handler()
 
       const dataForInsert = {
         user_id,
-        validasi: 0,
+        validasi: verifikator,
         penghargaan,
         tahun_perolehan: tahun_perolehan || null,
         nama: nama || null,

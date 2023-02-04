@@ -122,7 +122,7 @@ function ProfileDetail({ profile, isUser, handleDeleteClick }) {
                   aria-label="delete"
                   onClick={handleDeleteClick}
                 >
-                  <DeleteOutlineOutlinedIcon />
+                  <DeleteOutlineOutlinedIcon color="primary" />
                 </Fab>
               </>
             )}
@@ -156,21 +156,25 @@ function ProfileDetail({ profile, isUser, handleDeleteClick }) {
           <Box mb={2}>
             <Typography variant="subtitle2">Email</Typography>
             <Typography variant="subtitle2" color="textPrimary">
-              {profile.email_admin}
+              {profile.email_admin || "-"}
             </Typography>
           </Box>
           <Box mb={2}>
             <Typography variant="subtitle2">Phone No.</Typography>
             <Typography variant="subtitle2" color="textPrimary">
-              {profile.telp_admin}
+              {profile.telp_admin || "-"}
             </Typography>
           </Box>
-          <Box>
-            <Typography variant="subtitle2">Update Terakhir</Typography>
-            <Typography variant="subtitle2" color="textPrimary">
-              {formatedDate(profile.updated_at, true)}
-            </Typography>
-          </Box>
+          {!isUser && (
+            <Box>
+              <Typography variant="subtitle2">Update Terakhir</Typography>
+              <Typography variant="subtitle2" color="textPrimary">
+                {profile.updated_at
+                  ? formatedDate(profile.updated_at, true)
+                  : "-"}
+              </Typography>
+            </Box>
+          )}
         </Box>
         <Divider />
         <Box display="flex" py={2} justifyContent="space-between">

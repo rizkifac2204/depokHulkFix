@@ -17,7 +17,7 @@ export default Handler()
   })
   .post(async (req, res) => {
     try {
-      const { id: user_id } = req.session.user;
+      const { id: user_id, verifikator } = req.session.user;
       const { nama, jenis_kelamin, tanggal_lahir, pekerjaan, keterangan } =
         req.body;
 
@@ -37,7 +37,7 @@ export default Handler()
           : null,
         pekerjaan: pekerjaan || null,
         keterangan: keterangan || null,
-        validasi: 0,
+        validasi: verifikator,
       };
 
       // proses simpan
