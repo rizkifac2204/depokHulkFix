@@ -18,6 +18,10 @@ export default function middleware(req, res) {
   const { pathname, origin } = req.nextUrl;
   const depokApps = req.cookies.get("depokApps")?.value;
 
+  if (pathname.startsWith("/_next")) {
+    return NextResponse.next();
+  }
+
   if (pathname.startsWith("/login")) {
     if (depokApps) return NextResponse.redirect(`${origin}/admin`);
   }

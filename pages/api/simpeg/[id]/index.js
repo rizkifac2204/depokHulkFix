@@ -2,22 +2,7 @@ import db from "libs/db";
 import Handler from "middlewares/Handler";
 import getLogger from "middlewares/getLogger";
 import { DeleteUpload } from "services/uploadService";
-
-async function isEditable(level, bawaslu_id, verifikator, obj) {
-  if (level === 1) return true;
-  if (
-    level === obj.level_id &&
-    bawaslu_id === obj.bawaslu_id &&
-    verifikator === 1
-  )
-    return true;
-  if (level < obj.bawaslu_id) return true;
-  return false;
-}
-async function isMyself(idAdmin, idUser) {
-  if (idAdmin === idUser) return true;
-  return false;
-}
+import { isEditable, isMyself } from "middlewares/simpegAttrs";
 
 export default Handler()
   .get(async (req, res) => {
@@ -40,8 +25,8 @@ export default Handler()
 
       const result = {
         ...data,
-        editable: await isEditable(level, bawaslu_id, verifikator, data),
-        myselft: await isMyself(user_id, data.id),
+        editable: isEditable(level, bawaslu_id, verifikator, data),
+        myself: isMyself(user_id, data.id),
       };
 
       res.json(result);

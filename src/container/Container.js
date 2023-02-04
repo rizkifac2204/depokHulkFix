@@ -20,14 +20,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { useRizkiContext } from "context/AppContext";
-import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
 function Container(props) {
   const { children, fullPage } = props;
   const [init] = useRizkiContext();
-  const { isDarkModeActive, selectedThemeColor, isRtlActive } = init;
+  const { isDarkModeActive, selectedThemeColor } = init;
   let theme = "";
   if (isDarkModeActive) {
     theme = darkTheme;

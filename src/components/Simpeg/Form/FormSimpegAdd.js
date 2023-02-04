@@ -2,21 +2,21 @@ import { useFormik } from "formik";
 import { useState, useEffect } from "react";
 import * as yup from "yup";
 import { toast } from "react-toastify";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import Alert from "@mui/material/Alert";
 import FormHelperText from "@mui/material/FormHelperText";
-import { makeStyles } from "@mui/styles";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 // components
-import Thumb from "components/GlobalComponents/Thumb";
 import ContentLayout from "components/GlobalComponents/ContentLayout";
 import Wait from "components/GlobalComponents/Wait";
 
@@ -24,7 +24,7 @@ import { useAuthContext } from "context/AuthContext";
 
 const validationSchema = yup.object({
   level_id: yup.number().required("Harus Dipilih"),
-  verifikator: yup.number("Masukan verifikator").required("Harus Dipilih"),
+  verifikator: yup.boolean("Masukan verifikator").required("Harus Dipilih"),
   nama_admin: yup.string("Masukan Nama").required("Harus Diisi"),
   telp_admin: yup.string("Masukan Telp/HP"),
   email_admin: yup.string("Masukan Email").email("Email Tidak Valid"),
@@ -79,7 +79,7 @@ function FormSimpegAdd() {
 
   const initialvalues = {
     level_id: "",
-    verifikator: 0,
+    verifikator: false,
     nama_admin: "",
     telp_admin: "",
     email_admin: "",
@@ -400,11 +400,20 @@ function FormSimpegAdd() {
                     onChange={formik.handleChange}
                   >
                     <MenuItem value="">Pilih</MenuItem>
-                    {kecamatan.map((i, idx) => (
-                      <MenuItem key={idx} value={i.id}>
-                        {i.kecamatan}
-                      </MenuItem>
-                    ))}
+                    {kecamatan
+                      .filter((item) => {
+                        if (user.level === 5) return item.id == user.bawaslu_id;
+                        if (user.level === 6) {
+                          let idtemp = String(user.bawaslu_id).substr(0, 6);
+                          return item.id == idtemp;
+                        }
+                        return item;
+                      })
+                      .map((i, idx) => (
+                        <MenuItem key={idx} value={i.id}>
+                          {i.kecamatan}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
               ) : null}
@@ -580,6 +589,27 @@ function FormSimpegAdd() {
             </FormControl>
           </ContentLayout>
         </Box>
+        {/* input verifikator  */}
+        {user.level === 1 && (
+          <Box mb={3}>
+            <ContentLayout>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name="verifikator"
+                      checked={formik.values.verifikator}
+                      onChange={(e) => {
+                        formik.setFieldValue("verifikator", e.target.checked);
+                      }}
+                    />
+                  }
+                  label=" Buat Sebagai Verifikator"
+                />
+              </FormGroup>
+            </ContentLayout>
+          </Box>
+        )}
         {/* submit  */}
         <Box mb={3}>
           <ContentLayout>

@@ -17,6 +17,7 @@ import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 // ICON
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 // components
 import { CustomToolbar } from "components/GlobalComponents/TableComponents";
 import ProfileDetail from "components/Profile/ProfileDetail";
@@ -46,7 +47,6 @@ function Simpeg() {
     isLoading,
     error,
   } = useQuery({
-    initialData: [],
     queryKey: ["users"],
     queryFn: ({ signal }) =>
       axios
@@ -59,7 +59,7 @@ function Simpeg() {
 
   const [detail, setDetail] = useState({});
   useEffect(() => {
-    if (users.length === 0) return;
+    if (!users || users.length === 0) return;
     setDetail(users[0]);
   }, [users]);
 
@@ -81,7 +81,6 @@ function Simpeg() {
     }
   };
 
-  if (isLoading) return <LinearProgress sx={{ height: "4px" }} />;
   if (isError)
     return (
       <Alert
@@ -120,21 +119,44 @@ function Simpeg() {
       cellClassName: "actions",
       hide: hideOnLg,
       getActions: (values) => {
-        return [
-          <GridActionsCellItem
-            key="0"
-            icon={<VisibilityIcon />}
-            label="Detail"
-            onClick={() => router.push("/admin/simpeg/" + values.id)}
-          />,
-          <GridActionsCellItem
-            key="4"
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={() => handleDeleteClick(values.id)}
-            showInMenu
-          />,
-        ];
+        if (values.row.myself) {
+          return [
+            <GridActionsCellItem
+              icon={<VisibilityIcon />}
+              label="Profile"
+              onClick={() => router.push("/admin/profile")}
+            />,
+          ];
+        }
+        if (values.row.editable) {
+          return [
+            <GridActionsCellItem
+              icon={<VisibilityIcon />}
+              label="Detail"
+              onClick={() => router.push(`/admin/simpeg/${values.id}`)}
+            />,
+            <GridActionsCellItem
+              icon={<EditOutlinedIcon />}
+              label="Edit"
+              onClick={() => router.push(`/admin/simpeg/${values.id}/edit`)}
+              showInMenu
+            />,
+            <GridActionsCellItem
+              icon={<DeleteIcon />}
+              label="Delete"
+              onClick={() => handleDeleteClick(values.id)}
+              showInMenu
+            />,
+          ];
+        } else {
+          return [
+            <GridActionsCellItem
+              icon={<VisibilityIcon />}
+              label="Detail"
+              onClick={() => router.push("/admin/simpeg/" + values.id)}
+            />,
+          ];
+        }
       },
     },
   ];
@@ -149,27 +171,31 @@ function Simpeg() {
           <Grid container spacing={2}>
             <Grid item xs={12} lg={9}>
               <CustomCard minHeight={600}>
-                <DataGrid
-                  experimentalFeatures={{ newEditingApi: true }}
-                  autoHeight
-                  pageSize={pageSize}
-                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-                  rowsPerPageOptions={[1, 2, 5, 10]}
-                  components={{
-                    Toolbar: CustomToolbar,
-                  }}
-                  componentsProps={{
-                    toolbar: {
-                      // selectedItem: [],
-                      // handleDeleteSelected: () => {},
-                      multiSearch: true,
-                    },
-                  }}
-                  loading={isLoading}
-                  rows={users}
-                  columns={columns}
-                  onRowClick={({ row }) => setDetail(row)}
-                />
+                <div style={{ display: "flex", height: "100%" }}>
+                  <div style={{ flexGrow: 1 }}>
+                    <DataGrid
+                      experimentalFeatures={{ newEditingApi: true }}
+                      autoHeight
+                      pageSize={pageSize}
+                      onPageSizeChange={(newPageSize) =>
+                        setPageSize(newPageSize)
+                      }
+                      rowsPerPageOptions={[1, 2, 5, 10]}
+                      components={{
+                        Toolbar: CustomToolbar,
+                      }}
+                      componentsProps={{
+                        toolbar: {
+                          multiSearch: true,
+                        },
+                      }}
+                      loading={isLoading}
+                      rows={users ? users : []}
+                      columns={columns}
+                      onRowClick={({ row }) => setDetail(row)}
+                    />
+                  </div>
+                </div>
               </CustomCard>
             </Grid>
             <Grid item lg={3}>
