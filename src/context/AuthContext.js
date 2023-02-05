@@ -19,14 +19,14 @@ export const AuthContextProvider = ({ children }) => {
   const logout = async () => {
     setUser(null);
     axios
-      .get("/api/auth/logout")
+      .get("/api/auth/logout", { redirect: "true" })
       .then((res) => {
         console.log("Logged Out");
       })
       .catch((err) => {
         console.log("Error Something");
       })
-      .finally(() => {
+      .then(() => {
         window.open("/login", "_self");
       });
   };
@@ -39,7 +39,9 @@ export const AuthContextProvider = ({ children }) => {
         setUser(res.data);
       })
       .catch((err) => {
-        // no action
+        if (router.pathname.startsWith("/admin")) {
+          if (err?.response?.status === 401) window.open("/login", "_self");
+        }
       });
 
     return () => {

@@ -1,6 +1,7 @@
 import nextConnect from "next-connect";
-import jwtDecode from "jwt-decode";
 import cookie from "cookie";
+const jwt = require("jsonwebtoken");
+import getLogger from "middlewares/getLogger";
 
 export default function Handler() {
   return nextConnect({
@@ -12,16 +13,17 @@ export default function Handler() {
       res.status(404).json({ message: "Not found", type: "error" });
     },
   }).use(async (req, res, next) => {
+    const { depokApps } = cookie.parse(req.headers.cookie);
+    if (!depokApps)
+      return res.status(401).json({ message: "Akses Tidak Dikenal" });
     try {
-      const { depokApps } = cookie.parse(req.headers.cookie);
-      if (!depokApps)
-        return res.status(401).json({ message: "Akses Tidak Dikenal" });
-      const decoded = jwtDecode(depokApps);
+      const decoded = jwt.verify(depokApps, process.env.JWT_SECRET_KEY);
       req.session = {
         user: decoded,
       };
       next();
     } catch (err) {
+      getLogger.error(err);
       return res.status(401).json({ message: "Akses Tidak Dikenal" });
     }
   });

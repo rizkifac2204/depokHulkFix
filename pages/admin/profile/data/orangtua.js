@@ -242,7 +242,7 @@ function ProfileOrangTua() {
   return (
     <>
       <Head>
-        <title>{`Profile Data Orang Tua - BWS Depok Apps`}</title>
+        <title>{`Profile Data Orang Tua - Bawaslu Depok  Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Orang Tua" />

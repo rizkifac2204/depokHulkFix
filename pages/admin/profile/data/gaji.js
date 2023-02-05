@@ -256,7 +256,7 @@ function ProfileGaji() {
   return (
     <>
       <Head>
-        <title>{`Profile Riwayat Gaji - BWS Depok Apps`}</title>
+        <title>{`Profile Riwayat Gaji - Bawaslu Depok  Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Riwayat Gaji" />

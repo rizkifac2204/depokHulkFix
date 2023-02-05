@@ -271,7 +271,7 @@ function ProfilePendidikan() {
   return (
     <>
       <Head>
-        <title>{`Profile Riwayat Pendidikan - BWS Depok Apps`}</title>
+        <title>{`Profile Riwayat Pendidikan - Bawaslu Depok  Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Riwayat Pendidikan" />

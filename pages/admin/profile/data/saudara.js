@@ -249,7 +249,7 @@ function ProfileSaudara() {
   return (
     <>
       <Head>
-        <title>{`Profile Data Saudara - BWS Depok Apps`}</title>
+        <title>{`Profile Data Saudara - Bawaslu Depok  Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Saudara" />

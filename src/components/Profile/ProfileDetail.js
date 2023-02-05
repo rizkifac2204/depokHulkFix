@@ -1,5 +1,6 @@
 import { makeStyles } from "@mui/styles";
 import { Typography, Fab, Box, Divider } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 import Link from "next/link";
 
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +12,7 @@ import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 // utils
 import { formatedDate } from "utils/formatDate";
 
@@ -76,6 +78,11 @@ function ProfileDetail({ profile, isUser, handleDeleteClick }) {
           <Thumb file={profile.foto_admin} alt={profile.nama_admin} />
         </div>
         <Typography variant="h6" style={{ marginBottom: "5px" }}>
+          {profile.verifikator ? (
+            <Tooltip title="Verifikator Data Pegawai">
+              <KeyOutlinedIcon color="primary" />
+            </Tooltip>
+          ) : null}
           {profile.nama_admin}
         </Typography>
         <Box mb={2} fontSize="subtitle2.fontSize" color="text.secondary">
@@ -122,7 +129,7 @@ function ProfileDetail({ profile, isUser, handleDeleteClick }) {
                   aria-label="delete"
                   onClick={handleDeleteClick}
                 >
-                  <DeleteOutlineOutlinedIcon color="primary" />
+                  <DeleteOutlineOutlinedIcon />
                 </Fab>
               </>
             )}

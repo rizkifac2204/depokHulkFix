@@ -227,17 +227,83 @@ function DefaultLayout(props) {
   }
 
   return (
-    <div>
-      <FullScreen handle={handleFullScreen}>
-        {isMiniSidebarActive === false ? (
-          <div className={`hk-app-layout ${classes.root}`}>
-            <Header
-              toggleResponsiveSidebar={handleDrawerToggle}
-              open={navCollapsed}
-              toggleSidebar={(e) => onToggleNavCollapsed(e)}
-              openHorizontal={isHorizontalMenuActive}
-              handleFullScreen={handleFullScreen}
-            />
+    <FullScreen handle={handleFullScreen}>
+      {isMiniSidebarActive === false ? (
+        <div className={`hk-app-layout ${classes.root}`}>
+          <Header
+            toggleResponsiveSidebar={handleDrawerToggle}
+            open={navCollapsed}
+            toggleSidebar={(e) => onToggleNavCollapsed(e)}
+            openHorizontal={isHorizontalMenuActive}
+            handleFullScreen={handleFullScreen}
+          />
+          <SidebarCustomization
+            iconColor="#fff"
+            open={navCollapsed}
+            toggleSidebar={(e) => onToggleNavCollapsed(e)}
+            darkModeStatus={isDarkModeActive}
+            miniSidebarStatus={isMiniSidebarActive}
+            toggleDarkMode={(e) => onToggleDarkMode(e)}
+            toggleMiniSidebar={(e) => onToggleMiniSidebar(e)}
+            horizontalMenuStatus={isHorizontalMenuActive}
+            toggleHorizontalMenu={(e) => onToggleHorizontalMenu(e)}
+            chooseTheme={(e) => chooseTheme(e)}
+            rtlStatus={isRtlActive}
+            toggleRtl={(e) => onToggleRtl(e)}
+          />
+          <NotificationSidebar />
+          <nav aria-label="menu-sidebar">
+            <Drawer
+              sx={{ display: { xs: "block", lg: "none" }, zIndex: 1201 }}
+              variant="temporary"
+              anchor={isRtlActive ? "right" : "left"}
+              SlideProps={{ direction: isRtlActive ? "left" : "right" }}
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              classes={{
+                paper: `${classes.bgColor} ${classes.drawer}`,
+              }}
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+            >
+              <div>
+                <Sidebar closeSidebar={handleDrawerToggle} />
+              </div>
+            </Drawer>
+            <div
+              className={clsx(classes.drawer, {
+                [`rtl-sidebar`]: !navCollapsed,
+              })}
+            >
+              <Drawer
+                sx={{ display: { xs: "none", lg: "block" } }}
+                variant="persistent"
+                anchor="left"
+                open={navCollapsed}
+                classes={{
+                  paper: ` ${classes.drawerPaper}`,
+                }}
+              >
+                <Sidebar />
+              </Drawer>
+            </div>
+          </nav>
+          <main
+            className={clsx(
+              classes.content,
+              {
+                [classes.contentShift]: navCollapsed,
+              },
+              "hk-main"
+            )}
+          >
+            <div className="hk-page">{renderPage()}</div>
+          </main>
+        </div>
+      ) : (
+        <div className={`hk-icon-layout ${classes.root}`}>
+          <>
             <SidebarCustomization
               iconColor="#fff"
               open={navCollapsed}
@@ -252,13 +318,25 @@ function DefaultLayout(props) {
               rtlStatus={isRtlActive}
               toggleRtl={(e) => onToggleRtl(e)}
             />
-            <NotificationSidebar />
-            <nav aria-label="menu-sidebar">
+            <NotificationSidebar
+              iconColor="#fff"
+              open={navCollapsed}
+              toggleSidebar={(e) => onToggleNavCollapsed(e)}
+              darkModeStatus={isDarkModeActive}
+              miniSidebarStatus={isMiniSidebarActive}
+              toggleDarkMode={(e) => onToggleDarkMode(e)}
+              toggleMiniSidebar={(e) => onToggleMiniSidebar(e)}
+              horizontalMenuStatus={isHorizontalMenuActive}
+              toggleHorizontalMenu={(e) => onToggleHorizontalMenu(e)}
+              rtlStatus={isRtlActive}
+              toggleRtl={(e) => onToggleRtl(e)}
+            />
+            <nav aria-label="menu-sidebar" className="icon-sidebar">
               <Drawer
-                sx={{ display: { xs: "block", lg: "none" }, zIndex: 1201 }}
-                variant="temporary"
+                sx={{ display: { lg: "none", xs: "block" }, zIndex: 1201 }}
                 anchor={isRtlActive ? "right" : "left"}
                 SlideProps={{ direction: isRtlActive ? "left" : "right" }}
+                variant="temporary"
                 open={mobileOpen}
                 onClose={handleDrawerToggle}
                 classes={{
@@ -272,21 +350,15 @@ function DefaultLayout(props) {
                   <Sidebar closeSidebar={handleDrawerToggle} />
                 </div>
               </Drawer>
-              <div
-                className={clsx(classes.drawer, {
-                  [`rtl-sidebar`]: !navCollapsed,
-                })}
-              >
+              <div className={`icon-drawer ${classes.drawer}`}>
                 <Drawer
                   sx={{ display: { xs: "none", lg: "block" } }}
                   variant="persistent"
                   anchor="left"
                   open={navCollapsed}
-                  classes={{
-                    paper: ` ${classes.drawerPaper}`,
-                  }}
+                  classes={{ paper: classes.drawerPaper }}
                 >
-                  <Sidebar />
+                  <IconSidebar />
                 </Drawer>
               </div>
             </nav>
@@ -299,95 +371,21 @@ function DefaultLayout(props) {
                 "hk-main"
               )}
             >
+              <Box className="icon-header-layout">
+                <Header
+                  toggleResponsiveSidebar={handleDrawerToggle}
+                  open={navCollapsed}
+                  toggleSidebar={(e) => onToggleNavCollapsed(e)}
+                  openHorizontal={isHorizontalMenuActive}
+                  handleFullScreen={handleFullScreen}
+                />
+              </Box>
               <div className="hk-page">{renderPage()}</div>
             </main>
-          </div>
-        ) : (
-          <div className={`hk-icon-layout ${classes.root}`}>
-            <>
-              <SidebarCustomization
-                iconColor="#fff"
-                open={navCollapsed}
-                toggleSidebar={(e) => onToggleNavCollapsed(e)}
-                darkModeStatus={isDarkModeActive}
-                miniSidebarStatus={isMiniSidebarActive}
-                toggleDarkMode={(e) => onToggleDarkMode(e)}
-                toggleMiniSidebar={(e) => onToggleMiniSidebar(e)}
-                horizontalMenuStatus={isHorizontalMenuActive}
-                toggleHorizontalMenu={(e) => onToggleHorizontalMenu(e)}
-                chooseTheme={(e) => chooseTheme(e)}
-                rtlStatus={isRtlActive}
-                toggleRtl={(e) => onToggleRtl(e)}
-              />
-              <NotificationSidebar
-                iconColor="#fff"
-                open={navCollapsed}
-                toggleSidebar={(e) => onToggleNavCollapsed(e)}
-                darkModeStatus={isDarkModeActive}
-                miniSidebarStatus={isMiniSidebarActive}
-                toggleDarkMode={(e) => onToggleDarkMode(e)}
-                toggleMiniSidebar={(e) => onToggleMiniSidebar(e)}
-                horizontalMenuStatus={isHorizontalMenuActive}
-                toggleHorizontalMenu={(e) => onToggleHorizontalMenu(e)}
-                rtlStatus={isRtlActive}
-                toggleRtl={(e) => onToggleRtl(e)}
-              />
-              <nav aria-label="menu-sidebar" className="icon-sidebar">
-                <Drawer
-                  sx={{ display: { lg: "none", xs: "block" }, zIndex: 1201 }}
-                  anchor={isRtlActive ? "right" : "left"}
-                  SlideProps={{ direction: isRtlActive ? "left" : "right" }}
-                  variant="temporary"
-                  open={mobileOpen}
-                  onClose={handleDrawerToggle}
-                  classes={{
-                    paper: `${classes.bgColor} ${classes.drawer}`,
-                  }}
-                  ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
-                  }}
-                >
-                  <div>
-                    <Sidebar closeSidebar={handleDrawerToggle} />
-                  </div>
-                </Drawer>
-                <div className={`icon-drawer ${classes.drawer}`}>
-                  <Drawer
-                    sx={{ display: { xs: "none", lg: "block" } }}
-                    variant="persistent"
-                    anchor="left"
-                    open={navCollapsed}
-                    classes={{ paper: classes.drawerPaper }}
-                  >
-                    <IconSidebar />
-                  </Drawer>
-                </div>
-              </nav>
-              <main
-                className={clsx(
-                  classes.content,
-                  {
-                    [classes.contentShift]: navCollapsed,
-                  },
-                  "hk-main"
-                )}
-              >
-                <Box className="icon-header-layout">
-                  <Header
-                    toggleResponsiveSidebar={handleDrawerToggle}
-                    open={navCollapsed}
-                    toggleSidebar={(e) => onToggleNavCollapsed(e)}
-                    openHorizontal={isHorizontalMenuActive}
-                    handleFullScreen={handleFullScreen}
-                  />
-                </Box>
-                <div className="hk-page">{renderPage()}</div>
-              </main>
-            </>
-          </div>
-        )}
-      </FullScreen>
-    </div>
+          </>
+        </div>
+      )}
+    </FullScreen>
   );
 }
 

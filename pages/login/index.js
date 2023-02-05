@@ -19,6 +19,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useRizkiContext } from "context/AppContext";
+import SignInButton from "components/Auth/SignIn";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -213,7 +214,8 @@ function Login() {
                   <div className="social-login-wrapper">
                     <Typography variant="body2">Sign in with</Typography>
                     <div className="social-list">
-                      <Fab
+                      <SignInButton />
+                      {/* <Fab
                         size="small"
                         variant="circular"
                         className="text-white facebook-color"
@@ -222,7 +224,7 @@ function Login() {
                         }}
                       >
                         <GoogleIcon />
-                      </Fab>
+                      </Fab> */}
                     </div>
                   </div>
                 </form>

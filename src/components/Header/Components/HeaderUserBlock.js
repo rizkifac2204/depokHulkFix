@@ -45,6 +45,38 @@ const styles = (theme) => ({
   },
 });
 
+function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  if (!string) return;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = "#";
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+function stringAvatar(name) {
+  if (!name) return;
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+  };
+}
+
 function HeaderUserBlock(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -71,11 +103,7 @@ function HeaderUserBlock(props) {
           style={{ padding: "6px" }}
           onClick={handleClick}
         >
-          <Avatar
-            alt={user.name}
-            className={classes.avatar}
-            src={user.image ? user.image : user.name}
-          />
+          <Avatar className={classes.avatar} {...stringAvatar(user.name)} />
         </IconButton>
       </Tooltip>
       <Popover
@@ -100,9 +128,8 @@ function HeaderUserBlock(props) {
             <ListSubheader component="div" id="nested-list-subheader">
               <div className="dropdown-header user-info  text-center">
                 <Avatar
-                  alt={user.name}
                   className={classes.large}
-                  src={user.image}
+                  {...stringAvatar(user.name)}
                 />
                 <Typography variant="body2">{user.name}</Typography>
                 <Typography variant="subtitle2">{user.nama_level}</Typography>

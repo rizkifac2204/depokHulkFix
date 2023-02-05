@@ -236,7 +236,7 @@ function ProfileKeluarNegeri() {
   return (
     <>
       <Head>
-        <title>{`Profile Riwayat Keluar Negeri - BWS Depok Apps`}</title>
+        <title>{`Profile Riwayat Keluar Negeri - Bawaslu Depok  Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Riwayat Keluar Negeri" />

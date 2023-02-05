@@ -320,7 +320,7 @@ function ProfileKepangkatan() {
   return (
     <>
       <Head>
-        <title>{`Profile Riwayat Kepangkatan - BWS Depok Apps`}</title>
+        <title>{`Profile Riwayat Kepangkatan - Bawaslu Depok  Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Riwayat Kepangkatan" />

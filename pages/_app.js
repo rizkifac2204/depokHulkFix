@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import { CacheProvider } from "@emotion/react";
 import createEmotionCache from "utils/createEmotionCache";
+import ErrorBoundary from "services/ErrorBoundary";
 
 // Toast dibutuhkan pada semua halaman termasuk saat logout
 import { ToastContainer } from "react-toastify";
@@ -36,23 +37,25 @@ export default function App({
   pageProps,
 }) {
   return (
-    <CacheProvider value={emotionCache}>
-      <Head>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </Head>
-      <noscript>
-        Browser Anda Tidak Mendukung Aplikasi Ini, Silakan Ganti Browser Yang
-        Anda Gunakan {`(recomended : Google Chrome, Firefox, Edge, Opera)`}
-      </noscript>
-      <ToastContainer />
-      <AuthContextProvider>
+    <ErrorBoundary>
+      <CacheProvider value={emotionCache}>
+        <Head>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+        </Head>
+        <noscript>
+          Browser Anda Tidak Mendukung Aplikasi Ini, Silakan Ganti Browser Yang
+          Anda Gunakan {`(recomended : Google Chrome, Firefox, Edge, Opera)`}
+        </noscript>
+        <ToastContainer />
         <ContextProvider>
-          <Container fullPage={Component.fullPage}>
-            <Component {...pageProps} />
-          </Container>
+          <AuthContextProvider>
+            <Container fullPage={Component.fullPage}>
+              <Component {...pageProps} />
+            </Container>
+          </AuthContextProvider>
         </ContextProvider>
-      </AuthContextProvider>
-    </CacheProvider>
+      </CacheProvider>
+    </ErrorBoundary>
   );
 }
 

@@ -246,7 +246,7 @@ function ProfileKursus() {
   return (
     <>
       <Head>
-        <title>{`Profile Riwayat Kursus - BWS Depok Apps`}</title>
+        <title>{`Profile Riwayat Kursus - Bawaslu Depok  Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Riwayat Kursus" />

@@ -14,7 +14,7 @@ function TambahUser() {
   return (
     <div>
       <Head>
-        <title>{`Tambah Pegawai - BWS Depok Apps`}</title>
+        <title>{`Tambah Pegawai - Bawaslu Depok  Apps`}</title>
       </Head>
       <SmallTitleBar title="Tambah Data Pegawai" />
       <Container maxWidth={false}>

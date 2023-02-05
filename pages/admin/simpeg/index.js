@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Link from "next/link";
 // library
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -36,7 +36,6 @@ async function deleteData(id) {
 
 function Simpeg() {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const theme = useTheme();
   const hideOnLg = useMediaQuery(theme.breakpoints.up("lg"));
   const [pageSize, setPageSize] = useState(10);
@@ -93,13 +92,12 @@ function Simpeg() {
     {
       field: "nama_admin",
       headerName: "Nama",
-      flex: 1,
-      minWidth: 250,
+      minWidth: 180,
     },
     {
       field: "nama_bawaslu",
       headerName: "Unit",
-      width: 180,
+      minWidth: 180,
     },
     {
       field: "telp_admin",
@@ -109,13 +107,12 @@ function Simpeg() {
     {
       field: "email_admin",
       headerName: "Email",
-      width: 250,
+      width: 180,
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      width: 200,
       cellClassName: "actions",
       hide: hideOnLg,
       getActions: (values) => {
@@ -124,7 +121,8 @@ function Simpeg() {
             <GridActionsCellItem
               icon={<VisibilityIcon />}
               label="Profile"
-              onClick={() => router.push("/admin/profile")}
+              components={Link}
+              href={`/admin/profile`}
             />,
           ];
         }
@@ -133,19 +131,19 @@ function Simpeg() {
             <GridActionsCellItem
               icon={<VisibilityIcon />}
               label="Detail"
-              onClick={() => router.push(`/admin/simpeg/${values.id}`)}
+              components={Link}
+              href={`/admin/simpeg/${values.id}`}
             />,
             <GridActionsCellItem
               icon={<EditOutlinedIcon />}
               label="Edit"
-              onClick={() => router.push(`/admin/simpeg/${values.id}/edit`)}
-              showInMenu
+              components={Link}
+              href={`/admin/simpeg/${values.id}/edit`}
             />,
             <GridActionsCellItem
               icon={<DeleteIcon />}
               label="Delete"
               onClick={() => handleDeleteClick(values.id)}
-              showInMenu
             />,
           ];
         } else {
@@ -153,7 +151,8 @@ function Simpeg() {
             <GridActionsCellItem
               icon={<VisibilityIcon />}
               label="Detail"
-              onClick={() => router.push("/admin/simpeg/" + values.id)}
+              components={Link}
+              href={`/admin/simpeg/${values.id}`}
             />,
           ];
         }
@@ -164,7 +163,7 @@ function Simpeg() {
   return (
     <>
       <Head>
-        <title>{`Simpeg - BWS Depok Apps`}</title>
+        <title>{`Simpeg - Bawaslu Depok  Apps`}</title>
       </Head>
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>

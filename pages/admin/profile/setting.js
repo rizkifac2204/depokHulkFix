@@ -52,7 +52,7 @@ function ProfileSetting(props) {
   return (
     <div className="hk-user-settings">
       <Head>
-        <title>{`Profile Setting - BWS Depok Apps`}</title>
+        <title>{`Profile Setting - Bawaslu Depok  Apps`}</title>
       </Head>
       <Box className={` white-btn-color`}>
         <PageTitleBarWithImage

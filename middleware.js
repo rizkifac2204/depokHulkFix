@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+const jwt = require("jsonwebtoken");
 
 export const config = {
   matcher: ["/(admin.*)", "/login"],
