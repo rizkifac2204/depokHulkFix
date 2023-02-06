@@ -39,8 +39,10 @@ export const AuthContextProvider = ({ children }) => {
         setUser(res.data);
       })
       .catch((err) => {
-        if (router.pathname.startsWith("/admin")) {
-          if (err?.response?.status === 401) window.open("/login", "_self");
+        // ini sebenarya sudah di block oleh middleware
+        if (err?.response?.status === 401) {
+          if (router.pathname.startsWith("/admin"))
+            window.open("/login", "_self");
         }
       });
 

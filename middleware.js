@@ -1,33 +1,25 @@
 import { NextResponse } from "next/server";
-const jwt = require("jsonwebtoken");
+import { verifyAuth } from "libs/auth";
 
 export const config = {
   matcher: ["/(admin.*)", "/login"],
-  // matcher: [
-  //   /*
-  //    * Match all request paths except for the ones starting with:
-  //    * - api (API routes)
-  //    * - _next/static (static files)
-  //    * - _next/image (image optimization files)
-  //    * - favicon.ico (favicon file)
-  //    */
-  //   "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  // ],
 };
 
-export default function middleware(req, res) {
+export async function middleware(req, res) {
   const { pathname, origin } = req.nextUrl;
-  const depokApps = req.cookies.get("depokApps")?.value;
+  const token = req.cookies.get(process.env.JWT_NAME)?.value;
 
-  if (pathname.startsWith("/_next")) {
-    return NextResponse.next();
-  }
+  const verifiedToken = await verifyAuth(token, res).catch((err) => {
+    if (pathname.startsWith("/admin"))
+      return NextResponse.redirect(`${origin}/login`);
+  });
 
   if (pathname.startsWith("/login")) {
-    if (depokApps) return NextResponse.redirect(`${origin}/admin`);
+    if (verifiedToken) return NextResponse.redirect(`${origin}/admin`);
   }
+
   if (pathname.startsWith("/admin")) {
-    if (!depokApps) return NextResponse.redirect(`${origin}/login`);
+    if (!verifiedToken) return NextResponse.redirect(`${origin}/login`);
   }
 
   return NextResponse.next();
