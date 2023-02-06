@@ -69,11 +69,15 @@ function stringToColor(string) {
 
 function stringAvatar(name) {
   if (!name) return;
+  const isMoreOneWord = name.includes(" ");
+  const displayName = isMoreOneWord
+    ? `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`
+    : `${name.charAt(0)}`;
   return {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    children: `${displayName}`,
   };
 }
 

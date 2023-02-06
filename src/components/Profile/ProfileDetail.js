@@ -20,6 +20,7 @@ import { formatedDate } from "utils/formatDate";
 import { SocialIcons } from "components/GlobalComponents/SocialIcons";
 import Wait from "components/GlobalComponents/Wait";
 import Thumb from "components/GlobalComponents/Thumb";
+import FotoAction from "components/GlobalComponents/FotoAction";
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -74,9 +75,12 @@ function ProfileDetail({ profile, isUser, handleDeleteClick }) {
   return (
     <div className="">
       <Box className="user-detail" sx={{ pb: 2 }}>
-        <div className="user-avatar">
-          <Thumb file={profile.foto_admin} alt={profile.nama_admin} />
-        </div>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          {!isUser && <FotoAction profile={profile} />}
+          <div className="user-avatar">
+            <Thumb file={profile.foto_admin} alt={profile.nama_admin} />
+          </div>
+        </Box>
         <Typography variant="h6" style={{ marginBottom: "5px" }}>
           {profile.verifikator ? (
             <Tooltip title="Verifikator Data Pegawai">

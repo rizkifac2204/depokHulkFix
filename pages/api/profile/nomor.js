@@ -43,11 +43,24 @@ export default Handler()
 
       // jika password tidak sama
       const match = await bcrypt.compare(passwordConfirm, cek.password);
-
       if (!match)
         return res
           .status(401)
           .json({ message: "Password Anda Salah", type: "error" });
+
+      //cek jika ada email yang sama
+      if (no_ktp) {
+        const cekKTPSama = await db("user")
+          .where("id", "!=", id)
+          .andWhere("no_ktp", no_ktp)
+          .first();
+        if (cekKTPSama) {
+          return res.status(401).json({
+            type: "error",
+            message: "No KTP terdaftar oleh pegawai lain",
+          });
+        }
+      }
 
       const forNomor = {
         no_nip: no_nip || null,

@@ -12,6 +12,7 @@ export default function Thumb({ file, altText = "Pemohon" }) {
   useEffect(() => {
     if (!file) return;
     setLoading(true);
+    setThumb("/Pictures/avatar-4.jpg");
     if (typeof file === "object") {
       var reader = new FileReader();
       reader.onloadend = function () {
@@ -35,7 +36,7 @@ export default function Thumb({ file, altText = "Pemohon" }) {
         })
         .then(() => setLoading(false));
     }
-  }, [file, altText]);
+  }, [file]);
 
   if (!file)
     return (
@@ -47,6 +48,7 @@ export default function Thumb({ file, altText = "Pemohon" }) {
         priority
       />
     );
+
   if (loading)
     return (
       <Box

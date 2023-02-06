@@ -2,8 +2,10 @@ import { nanoid } from "nanoid";
 import { SignJWT, jwtVerify } from "jose";
 import { serialize } from "cookie";
 
+export class AuthError extends Error {}
+
 export async function verifyAuth(token, res) {
-  if (!token) throw new Error("Missing user token");
+  if (!token) throw new AuthError("Tidak Ada Token");
   try {
     const verified = await jwtVerify(
       token,
@@ -11,7 +13,7 @@ export async function verifyAuth(token, res) {
     );
     return verified.payload;
   } catch (err) {
-    throw new Error("Your token not valid.");
+    throw new AuthError("Token Tidak valid.");
   }
 }
 

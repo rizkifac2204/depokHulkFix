@@ -7,7 +7,7 @@ export default async function isLogin(req, res) {
     const cookiess = cookie.parse(req.headers.cookie || "");
     const token = cookiess[process.env.JWT_NAME];
     const verifiedToken = await verifyAuth(token, res).catch((err) => {
-      return res.status(401).json({ message: "Akses Tidak Dikenal" });
+      // console.log(err);
     });
     if (!verifiedToken)
       return res.status(401).json({ message: "Akses Tidak Dikenal" });
