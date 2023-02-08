@@ -142,18 +142,3 @@ export default Handler()
       res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
     }
   });
-// .delete(async (req, res) => {
-//   try {
-//     const { id: user_id } = req.session.user;
-//     const arrID = req.body;
-//     const proses = await db("user_keluarga_anak").whereIn("id", arrID).del();
-
-//     if (!proses)
-//       return res.status(400).json({ message: "Gagal Hapus", type: "error" });
-
-//     res.json({ message: "Sukses Menghapus Data Terpilih", type: "success" });
-//   } catch (error) {
-//     getLogger.error(error);
-//     res.status(500).json({ message: "Terjadi Kesalahan..." });
-//   }
-// });

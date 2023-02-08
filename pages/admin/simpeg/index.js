@@ -11,7 +11,6 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LinearProgress from "@mui/material/LinearProgress";
 import Alert from "@mui/material/Alert";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 // ICON
@@ -79,6 +78,19 @@ function Simpeg() {
       mutateDelete(id);
     }
   };
+
+  function deleteCallback() {
+    function onSuccess(data) {
+      toast.success(data.message || "Sukses");
+      queryClient.invalidateQueries(["users"]);
+    }
+
+    function onError(err) {
+      toast.error(err.message);
+    }
+
+    return { onSuccess, onError };
+  }
 
   if (isError)
     return (
@@ -163,7 +175,7 @@ function Simpeg() {
   return (
     <>
       <Head>
-        <title>{`Simpeg - Bawaslu Depok  Apps`}</title>
+        <title>{`Pegawai - Bawaslu Depok  Apps`}</title>
       </Head>
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>
@@ -203,7 +215,7 @@ function Simpeg() {
                   <ProfileDetail
                     profile={detail}
                     isUser={true}
-                    handleDeleteClick={() => handleDeleteClick(detail.id)}
+                    deleteCallback={deleteCallback}
                   />
                 </Box>
               ) : null}

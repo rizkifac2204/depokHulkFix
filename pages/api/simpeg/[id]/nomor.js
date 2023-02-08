@@ -7,7 +7,7 @@ export default Handler().get(async (req, res) => {
     const { id } = req.query;
     const result = await db
       .select("*")
-      .from("user_alamat")
+      .from("user_nomor")
       .where("user_id", id)
       .first();
 

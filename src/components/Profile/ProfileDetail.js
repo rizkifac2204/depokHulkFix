@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProfileDetail({ profile, isUser, handleDeleteClick }) {
+function ProfileDetail({ profile, isUser, deleteCallback }) {
   const classes = useStyles();
   let url, queryKey;
 
@@ -69,6 +69,21 @@ function ProfileDetail({ profile, isUser, handleDeleteClick }) {
           throw new Error(err.response.data.message);
         }),
   });
+
+  function handleDeleteClick() {
+    const ask = confirm("Yakin Hapus Data?");
+    if (ask) {
+      axios
+        .delete(`/api/simpeg/${profile.id}`)
+        .then((res) => {
+          deleteCallback().onSuccess(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          deleteCallback().onError(err.response.data);
+        });
+    }
+  }
 
   if (!profile) return null;
 
@@ -133,7 +148,7 @@ function ProfileDetail({ profile, isUser, handleDeleteClick }) {
                   aria-label="delete"
                   onClick={handleDeleteClick}
                 >
-                  <DeleteOutlineOutlinedIcon />
+                  <DeleteOutlineOutlinedIcon color="primary" />
                 </Fab>
               </>
             )}

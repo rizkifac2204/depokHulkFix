@@ -83,8 +83,12 @@ function FormSimpegAdd() {
     nama_admin: "",
     telp_admin: "",
     email_admin: "",
-    provinsi_id: "32",
-    kabkota_id: "3276",
+    provinsi_id: process.env.NEXT_PUBLIC_PROVINSI_DEFAULT
+      ? process.env.NEXT_PUBLIC_PROVINSI_DEFAULT
+      : "",
+    kabkota_id: process.env.NEXT_PUBLIC_KABKOTA_DEFAULT
+      ? process.env.NEXT_PUBLIC_KABKOTA_DEFAULT
+      : "",
     kecamatan_id: "",
     kelurahan_id: "",
     username: "",
@@ -322,7 +326,7 @@ function FormSimpegAdd() {
           <ContentLayout title="Provinsi *">
             {isLoadingProvinsi && "Loading..."}
             {isErrorProvinsi && "Gagal Mengambil Data"}
-            {provinsi.length !== 0 ? (
+            {provinsi && provinsi.length !== 0 ? (
               <FormControl
                 fullWidth
                 disabled
@@ -354,7 +358,7 @@ function FormSimpegAdd() {
             {isFetchingKabkota && "Memuat..."}
             {isLoadingKabkota && "Menunggu Pilihan Provinsi..."}
             {isErrorKabkota && "Gagal Mengambil Data"}
-            {kabkota.length !== 0 ? (
+            {kabkota && kabkota.length !== 0 ? (
               <FormControl
                 fullWidth
                 disabled
@@ -387,7 +391,7 @@ function FormSimpegAdd() {
               {isFetchingKecamatan && "Memuat..."}
               {isLoadingKecamatan && "Menunggu Pilihan Kabupaten/Kota..."}
               {isErrorKecamatan && "Gagal Mengambil Data"}
-              {kecamatan ? (
+              {kecamatan && kecamatan.length !== 0 ? (
                 <FormControl
                   required
                   fullWidth
@@ -430,7 +434,7 @@ function FormSimpegAdd() {
               {isFetchingKelurahan && "Memuat..."}
               {isLoadingKelurahan && "Menunggu Pilihan Kecamatan..."}
               {isErrorKelurahan && "Gagal Mengambil Data"}
-              {kelurahan.length !== 0 ? (
+              {kelurahan && kelurahan.length !== 0 ? (
                 <FormControl
                   required
                   fullWidth
