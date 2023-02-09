@@ -11,7 +11,6 @@ import Box from "@mui/material/Box";
 import ContentLayout from "components/GlobalComponents/ContentLayout";
 
 const validationSchema = yup.object({
-  lama: yup.string().required("Password Lama Harus Diisi"),
   baru: yup.string().required("Password Baru Harus Diisi"),
   passwordConfirm: yup
     .string()
@@ -19,10 +18,10 @@ const validationSchema = yup.object({
     .oneOf([yup.ref("baru"), null], "Passwords tidak sama"),
 });
 
-const handleSubmit = (values, setSubmitting) => {
+const handleSubmit = (values, setSubmitting, user) => {
   const toastProses = toast.loading("Tunggu Sebentar...", { autoClose: false });
   axios
-    .put(`/api/profile/gantiPassword`, values)
+    .put(`/api/simpeg/${user.id}/gantiPassword`, values)
     .then((res) => {
       toast.update(toastProses, {
         render: res.data.message,
@@ -53,37 +52,17 @@ const handleSubmit = (values, setSubmitting) => {
     });
 };
 
-function ProfileFormPassword() {
+function SimpegFormPassword({ user }) {
   const formik = useFormik({
-    initialValues: { lama: "", baru: "", passwordConfirm: "" },
-    enableReinitialize: true,
+    initialValues: { baru: "", passwordConfirm: "" },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting }) =>
-      handleSubmit(values, setSubmitting),
+      handleSubmit(values, setSubmitting, user),
   });
 
   return (
     <div className="hk-general-settings">
       <form onSubmit={formik.handleSubmit}>
-        {/* input lama */}
-        <Box mb={3}>
-          <ContentLayout title="Password Lama *">
-            <FormControl fullWidth>
-              <TextField
-                required
-                type="password"
-                variant="standard"
-                name="lama"
-                placeholder="Password Lama"
-                value={formik.values.lama}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.lama && Boolean(formik.errors.lama)}
-                helperText={formik.touched.lama && formik.errors.lama}
-              />
-            </FormControl>
-          </ContentLayout>
-        </Box>
         {/* input baru */}
         <Box mb={3}>
           <ContentLayout title="Password Baru *">
@@ -147,4 +126,4 @@ function ProfileFormPassword() {
   );
 }
 
-export default ProfileFormPassword;
+export default SimpegFormPassword;

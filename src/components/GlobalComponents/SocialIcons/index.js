@@ -1,10 +1,8 @@
-/**
- * social icon
- */
 import React, { Fragment } from "react";
 import { makeStyles } from "@mui/styles";
 import Link from "next/link";
 import { Fab, Box, Icon } from "@mui/material";
+import Image from "next/image";
 
 // icons
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
@@ -49,7 +47,7 @@ export function SocialIcons() {
         component={Link}
         href="#"
       >
-        <Icon>facebook</Icon>
+        <FacebookOutlinedIcon />
       </Fab>
       <Fab
         size="small"
@@ -58,7 +56,12 @@ export function SocialIcons() {
         component={Link}
         href="#"
       >
-        <Icon>facebook</Icon>
+        <Image
+          alt="Twitter"
+          src="/Pictures/twitter.svg"
+          width={20}
+          height={20}
+        />
       </Fab>
       <Fab
         size="small"
@@ -67,7 +70,12 @@ export function SocialIcons() {
         component={Link}
         href="#"
       >
-        <Icon>facebook</Icon>
+        <Image
+          alt="instagram"
+          src="/Pictures/instagram.svg"
+          width={20}
+          height={20}
+        />
       </Fab>
       <Fab
         size="small"
@@ -76,7 +84,7 @@ export function SocialIcons() {
         component={Link}
         href="#"
       >
-        <Icon>facebook</Icon>
+        <Image alt="tiktok" src="/Pictures/tiktok.svg" width={20} height={20} />
       </Fab>
     </Box>
   );

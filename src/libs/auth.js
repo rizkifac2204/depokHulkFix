@@ -22,7 +22,7 @@ export async function setUserCookie(data, res) {
     .setProtectedHeader({ alg: "HS256" })
     .setJti(nanoid())
     .setIssuedAt()
-    .setExpirationTime("2h")
+    .setExpirationTime("30d")
     .sign(new TextEncoder().encode(process.env.JWT_SECRET_KEY));
 
   const serialized = serialize(process.env.JWT_NAME, token, {
