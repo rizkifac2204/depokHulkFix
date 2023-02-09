@@ -3,12 +3,15 @@ import Link from "next/link";
 import { withStyles } from "@mui/styles";
 import { Tooltip, IconButton, Box, TextField, Icon } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
+// data assets
 import urlName from "assets/Data/GlobalSearchMenuItem";
-import useWindowSize from "utils/useWindowSize";
 
 const styles = (theme) => ({
+  noBorder: {
+    border: "none",
+  },
   inputBar: {
+    border: "none",
     width: "calc(100% - 40px)",
     "& .MuiInputBase-root": {
       "&:before, &:after": {
@@ -23,8 +26,6 @@ const styles = (theme) => ({
 
 function GlobalSearch(props) {
   const { className, classes, showSearchBar } = props;
-
-  const size = useWindowSize();
 
   const [searchResult, setSearchResult] = useState(false);
   const [searchData, setSearchData] = useState(null);
@@ -56,9 +57,12 @@ function GlobalSearch(props) {
         <TextField
           fullWidth
           id="standard-basic"
-          placeholder="Search here..."
+          placeholder="Cari Disini..."
           onChange={(e) => updateSearch(e)}
           value={value}
+          InputProps={{
+            classes: { notchedOutline: classes.noBorder },
+          }}
         />
       </Box>
       <Tooltip title="Close" placement="bottom">

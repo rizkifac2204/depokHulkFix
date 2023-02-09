@@ -13,6 +13,7 @@ import GlobalSearch from "components/GlobalComponents/GlobalSearch";
 import FullScreen from "./Components/FullScreen";
 import Notification from "./Components/Notifications";
 import HeaderUserBlock from "./Components/HeaderUserBlock";
+import NotesAdd from "components/Notes/NotesAdd";
 
 import { drawerWidth, useRizkiContext } from "context/AppContext";
 import useWindowSize from "utils/useWindowSize";
@@ -175,6 +176,7 @@ function Header(props) {
             >
               <MenuIcon />
             </IconButton>
+
             {openHorizontal ? (
               <div>
                 <Box
@@ -216,6 +218,9 @@ function Header(props) {
                   />
                 </IconButton>
               </Tooltip>
+            </Box>
+            <Box pl={2} className="mega-menu-wrap">
+              <NotesAdd />
             </Box>
           </Box>
           <Box className="horizontal-icon" display="flex" alignItems="center">
