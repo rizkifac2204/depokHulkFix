@@ -1,3 +1,10 @@
+function addZero(i) {
+  if (i < 10) {
+    i = "0" + i;
+  }
+  return i;
+}
+
 const namaBulan = (bulan, singkat = false) => {
   switch (bulan) {
     case 0:
@@ -111,10 +118,18 @@ const formatedDateUntil = (start, end) => {
   return `${textMulai} s/d ${textSelesai}`;
 };
 
+const getTime = (date) => {
+  date = new Date(date);
+  var hour = addZero(date.getHours());
+  var minute = addZero(date.getMinutes());
+  return hour + ":" + minute;
+};
+
 export {
   formatedDate,
   namaBulan,
   namaHari,
   formatedDateUntil,
   formatedDateFromEpoch,
+  getTime,
 };
