@@ -3,7 +3,7 @@ import cookie from "cookie";
 import getLogger from "middlewares/getLogger";
 import { verifyAuth } from "libs/auth";
 
-export default function Handler() {
+export default function handler() {
   return nextConnect({
     onError: (err, req, res, next) => {
       console.error(err.stack);

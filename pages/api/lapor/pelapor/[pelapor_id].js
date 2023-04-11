@@ -5,21 +5,18 @@ import getLogger from "middlewares/getLogger";
 export default handler()
   .get(async (req, res) => {
     try {
-      const { id } = req.query;
+      const { pelapor_id } = req.query;
 
       const result = await db
-        .select(
-          "notes.*",
-          "user.nama_admin",
-          "level.nama_level",
-          "bawaslu.nama_bawaslu"
-        )
-        .from("notes")
-        .innerJoin("user", "notes.user_id", "user.id")
-        .innerJoin("bawaslu", "user.bawaslu_id", "bawaslu.id")
-        .innerJoin("level", "user.level_id", "level.id")
-        .where("notes.id", id)
+        .select("*")
+        .from("lapor_pelapor")
+        .where("id", pelapor_id)
         .first();
+
+      if (!result)
+        return res
+          .status(404)
+          .json({ message: "Tidak Ditemukan", type: "error" });
 
       res.json(result);
     } catch (error) {
@@ -29,14 +26,32 @@ export default handler()
   })
   .put(async (req, res) => {
     try {
-      const { id } = req.query;
+      const { pelapor_id } = req.query;
+
+      // get post
+      const {
+        nama,
+        tempat_lahir,
+        tanggal_lahir,
+        jenis_kelamin,
+        pekerjaan,
+        alamat,
+        telp,
+        email,
+      } = req.body;
 
       // proses insert
-      const proses = await db("notes")
-        .where("id", id)
-        .update({
-          share: db.raw("!share"),
-        });
+      const proses = await db("lapor_pelapor").where("id", pelapor_id).update({
+        nama,
+        tempat_lahir,
+        tanggal_lahir,
+        jenis_kelamin,
+        pekerjaan,
+        alamat,
+        telp,
+        email,
+        updated_at: db.fn.now(),
+      });
 
       // failed
       if (!proses)
@@ -46,7 +61,7 @@ export default handler()
         });
 
       // success
-      res.json({ message: "Catatan Terupdate", type: "success" });
+      res.json({ message: "Pelapor Terupdate", type: "success" });
     } catch (error) {
       getLogger.error(error);
       res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
@@ -54,9 +69,9 @@ export default handler()
   })
   .delete(async (req, res) => {
     try {
-      const { id } = req.query;
+      const { pelapor_id } = req.query;
 
-      const proses = await db("notes").where("id", id).del();
+      const proses = await db("lapor_pelapor").where("id", pelapor_id).del();
       if (!proses)
         return res.status(400).json({ message: "Gagal Hapus", type: "error" });
 

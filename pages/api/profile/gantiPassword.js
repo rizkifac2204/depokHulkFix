@@ -1,9 +1,9 @@
 import db from "libs/db";
-import Handler from "middlewares/Handler";
+import handler from "middlewares/handler";
 import bcrypt from "bcryptjs";
 import getLogger from "middlewares/getLogger";
 
-export default Handler().put(async (req, res) => {
+export default handler().put(async (req, res) => {
   try {
     const { id } = req.session.user;
     const { lama, baru } = req.body;

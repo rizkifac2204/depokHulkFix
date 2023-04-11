@@ -1,7 +1,7 @@
 import db from "libs/db";
-import HandlerPublic from "middlewares/HandlerPublic";
+import handlerPublic from "middlewares/handlerPublic";
 
-export default HandlerPublic().get(async (req, res) => {
+export default handlerPublic().get(async (req, res) => {
   const { provinsi_id, kabkota_id } = req.query;
   const data = await db
     .select(`kecamatan.*`)

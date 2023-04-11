@@ -1,5 +1,5 @@
 import db from "libs/db";
-import Handler from "middlewares/Handler";
+import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 import { UploadImageOnly, DeleteUpload } from "services/uploadService";
 import { isEditable, isMyself } from "middlewares/simpegAttrs";
@@ -81,7 +81,7 @@ async function middlewareEdit(req, res, next) {
   }
 }
 
-export default Handler().put(
+export default handler().put(
   UploadImageOnly().single("file"),
   middlewareEdit,
   async (req, res) => {

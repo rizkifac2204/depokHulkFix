@@ -1,9 +1,9 @@
 import db from "libs/db";
-import Handler from "middlewares/Handler";
+import handler from "middlewares/handler";
 import bcrypt from "bcryptjs";
 import getLogger from "middlewares/getLogger";
 
-export default Handler()
+export default handler()
   .get(async (req, res) => {
     try {
       const result = await db

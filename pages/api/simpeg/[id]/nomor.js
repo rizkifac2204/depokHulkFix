@@ -1,9 +1,9 @@
 import db from "libs/db";
-import Handler from "middlewares/Handler";
+import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 import editableProcessRequired from "middlewares/editableUserRequired";
 
-export default Handler()
+export default handler()
   .get(async (req, res) => {
     try {
       const { id } = req.query;

@@ -1,7 +1,7 @@
 import db from "libs/db";
-import HandlerPublic from "middlewares/HandlerPublic";
+import handlerPublic from "middlewares/handlerPublic";
 
-export default HandlerPublic().get(async (req, res) => {
+export default handlerPublic().get(async (req, res) => {
   const data = await db("level")
     .where((builder) => {
       if (process.env.LEVEL_START) {

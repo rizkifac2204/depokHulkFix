@@ -1,5 +1,5 @@
 import db from "libs/db";
-import Handler from "middlewares/Handler";
+import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 
 const getData = async (date) => {
@@ -20,7 +20,7 @@ const getData = async (date) => {
   return result;
 };
 
-export default Handler()
+export default handler()
   .get(async (req, res) => {
     try {
       const { id: user_id } = req.session.user;

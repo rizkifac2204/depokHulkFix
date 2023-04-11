@@ -1,5 +1,5 @@
 import db from "libs/db";
-import Handler from "middlewares/Handler";
+import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 import { UploadImageOnly, DeleteUpload } from "services/uploadService";
 
@@ -9,7 +9,7 @@ export const config = {
   },
 };
 
-export default Handler()
+export default handler()
   .post(UploadImageOnly().single("file"), async (req, res) => {
     try {
       // jika sukses upload, maka file akan terdeteksi

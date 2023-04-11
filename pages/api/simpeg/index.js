@@ -1,5 +1,5 @@
 import db from "libs/db";
-import Handler from "middlewares/Handler";
+import handler from "middlewares/handler";
 import bcrypt from "bcryptjs";
 import getLogger from "middlewares/getLogger";
 
@@ -10,7 +10,7 @@ import {
   createBawasluNama,
 } from "middlewares/simpegAttrs";
 
-export default Handler()
+export default handler()
   .get(async (req, res) => {
     try {
       const { id: user_id, level, bawaslu_id, verifikator } = req.session.user;

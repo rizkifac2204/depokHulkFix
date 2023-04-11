@@ -1,7 +1,7 @@
 import db from "libs/db";
-import Handler from "middlewares/Handler";
+import handler from "middlewares/handler";
 
-export default Handler().get(async (req, res) => {
+export default handler().get(async (req, res) => {
   const data = await db("utils_pernikahan").orderBy("id", "asc");
   res.json(data);
 });

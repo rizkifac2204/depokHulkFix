@@ -1,4 +1,4 @@
-import HandlerPublic from "middlewares/HandlerPublic";
+import handlerPublic from "middlewares/handlerPublic";
 const path = require("path");
 const fs = require("fs");
 var mime = require("mime-types");
@@ -10,7 +10,7 @@ export const config = {
   },
 };
 
-export default HandlerPublic().get(async (req, res) => {
+export default handlerPublic().get(async (req, res) => {
   const _path = req.query.slug.join("/");
   if (!_path)
     return res.status(404).json({

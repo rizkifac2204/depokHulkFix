@@ -43,6 +43,14 @@
     {
       "name": "Form Cyber Patrol",
       "url": "/admin/cyber/form"
+    },
+    {
+      "name": "Laporan",
+      "url": "/admin/lapor"
+    },
+    {
+      "name": "Tambah Laporan / Formulir B.1",
+      "url": "/admin/lapor/add"
     }
   ]
 }

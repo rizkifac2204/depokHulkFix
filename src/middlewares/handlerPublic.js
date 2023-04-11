@@ -1,6 +1,6 @@
 import nextConnect from "next-connect";
 
-export default function HandlerPublic() {
+export default function handlerPublic() {
   return nextConnect({
     onError: (err, req, res, next) => {
       console.error(err.stack);

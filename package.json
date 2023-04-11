@@ -44,6 +44,7 @@
     "react-dom": "18.2.0",
     "react-full-screen": "^1.1.1",
     "react-toastify": "^9.1.1",
+    "sharp": "^0.32.0",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1",
     "yup": "^0.32.11"

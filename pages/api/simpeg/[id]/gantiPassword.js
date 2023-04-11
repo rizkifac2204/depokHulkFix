@@ -1,10 +1,10 @@
 import db from "libs/db";
-import Handler from "middlewares/Handler";
+import handler from "middlewares/handler";
 import bcrypt from "bcryptjs";
 import getLogger from "middlewares/getLogger";
 import editableProcessRequired from "middlewares/editableUserRequired";
 
-export default Handler().put(editableProcessRequired, async (req, res) => {
+export default handler().put(editableProcessRequired, async (req, res) => {
   try {
     const { id } = req.query;
     const { baru } = req.body;

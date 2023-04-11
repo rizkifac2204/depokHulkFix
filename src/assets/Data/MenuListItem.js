@@ -4,6 +4,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import StickyNote2OutlinedIcon from "@mui/icons-material/StickyNote2Outlined";
 import FormatColorTextOutlinedIcon from "@mui/icons-material/FormatColorTextOutlined";
 import PolicyOutlinedIcon from "@mui/icons-material/PolicyOutlined";
+import ReportGmailerrorredIcon from "@mui/icons-material/ReportGmailerrorred";
 
 const MenuListItem = [
   {
@@ -77,6 +78,36 @@ const MenuListItem = [
       {
         path: "/admin/simpeg/add",
         menu_title: "tambahPegawai",
+        icon: <></>,
+        isMenuOpen: false,
+        fullPageMenu: false,
+        third_child_routes: null,
+        limit_access_level: [1, 2, 3, 4, 5, 6],
+      },
+    ],
+  },
+  {
+    menu_title: "laporan",
+    path: "/admin/lapor",
+    icon: <ReportGmailerrorredIcon />,
+    category: "ppdatin",
+    isMenuOpen: false,
+    menu: "lapor",
+    fullPageMenu: false,
+    desc: true,
+    content: "",
+    child_routes: [
+      {
+        path: "/admin/dataLaporan",
+        menu_title: "dataLaporan",
+        icon: <></>,
+        isMenuOpen: false,
+        fullPageMenu: false,
+        third_child_routes: null,
+      },
+      {
+        path: "/admin/lapor/add",
+        menu_title: "formulirB.1",
         icon: <></>,
         isMenuOpen: false,
         fullPageMenu: false,

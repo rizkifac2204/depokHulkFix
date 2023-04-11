@@ -1,5 +1,5 @@
 import db from "libs/db";
-import Handler from "middlewares/Handler";
+import handler from "middlewares/handler";
 import bcrypt from "bcryptjs";
 import getLogger from "middlewares/getLogger";
 import { UploadImageOnly, DeleteUpload } from "services/uploadService";
@@ -11,7 +11,7 @@ export const config = {
   },
 };
 
-export default Handler().put(
+export default handler().put(
   UploadImageOnly().single("file"),
   async (req, res) => {
     try {

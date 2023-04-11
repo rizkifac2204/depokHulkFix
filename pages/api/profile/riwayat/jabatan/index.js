@@ -1,8 +1,8 @@
 import db from "libs/db";
-import Handler from "middlewares/Handler";
+import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 
-export default Handler()
+export default handler()
   .get(async (req, res) => {
     try {
       const data = await db("user_riwayat_jabatan")
