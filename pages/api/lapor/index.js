@@ -1,6 +1,7 @@
 import db from "libs/db";
 import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
+import moment from "moment";
 
 function filterData(builder, user_id, level) {
   if (level > 4) {
@@ -81,20 +82,18 @@ export default handler()
         pelapor,
         nomor,
         peristiwa,
-        hari_kejadian,
+        tempat_kejadian,
         tanggal_kejadian,
-        hari_diketahui,
         tanggal_diketahui,
         uraian,
         tempat_lapor,
-        hari_lapor,
         tanggal_lapor,
         jam_lapor,
       } = req.body;
 
       // pelapor id bisa diambil dari data object post jika ada, atau membuat baru
       const dataPelapor =
-        Object.keys(pelapor) !== 0
+        pelapor && Object.keys(pelapor) !== 0
           ? { id: pelapor.id, isNew: false }
           : await prosesSimpanPelapor(req, res);
 
@@ -103,17 +102,21 @@ export default handler()
         {
           user_id,
           pelapor_id: dataPelapor.id,
-          nomor,
-          peristiwa,
-          hari_kejadian,
-          tanggal_kejadian,
-          hari_diketahui,
-          tanggal_diketahui,
-          uraian,
-          tempat_lapor,
-          hari_lapor,
-          tanggal_lapor,
-          jam_lapor,
+          nomor: nomor || null,
+          peristiwa: peristiwa || null,
+          tempat_kejadian: tempat_kejadian || null,
+          tanggal_kejadian: tanggal_kejadian
+            ? moment(tanggal_kejadian).format("MM/DD/YYYY")
+            : null,
+          tanggal_diketahui: tanggal_diketahui
+            ? moment(tanggal_diketahui).format("MM/DD/YYYY")
+            : null,
+          uraian: uraian || null,
+          tempat_lapor: tempat_lapor || null,
+          tanggal_lapor: tanggal_lapor
+            ? moment(tanggal_lapor).format("MM/DD/YYYY")
+            : null,
+          jam_lapor: jam_lapor ? moment(jam_lapor).format("HH:MM") : null,
         },
       ]);
 

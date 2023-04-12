@@ -98,7 +98,7 @@ const MenuListItem = [
     content: "",
     child_routes: [
       {
-        path: "/admin/dataLaporan",
+        path: "/admin/lapor",
         menu_title: "dataLaporan",
         icon: <></>,
         isMenuOpen: false,
