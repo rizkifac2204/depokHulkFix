@@ -268,11 +268,13 @@ function ProfileJabatan() {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
+              key={0}
               icon={<SaveIcon />}
               label="Save"
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
+              key={1}
               icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
@@ -284,6 +286,7 @@ function ProfileJabatan() {
 
         return [
           <GridActionsCellItem
+            key={2}
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
@@ -291,6 +294,7 @@ function ProfileJabatan() {
             color="inherit"
           />,
           <GridActionsCellItem
+            key={3}
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}

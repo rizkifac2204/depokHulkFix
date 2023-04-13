@@ -200,11 +200,13 @@ function ProfileKeluarNegeri() {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
+              key={0}
               icon={<SaveIcon />}
               label="Save"
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
+              key={1}
               icon={<CancelIcon />}
               label="Cancel"
               className="textPrimary"
@@ -216,6 +218,7 @@ function ProfileKeluarNegeri() {
 
         return [
           <GridActionsCellItem
+            key={2}
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
@@ -223,6 +226,7 @@ function ProfileKeluarNegeri() {
             color="inherit"
           />,
           <GridActionsCellItem
+            key={3}
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}

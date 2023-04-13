@@ -206,7 +206,7 @@ const ContextProvider = ({ children }) => {
     state.isHorizontalMenuActive,
     state.isMiniSidebarActive,
     state.isRtlActive,
-  ]);
+  ]); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const isMobile =
@@ -221,7 +221,7 @@ const ContextProvider = ({ children }) => {
       document.getElementsByTagName("BODY")[0].setAttribute("dir", "ltr");
       // document.getElementsByTagName("BODY")[0].removeAttribute("dir");
     }
-  }, [state.isRtlActive]);
+  }, [state.isRtlActive]); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   return (
     <RizkiFach.Provider value={[state, dispatch]}>

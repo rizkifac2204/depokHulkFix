@@ -54,7 +54,7 @@ const validationSchema = yup.object({
 
 const handleSubmit = (values, setSubmitting) => {
   axios
-    .post(`/api/lapor`, values)
+    .put(`/api/lapor/${values.id}`, values)
     .then((res) => {
       toast.success(res.data.message);
     })
@@ -72,33 +72,14 @@ const handleSubmit = (values, setSubmitting) => {
 
 const filter = createFilterOptions();
 
-function FormLaporAdd() {
-  const formik = useFormik({
-    initialValues: {
-      nama: null,
-      tempat_lahir: "",
-      tanggal_lahir: "",
-      jenis_kelamin: "",
-      pekerjaan: "",
-      alamat: "",
-      telp: "",
-      email: "",
-      nomor: "",
-      peristiwa: "",
-      tempat_kejadian: "",
-      tanggal_kejadian: "",
-      tanggal_diketahui: "",
-      uraian: "",
-      tempat_lapor: "",
-      tanggal_lapor: "",
-      jam_lapor: "",
-    },
-    validationSchema: validationSchema,
-    enableReinitialize: true,
-    onSubmit: (values, { setSubmitting }) =>
-      handleSubmit(values, setSubmitting),
-  });
+function SetJam(time) {
+  const timeNow = new Date();
+  const separate = time.replace(/:/g, ",").split(",").map(Number);
+  timeNow.setHours(separate[0], separate[1], 0, 0);
+  return timeNow;
+}
 
+function FormLaporEdit({ detail }) {
   // GET PELAPOR
   const {
     data: pelapor,
@@ -136,6 +117,60 @@ function FormLaporAdd() {
       formik.setFieldValue("email", "");
     }
   }
+
+  const formik = useFormik({
+    initialValues: detail
+      ? {
+          nama: detail.nama ? detail.nama : "",
+          tempat_lahir: detail.tempat_lahir ? detail.tempat_lahir : "",
+          tanggal_lahir: detail.tanggal_lahir
+            ? new Date(detail.tanggal_lahir)
+            : "",
+          jenis_kelamin: detail.jenis_kelamin ? detail.jenis_kelamin : "",
+          pekerjaan: detail.pekerjaan ? detail.pekerjaan : "",
+          alamat: detail.alamat ? detail.alamat : "",
+          telp: detail.telp ? detail.telp : "",
+          email: detail.email ? detail.email : "",
+          nomor: detail.nomor ? detail.nomor : "",
+          peristiwa: detail.peristiwa ? detail.peristiwa : "",
+          tempat_kejadian: detail.tempat_kejadian ? detail.tempat_kejadian : "",
+          tanggal_kejadian: detail.tanggal_kejadian
+            ? new Date(detail.tanggal_kejadian)
+            : "",
+          tanggal_diketahui: detail.tanggal_diketahui
+            ? new Date(detail.tanggal_diketahui)
+            : "",
+          uraian: detail.uraian ? detail.uraian : "",
+          tempat_lapor: detail.tempat_lapor ? detail.tempat_lapor : "",
+          tanggal_lapor: detail.tanggal_lapor
+            ? new Date(detail.tanggal_lapor)
+            : "",
+          jam_lapor: detail.jam_lapor ? SetJam(detail.jam_lapor) : "",
+        }
+      : {
+          nama: null,
+          tempat_lahir: "",
+          tanggal_lahir: "",
+          jenis_kelamin: "",
+          pekerjaan: "",
+          alamat: "",
+          telp: "",
+          email: "",
+          nomor: "",
+          peristiwa: "",
+          tempat_kejadian: "",
+          tanggal_kejadian: "",
+          tanggal_diketahui: "",
+          uraian: "",
+          tempat_lapor: "",
+          tanggal_lapor: "",
+          jam_lapor: "",
+        },
+    validationSchema: validationSchema,
+    enableReinitialize: true,
+    onSubmit: (values, { setSubmitting }) =>
+      handleSubmit(values, setSubmitting),
+  });
 
   return (
     <div className="hk-general-settings">
@@ -598,7 +633,7 @@ function FormLaporAdd() {
               color="primary"
               className="primary-bg-btn"
             >
-              {formik.isSubmitting ? "Memproses ..." : "Simpan"}
+              {formik.isSubmitting ? "Memproses ..." : "Update"}
             </Button>
           </ContentLayout>
         </Box>
@@ -607,4 +642,4 @@ function FormLaporAdd() {
   );
 }
 
-export default FormLaporAdd;
+export default FormLaporEdit;

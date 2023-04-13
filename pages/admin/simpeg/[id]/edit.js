@@ -24,7 +24,6 @@ import { Tabs, Tab } from "@mui/material";
 
 // Components
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
-import PageTitleBarWithImage from "components/GlobalComponents/PageTitleBar/PageTitleBarWithImage";
 
 import ProfileDetail from "components/Profile/ProfileDetail";
 

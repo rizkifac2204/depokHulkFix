@@ -1,13 +1,12 @@
 import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 // library
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 // MUI
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -33,9 +32,8 @@ async function deleteData(id) {
 }
 
 function Lapor() {
+  const router = useRouter();
   const queryClient = useQueryClient();
-  const theme = useTheme();
-  const hideOnLg = useMediaQuery(theme.breakpoints.up("lg"));
   const [pageSize, setPageSize] = useState(10);
 
   const {
@@ -72,19 +70,6 @@ function Lapor() {
     }
   };
 
-  function deleteCallback() {
-    function onSuccess(data) {
-      toast.success(data.message || "Sukses");
-      queryClient.invalidateQueries(["lapors"]);
-    }
-
-    function onError(err) {
-      toast.error(err.message);
-    }
-
-    return { onSuccess, onError };
-  }
-
   if (isError)
     return (
       <Alert
@@ -100,31 +85,42 @@ function Lapor() {
       minWidth: 180,
     },
     {
+      field: "nama",
+      headerName: "Pelapor",
+      minWidth: 200,
+    },
+    {
+      field: "tanggal_lapor",
+      headerName: "Tanggal Laporan",
+      minWidth: 200,
+    },
+    {
       field: "peristiwa",
       headerName: "Peristiwa",
       minWidth: 180,
+      flex: 1,
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
       cellClassName: "actions",
-      hide: hideOnLg,
       getActions: (values) => {
         return [
           <GridActionsCellItem
+            key={0}
             icon={<VisibilityIcon />}
             label="Detail"
-            components={Link}
-            href={`/admin/lapor/${values.id}`}
+            onClick={() => router.push("/admin/lapor/" + values.id)}
           />,
           <GridActionsCellItem
+            key={1}
             icon={<EditOutlinedIcon />}
             label="Edit"
-            components={Link}
-            href={`/admin/lapor/${values.id}/edit`}
+            onClick={() => router.push(`/admin/lapor/${values.id}/edit`)}
           />,
           <GridActionsCellItem
+            key={2}
             icon={<DeleteIcon />}
             label="Delete"
             onClick={() => handleDeleteClick(values.id)}

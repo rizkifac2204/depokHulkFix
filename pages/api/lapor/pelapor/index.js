@@ -1,6 +1,7 @@
 import db from "libs/db";
 import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
+import moment from "moment";
 
 export default handler()
   .get(async (req, res) => {
@@ -29,18 +30,21 @@ export default handler()
         telp,
         email,
       } = req.body;
+      const namaPelapor = nama && typeof nama !== "string" ? nama.nama : nama;
 
       // proses insert
       const proses = await db("lapor_pelapor").insert([
         {
-          nama,
-          tempat_lahir,
-          tanggal_lahir,
-          jenis_kelamin,
-          pekerjaan,
-          alamat,
-          telp,
-          email,
+          nama: namaPelapor || null,
+          tempat_lahir: tempat_lahir || null,
+          tanggal_lahir: tanggal_lahir
+            ? moment(tanggal_lahir).format("MM/DD/YYYY")
+            : null,
+          jenis_kelamin: jenis_kelamin || null,
+          pekerjaan: pekerjaan || null,
+          alamat: alamat || null,
+          telp: telp || null,
+          email: email || null,
         },
       ]);
 

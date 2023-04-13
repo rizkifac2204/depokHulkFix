@@ -131,6 +131,7 @@ function Simpeg() {
         if (values.row.myself) {
           return [
             <GridActionsCellItem
+              key={0}
               icon={<VisibilityIcon />}
               label="Profile"
               components={Link}
@@ -141,18 +142,21 @@ function Simpeg() {
         if (values.row.editable) {
           return [
             <GridActionsCellItem
+              key={1}
               icon={<VisibilityIcon />}
               label="Detail"
               components={Link}
               href={`/admin/simpeg/${values.id}`}
             />,
             <GridActionsCellItem
+              key={2}
               icon={<EditOutlinedIcon />}
               label="Edit"
               components={Link}
               href={`/admin/simpeg/${values.id}/edit`}
             />,
             <GridActionsCellItem
+              key={3}
               icon={<DeleteIcon />}
               label="Delete"
               onClick={() => handleDeleteClick(values.id)}
@@ -161,6 +165,7 @@ function Simpeg() {
         } else {
           return [
             <GridActionsCellItem
+              key={4}
               icon={<VisibilityIcon />}
               label="Detail"
               components={Link}

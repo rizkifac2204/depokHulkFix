@@ -24,17 +24,21 @@ async function prosesSimpanPelapor(req, res) {
         email,
       } = req.body;
 
+      const namaPelapor = nama && typeof nama !== "string" ? nama.nama : nama;
+
       // proses insert
       const proses = await db("lapor_pelapor").insert([
         {
-          nama,
-          tempat_lahir,
-          tanggal_lahir,
-          jenis_kelamin,
-          pekerjaan,
-          alamat,
-          telp,
-          email,
+          nama: namaPelapor || null,
+          tempat_lahir: tempat_lahir || null,
+          tanggal_lahir: tanggal_lahir
+            ? moment(tanggal_lahir).format("MM/DD/YYYY")
+            : null,
+          jenis_kelamin: jenis_kelamin || null,
+          pekerjaan: pekerjaan || null,
+          alamat: alamat || null,
+          telp: telp || null,
+          email: email || null,
         },
       ]);
 
@@ -58,8 +62,18 @@ export default handler()
     try {
       const { id: user_id, level } = req.session.user;
       const result = await db
-        .select("lapor_peristiwa.*", "user.nama_admin", "bawaslu.nama_bawaslu")
+        .select(
+          "lapor_peristiwa.*",
+          "lapor_pelapor.nama",
+          "user.nama_admin",
+          "bawaslu.nama_bawaslu"
+        )
         .from("lapor_peristiwa")
+        .innerJoin(
+          "lapor_pelapor",
+          "lapor_pelapor.id",
+          "lapor_peristiwa.pelapor_id"
+        )
         .innerJoin("user", "user.id", "lapor_peristiwa.user_id")
         .innerJoin("bawaslu", "user.bawaslu_id", "bawaslu.id")
         .modify((builder) => filterData(builder, user_id, level));
@@ -79,7 +93,7 @@ export default handler()
 
       // get post
       const {
-        pelapor,
+        nama,
         nomor,
         peristiwa,
         tempat_kejadian,
@@ -93,8 +107,8 @@ export default handler()
 
       // pelapor id bisa diambil dari data object post jika ada, atau membuat baru
       const dataPelapor =
-        pelapor && Object.keys(pelapor) !== 0
-          ? { id: pelapor.id, isNew: false }
+        nama && typeof nama !== "string"
+          ? { id: nama.id, isNew: false }
           : await prosesSimpanPelapor(req, res);
 
       // proses insert
