@@ -52,9 +52,9 @@ const validationSchema = yup.object({
   jam_lapor: yup.string().required("Harus Diisi"),
 });
 
-const handleSubmit = (values, setSubmitting) => {
+const handleSubmit = (values, setSubmitting, id) => {
   axios
-    .put(`/api/lapor/${values.id}`, values)
+    .put(`/api/lapor/${id}`, values)
     .then((res) => {
       toast.success(res.data.message);
     })
@@ -85,7 +85,6 @@ function FormLaporEdit({ detail }) {
     data: pelapor,
     isError: isErrorPelapor,
     isLoading: isLoadingPelapor,
-    isFetching: isFetchingPelapor,
   } = useQuery({
     initialData: [],
     queryKey: ["pelapor"],
@@ -121,7 +120,10 @@ function FormLaporEdit({ detail }) {
   const formik = useFormik({
     initialValues: detail
       ? {
-          nama: detail.nama ? detail.nama : "",
+          pelapor_id: detail.pelapor_id ? detail.pelapor_id : "",
+          nama: pelapor
+            ? pelapor.find((x) => x.id === detail.pelapor_id)
+            : null,
           tempat_lahir: detail.tempat_lahir ? detail.tempat_lahir : "",
           tanggal_lahir: detail.tanggal_lahir
             ? new Date(detail.tanggal_lahir)
@@ -148,6 +150,7 @@ function FormLaporEdit({ detail }) {
           jam_lapor: detail.jam_lapor ? SetJam(detail.jam_lapor) : "",
         }
       : {
+          pelapor_id: null,
           nama: null,
           tempat_lahir: "",
           tanggal_lahir: "",
@@ -169,7 +172,7 @@ function FormLaporEdit({ detail }) {
     validationSchema: validationSchema,
     enableReinitialize: true,
     onSubmit: (values, { setSubmitting }) =>
-      handleSubmit(values, setSubmitting),
+      handleSubmit(values, setSubmitting, detail.id),
   });
 
   return (
@@ -197,71 +200,75 @@ function FormLaporEdit({ detail }) {
         {/* input nama  */}
         <Box mb={3}>
           <ContentLayout title="Nama Pelapor *">
-            <FormControl fullWidth>
-              <Autocomplete
-                value={formik.values.nama}
-                onChange={(event, newValue) => {
-                  if (typeof newValue === "string") {
-                    formik.setFieldValue("nama", newValue);
-                  } else if (newValue && newValue.inputValue) {
-                    // Create a new value from the user input
-                    formik.setFieldValue("nama", newValue.inputValue);
-                  } else {
-                    formik.setFieldValue("nama", newValue);
-                    setAutoValue(newValue);
-                  }
-                }}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
+            {isLoadingPelapor && "Loading..."}
+            {isErrorPelapor && "Gagal Mengambil Data"}
+            {pelapor ? (
+              <FormControl fullWidth>
+                <Autocomplete
+                  value={formik.values.nama || null}
+                  onChange={(event, newValue) => {
+                    if (typeof newValue === "string") {
+                      formik.setFieldValue("nama", newValue);
+                    } else if (newValue && newValue.inputValue) {
+                      // Create a new value from the user input
+                      formik.setFieldValue("nama", newValue.inputValue);
+                    } else {
+                      formik.setFieldValue("nama", newValue);
+                      setAutoValue(newValue);
+                    }
+                  }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
 
-                  const { inputValue } = params;
-                  // Suggest the creation of a new value
-                  const isExisting = options.some(
-                    (option) => inputValue === option.nama
-                  );
-                  if (inputValue !== "" && !isExisting) {
-                    filtered.push({
-                      inputValue,
-                      nama: `Tambah "${inputValue}"`,
-                    });
-                  }
+                    const { inputValue } = params;
+                    // Suggest the creation of a new value
+                    const isExisting = options.some(
+                      (option) => inputValue === option.nama
+                    );
+                    if (inputValue !== "" && !isExisting) {
+                      filtered.push({
+                        inputValue,
+                        nama: `Tambah "${inputValue}"`,
+                      });
+                    }
 
-                  return filtered;
-                }}
-                selectOnFocus
-                clearOnBlur
-                handleHomeEndKeys
-                id="nama"
-                options={pelapor ? pelapor : []}
-                getOptionLabel={(option) => {
-                  // Value selected with enter, right from the input
-                  if (typeof option === "string") {
-                    return option;
-                  }
-                  // Add "xxx" option created dynamically
-                  if (option.inputValue) {
-                    return option.inputValue;
-                  }
-                  // Regular option
-                  return option.nama;
-                }}
-                renderOption={(props, option) => (
-                  <li {...props} key={option.id ? option.id : 0}>
-                    {option.nama}
-                  </li>
-                )}
-                // sx={{ width: 300 }}
-                freeSolo
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    helperText={formik.touched.nama && formik.errors.nama}
-                    error={formik.touched.nama && Boolean(formik.errors.nama)}
-                  />
-                )}
-              />
-            </FormControl>
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="nama"
+                  options={pelapor ? pelapor : []}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    if (typeof option === "string") {
+                      return option;
+                    }
+                    // Add "xxx" option created dynamically
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.nama;
+                  }}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.id ? option.id : 0}>
+                      {option.nama}
+                    </li>
+                  )}
+                  // sx={{ width: 300 }}
+                  freeSolo
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      helperText={formik.touched.nama && formik.errors.nama}
+                      error={formik.touched.nama && Boolean(formik.errors.nama)}
+                    />
+                  )}
+                />
+              </FormControl>
+            ) : null}
           </ContentLayout>
         </Box>
         {/* input tempat_lahir tanggal_lahir  */}
