@@ -50,7 +50,7 @@ function LaporEdit() {
       <Head>
         <title>{`Edit Laporan - Bawaslu Depok  Apps`}</title>
       </Head>
-      <SmallTitleBar title="Formulir Model B.1" />
+      <SmallTitleBar title="Formulir Edit Laporan Model B.1" />
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>
           <CustomCard>
