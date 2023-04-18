@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
@@ -92,6 +94,15 @@ function FormLaporAdd() {
       tempat_lapor: "",
       tanggal_lapor: "",
       jam_lapor: "",
+      terlapor: [
+        { nama: "", alamat: "", telp: "" },
+        { nama: "", alamat: "", telp: "" },
+        { nama: "", alamat: "", telp: "" },
+      ],
+      saksi: [
+        { nama: "", alamat: "", telp: "" },
+        { nama: "", alamat: "", telp: "" },
+      ],
     },
     validationSchema: validationSchema,
     enableReinitialize: true,
@@ -158,339 +169,442 @@ function FormLaporAdd() {
           </ContentLayout>
         </Box>
 
-        <h3>1. Identitas Pelapor:</h3>
-        {/* input nama  */}
-        <Box mb={3}>
-          <ContentLayout title="Nama Pelapor *">
-            <FormControl fullWidth>
-              <Autocomplete
-                value={formik.values.nama}
-                onChange={(event, newValue) => {
-                  if (typeof newValue === "string") {
-                    formik.setFieldValue("nama", newValue);
-                  } else if (newValue && newValue.inputValue) {
-                    // Create a new value from the user input
-                    formik.setFieldValue("nama", newValue.inputValue);
-                  } else {
-                    formik.setFieldValue("nama", newValue);
-                    setAutoValue(newValue);
-                  }
-                }}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
-
-                  const { inputValue } = params;
-                  // Suggest the creation of a new value
-                  const isExisting = options.some(
-                    (option) => inputValue === option.nama
-                  );
-                  if (inputValue !== "" && !isExisting) {
-                    filtered.push({
-                      inputValue,
-                      nama: `Tambah "${inputValue}"`,
-                    });
-                  }
-
-                  return filtered;
-                }}
-                selectOnFocus
-                clearOnBlur
-                handleHomeEndKeys
-                id="nama"
-                options={pelapor ? pelapor : []}
-                getOptionLabel={(option) => {
-                  // Value selected with enter, right from the input
-                  if (typeof option === "string") {
-                    return option;
-                  }
-                  // Add "xxx" option created dynamically
-                  if (option.inputValue) {
-                    return option.inputValue;
-                  }
-                  // Regular option
-                  return option.nama;
-                }}
-                renderOption={(props, option) => (
-                  <li {...props} key={option.id ? option.id : 0}>
-                    {option.nama}
-                  </li>
-                )}
-                // sx={{ width: 300 }}
-                freeSolo
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    helperText={formik.touched.nama && formik.errors.nama}
-                    error={formik.touched.nama && Boolean(formik.errors.nama)}
-                  />
-                )}
-              />
-            </FormControl>
-          </ContentLayout>
-        </Box>
-        {/* input tempat_lahir tanggal_lahir  */}
-        <Box mb={3}>
-          <ContentLayout title="Tempat / Tanggal Lahir *">
-            <FormControl>
-              <TextField
-                required
-                variant="standard"
-                name="tempat_lahir"
-                value={formik.values.tempat_lahir}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.tempat_lahir &&
-                  Boolean(formik.errors.tempat_lahir)
-                }
-                helperText={
-                  formik.touched.tempat_lahir && formik.errors.tempat_lahir
-                }
-              />
-            </FormControl>
-            {" / "}
-            <FormControl>
-              <MobileDatePicker
-                inputFormat="DD-MM-YYYY"
-                value={formik.values.tanggal_lahir}
-                onChange={(value) => {
-                  formik.setFieldValue("tanggal_lahir", new Date(value));
-                }}
-                onBlur={formik.handleBlur}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    helperText={
-                      formik.touched.tanggal_lahir &&
-                      formik.errors.tanggal_lahir
+        {/* Pelapor  */}
+        <Box>
+          <h3>1. Identitas Pelapor:</h3>
+          {/* input nama  */}
+          <Box mb={3}>
+            <ContentLayout title="Nama Pelapor *">
+              <FormControl fullWidth>
+                <Autocomplete
+                  value={formik.values.nama}
+                  onChange={(event, newValue) => {
+                    if (typeof newValue === "string") {
+                      formik.setFieldValue("nama", newValue);
+                    } else if (newValue && newValue.inputValue) {
+                      // Create a new value from the user input
+                      formik.setFieldValue("nama", newValue.inputValue);
+                    } else {
+                      formik.setFieldValue("nama", newValue);
+                      setAutoValue(newValue);
                     }
-                    error={
-                      formik.touched.tanggal_lahir &&
-                      Boolean(formik.errors.tanggal_lahir)
+                  }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+
+                    const { inputValue } = params;
+                    // Suggest the creation of a new value
+                    const isExisting = options.some(
+                      (option) => inputValue === option.nama
+                    );
+                    if (inputValue !== "" && !isExisting) {
+                      filtered.push({
+                        inputValue,
+                        nama: `Tambah "${inputValue}"`,
+                      });
                     }
-                  />
-                )}
-              />
-            </FormControl>
-          </ContentLayout>
-        </Box>
-        {/* input jenis_kelamin  */}
-        <Box mb={1}>
-          <ContentLayout title="Jenis Kelamin">
-            <FormControl fullWidth error={Boolean(formik.errors.jenis_kelamin)}>
-              <RadioGroup
-                row
-                aria-label="jenis_kelamin"
-                name="jenis_kelamin"
-                value={formik.values.jenis_kelamin}
-                onChange={formik.handleChange}
+
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="nama"
+                  options={pelapor ? pelapor : []}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    if (typeof option === "string") {
+                      return option;
+                    }
+                    // Add "xxx" option created dynamically
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.nama;
+                  }}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.id ? option.id : 0}>
+                      {option.nama}
+                    </li>
+                  )}
+                  // sx={{ width: 300 }}
+                  freeSolo
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      helperText={formik.touched.nama && formik.errors.nama}
+                      error={formik.touched.nama && Boolean(formik.errors.nama)}
+                    />
+                  )}
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
+          {/* input tempat_lahir tanggal_lahir  */}
+          <Box mb={3}>
+            <ContentLayout title="Tempat / Tanggal Lahir *">
+              <FormControl>
+                <TextField
+                  required
+                  variant="standard"
+                  name="tempat_lahir"
+                  value={formik.values.tempat_lahir}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.tempat_lahir &&
+                    Boolean(formik.errors.tempat_lahir)
+                  }
+                  helperText={
+                    formik.touched.tempat_lahir && formik.errors.tempat_lahir
+                  }
+                />
+              </FormControl>
+              {" / "}
+              <FormControl>
+                <MobileDatePicker
+                  inputFormat="DD-MM-YYYY"
+                  value={formik.values.tanggal_lahir}
+                  onChange={(value) => {
+                    formik.setFieldValue("tanggal_lahir", new Date(value));
+                  }}
+                  onBlur={formik.handleBlur}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      helperText={
+                        formik.touched.tanggal_lahir &&
+                        formik.errors.tanggal_lahir
+                      }
+                      error={
+                        formik.touched.tanggal_lahir &&
+                        Boolean(formik.errors.tanggal_lahir)
+                      }
+                    />
+                  )}
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
+          {/* input jenis_kelamin  */}
+          <Box mb={1}>
+            <ContentLayout title="Jenis Kelamin">
+              <FormControl
+                fullWidth
+                error={Boolean(formik.errors.jenis_kelamin)}
               >
-                <FormControlLabel
-                  value="Laki-Laki"
-                  control={<Radio />}
-                  label="Laki-Laki"
-                />
-                <FormControlLabel
-                  value="Perempuan"
-                  control={<Radio />}
-                  label="Perempuan"
-                />
-              </RadioGroup>
-            </FormControl>
-            <FormHelperText style={{ color: "red" }}>
-              {formik.touched.jenis_kelamin && formik.errors.jenis_kelamin}
-            </FormHelperText>
-          </ContentLayout>
-        </Box>
-        {/* input pekerjaan  */}
-        <Box mb={3}>
-          <ContentLayout title="Pekerjaan *">
-            <FormControl fullWidth>
-              <TextField
-                required
-                variant="standard"
-                name="pekerjaan"
-                value={formik.values.pekerjaan}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.pekerjaan && Boolean(formik.errors.pekerjaan)
-                }
-                helperText={formik.touched.pekerjaan && formik.errors.pekerjaan}
-              />
-            </FormControl>
-          </ContentLayout>
-        </Box>
-        {/* input alamat  */}
-        <Box mb={3}>
-          <ContentLayout title="Alamat *">
-            <FormControl fullWidth>
-              <TextField
-                required
-                multiline
-                variant="standard"
-                name="alamat"
-                value={formik.values.alamat}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.alamat && Boolean(formik.errors.alamat)}
-                helperText={formik.touched.alamat && formik.errors.alamat}
-              />
-            </FormControl>
-          </ContentLayout>
-        </Box>
-        {/* input telp  */}
-        <Box mb={3}>
-          <ContentLayout title="Telp/HP *">
-            <FormControl fullWidth>
-              <TextField
-                required
-                variant="standard"
-                name="telp"
-                value={formik.values.telp}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.telp && Boolean(formik.errors.telp)}
-                helperText={formik.touched.telp && formik.errors.telp}
-              />
-            </FormControl>
-          </ContentLayout>
-        </Box>
-        {/* input email  */}
-        <Box mb={3}>
-          <ContentLayout title="Email *">
-            <FormControl fullWidth>
-              <TextField
-                required
-                variant="standard"
-                name="email"
-                type="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
-              />
-            </FormControl>
-          </ContentLayout>
-        </Box>
-
-        <h3>2. Identitas Terlapor:</h3>
-        <Alert severity="info">Diisi Pada Bagian Detail</Alert>
-
-        <h3>3. Peristiwa Yang Dilaporkan:</h3>
-
-        {/* input peristiwa  */}
-        <Box mb={3}>
-          <ContentLayout title="Peristiwa *">
-            <FormControl fullWidth>
-              <TextField
-                required
-                variant="standard"
-                name="peristiwa"
-                value={formik.values.peristiwa}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.peristiwa && Boolean(formik.errors.peristiwa)
-                }
-                helperText={formik.touched.peristiwa && formik.errors.peristiwa}
-              />
-            </FormControl>
-          </ContentLayout>
-        </Box>
-        {/* input tempat_kejadian  */}
-        <Box mb={3}>
-          <ContentLayout title="Tempat Kejadian *">
-            <FormControl fullWidth>
-              <TextField
-                required
-                variant="standard"
-                name="tempat_kejadian"
-                value={formik.values.tempat_kejadian}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.tempat_kejadian &&
-                  Boolean(formik.errors.tempat_kejadian)
-                }
-                helperText={
-                  formik.touched.tempat_kejadian &&
-                  formik.errors.tempat_kejadian
-                }
-              />
-            </FormControl>
-          </ContentLayout>
-        </Box>
-        {/* input tanggal_kejadian  */}
-        <Box mb={3}>
-          <ContentLayout title="Tanggal Kejadian *">
-            <FormControl fullWidth>
-              <MobileDatePicker
-                inputFormat="DD-MM-YYYY"
-                value={formik.values.tanggal_kejadian}
-                onChange={(value) => {
-                  formik.setFieldValue("tanggal_kejadian", new Date(value));
-                }}
-                onBlur={formik.handleBlur}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    helperText={
-                      formik.touched.tanggal_kejadian &&
-                      formik.errors.tanggal_kejadian
-                    }
-                    error={
-                      formik.touched.tanggal_kejadian &&
-                      Boolean(formik.errors.tanggal_kejadian)
-                    }
+                <RadioGroup
+                  row
+                  aria-label="jenis_kelamin"
+                  name="jenis_kelamin"
+                  value={formik.values.jenis_kelamin}
+                  onChange={formik.handleChange}
+                >
+                  <FormControlLabel
+                    value="Laki-Laki"
+                    control={<Radio />}
+                    label="Laki-Laki"
                   />
-                )}
-              />
-            </FormControl>
-          </ContentLayout>
-        </Box>
-        {/* input tanggal_diketahui  */}
-        <Box mb={3}>
-          <ContentLayout title="Tanggal Diketahui *">
-            <FormControl fullWidth>
-              <MobileDatePicker
-                inputFormat="DD-MM-YYYY"
-                value={formik.values.tanggal_diketahui}
-                onChange={(value) => {
-                  formik.setFieldValue("tanggal_diketahui", new Date(value));
-                }}
-                onBlur={formik.handleBlur}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    helperText={
-                      formik.touched.tanggal_diketahui &&
-                      formik.errors.tanggal_diketahui
-                    }
-                    error={
-                      formik.touched.tanggal_diketahui &&
-                      Boolean(formik.errors.tanggal_diketahui)
-                    }
+                  <FormControlLabel
+                    value="Perempuan"
+                    control={<Radio />}
+                    label="Perempuan"
                   />
-                )}
-              />
-            </FormControl>
-          </ContentLayout>
+                </RadioGroup>
+              </FormControl>
+              <FormHelperText style={{ color: "red" }}>
+                {formik.touched.jenis_kelamin && formik.errors.jenis_kelamin}
+              </FormHelperText>
+            </ContentLayout>
+          </Box>
+          {/* input pekerjaan  */}
+          <Box mb={3}>
+            <ContentLayout title="Pekerjaan *">
+              <FormControl fullWidth>
+                <TextField
+                  required
+                  variant="standard"
+                  name="pekerjaan"
+                  value={formik.values.pekerjaan}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.pekerjaan && Boolean(formik.errors.pekerjaan)
+                  }
+                  helperText={
+                    formik.touched.pekerjaan && formik.errors.pekerjaan
+                  }
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
+          {/* input alamat  */}
+          <Box mb={3}>
+            <ContentLayout title="Alamat *">
+              <FormControl fullWidth>
+                <TextField
+                  required
+                  multiline
+                  variant="standard"
+                  name="alamat"
+                  value={formik.values.alamat}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.alamat && Boolean(formik.errors.alamat)}
+                  helperText={formik.touched.alamat && formik.errors.alamat}
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
+          {/* input telp  */}
+          <Box mb={3}>
+            <ContentLayout title="Telp/HP *">
+              <FormControl fullWidth>
+                <TextField
+                  required
+                  variant="standard"
+                  name="telp"
+                  value={formik.values.telp}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.telp && Boolean(formik.errors.telp)}
+                  helperText={formik.touched.telp && formik.errors.telp}
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
+          {/* input email  */}
+          <Box mb={3}>
+            <ContentLayout title="Email *">
+              <FormControl fullWidth>
+                <TextField
+                  required
+                  variant="standard"
+                  name="email"
+                  type="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
         </Box>
 
-        <h3>4. Saksi-saksi:</h3>
-        <Alert severity="info">Diisi Pada Bagian Detail</Alert>
+        {/* Terlapor  */}
+        <Box>
+          <h3>2. Identitas Terlapor:</h3>
+          <Grid container>
+            {[1, 2, 3].map((item, index) => (
+              <Grid item xs={12} md={6} lg={4} key={index}>
+                <Box mb={2}>
+                  <Typography variant="body2">Terlapor {index + 1}</Typography>
+                </Box>
+                <ContentLayout title="Nama">
+                  <FormControl fullWidth>
+                    <TextField
+                      size="small"
+                      name={`terlapor[${index}].nama`}
+                      value={formik.values.terlapor[index].nama}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                  </FormControl>
+                </ContentLayout>
+                <ContentLayout title="Alamat">
+                  <FormControl fullWidth>
+                    <TextField
+                      size="small"
+                      name={`terlapor[${index}].alamat`}
+                      value={formik.values.terlapor[index].alamat}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                  </FormControl>
+                </ContentLayout>
+                <ContentLayout title="Telp">
+                  <FormControl fullWidth>
+                    <TextField
+                      size="small"
+                      name={`terlapor[${index}].telp`}
+                      value={formik.values.terlapor[index].telp}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                  </FormControl>
+                </ContentLayout>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
 
-        <h3>5. Bukti-bukti:</h3>
-        <Alert severity="info">Diisi Pada Bagian Detail</Alert>
+        {/* Peristiwa  */}
+        <Box>
+          <h3>3. Peristiwa Yang Dilaporkan:</h3>
+          {/* input peristiwa  */}
+          <Box mb={3}>
+            <ContentLayout title="Peristiwa *">
+              <FormControl fullWidth>
+                <TextField
+                  required
+                  variant="standard"
+                  name="peristiwa"
+                  value={formik.values.peristiwa}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.peristiwa && Boolean(formik.errors.peristiwa)
+                  }
+                  helperText={
+                    formik.touched.peristiwa && formik.errors.peristiwa
+                  }
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
+          {/* input tempat_kejadian  */}
+          <Box mb={3}>
+            <ContentLayout title="Tempat Kejadian *">
+              <FormControl fullWidth>
+                <TextField
+                  required
+                  variant="standard"
+                  name="tempat_kejadian"
+                  value={formik.values.tempat_kejadian}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.tempat_kejadian &&
+                    Boolean(formik.errors.tempat_kejadian)
+                  }
+                  helperText={
+                    formik.touched.tempat_kejadian &&
+                    formik.errors.tempat_kejadian
+                  }
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
+          {/* input tanggal_kejadian  */}
+          <Box mb={3}>
+            <ContentLayout title="Tanggal Kejadian *">
+              <FormControl fullWidth>
+                <MobileDatePicker
+                  inputFormat="DD-MM-YYYY"
+                  value={formik.values.tanggal_kejadian}
+                  onChange={(value) => {
+                    formik.setFieldValue("tanggal_kejadian", new Date(value));
+                  }}
+                  onBlur={formik.handleBlur}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      helperText={
+                        formik.touched.tanggal_kejadian &&
+                        formik.errors.tanggal_kejadian
+                      }
+                      error={
+                        formik.touched.tanggal_kejadian &&
+                        Boolean(formik.errors.tanggal_kejadian)
+                      }
+                    />
+                  )}
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
+          {/* input tanggal_diketahui  */}
+          <Box mb={3}>
+            <ContentLayout title="Tanggal Diketahui *">
+              <FormControl fullWidth>
+                <MobileDatePicker
+                  inputFormat="DD-MM-YYYY"
+                  value={formik.values.tanggal_diketahui}
+                  onChange={(value) => {
+                    formik.setFieldValue("tanggal_diketahui", new Date(value));
+                  }}
+                  onBlur={formik.handleBlur}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      helperText={
+                        formik.touched.tanggal_diketahui &&
+                        formik.errors.tanggal_diketahui
+                      }
+                      error={
+                        formik.touched.tanggal_diketahui &&
+                        Boolean(formik.errors.tanggal_diketahui)
+                      }
+                    />
+                  )}
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
+        </Box>
 
+        {/* Saksi  */}
+        <Box>
+          <h3>4. Saksi-saksi:</h3>
+          <Grid container>
+            {[1, 2].map((item, index) => (
+              <Grid item xs={12} md={6} lg={4} key={index}>
+                <Box mb={2}>
+                  <Typography variant="body2">Saksi {index + 1}</Typography>
+                </Box>
+                <ContentLayout title="Nama">
+                  <FormControl fullWidth>
+                    <TextField
+                      size="small"
+                      name={`saksi[${index}].nama`}
+                      value={formik.values.saksi[index].nama}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                  </FormControl>
+                </ContentLayout>
+                <ContentLayout title="Alamat">
+                  <FormControl fullWidth>
+                    <TextField
+                      size="small"
+                      name={`saksi[${index}].alamat`}
+                      value={formik.values.saksi[index].alamat}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                  </FormControl>
+                </ContentLayout>
+                <ContentLayout title="Telp">
+                  <FormControl fullWidth>
+                    <TextField
+                      size="small"
+                      name={`saksi[${index}].telp`}
+                      value={formik.values.saksi[index].telp}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                  </FormControl>
+                </ContentLayout>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
+        {/* Bukti  */}
+        <Box>
+          <h3>5. Bukti-bukti:</h3>
+          <Alert severity="info">Diisi Pada Bagian Detail</Alert>
+        </Box>
+
+        {/* uraian  */}
         <h3>6. Uraian Kejadian:</h3>
-        {/* input uraian  */}
         <Box mb={3}>
           <ContentLayout title="Uraian *">
             <FormControl fullWidth>
@@ -512,80 +626,83 @@ function FormLaporAdd() {
 
         <Divider sx={{ my: 5 }} />
 
-        {/* input tempat_lapor  */}
-        <Box mb={3}>
-          <ContentLayout title="Tempat Lapor *">
-            <FormControl fullWidth>
-              <TextField
-                required
-                variant="standard"
-                name="tempat_lapor"
-                value={formik.values.tempat_lapor}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.tempat_lapor &&
-                  Boolean(formik.errors.tempat_lapor)
-                }
-                helperText={
-                  formik.touched.tempat_lapor && formik.errors.tempat_lapor
-                }
-              />
-            </FormControl>
-          </ContentLayout>
-        </Box>
-        {/* input tanggal_lapor jam_lapor  */}
-        <Box mb={3}>
-          <ContentLayout title="Tanggal dan Jam Lapor *">
-            <FormControl>
-              <MobileDatePicker
-                label="Tanggal"
-                inputFormat="DD-MM-YYYY"
-                value={formik.values.tanggal_lapor}
-                onChange={(value) => {
-                  formik.setFieldValue("tanggal_lapor", new Date(value));
-                }}
-                onBlur={formik.handleBlur}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    helperText={
-                      formik.touched.tanggal_lapor &&
-                      formik.errors.tanggal_lapor
-                    }
-                    error={
-                      formik.touched.tanggal_lapor &&
-                      Boolean(formik.errors.tanggal_lapor)
-                    }
-                  />
-                )}
-              />
-            </FormControl>{" "}
-            <FormControl>
-              <MobileTimePicker
-                label="Jam"
-                value={formik.values.jam_lapor}
-                onChange={(value) => {
-                  formik.setFieldValue("jam_lapor", new Date(value));
-                }}
-                onBlur={formik.handleBlur}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="standard"
-                    helperText={
-                      formik.touched.jam_lapor && formik.errors.jam_lapor
-                    }
-                    error={
-                      formik.touched.jam_lapor &&
-                      Boolean(formik.errors.jam_lapor)
-                    }
-                  />
-                )}
-              />
-            </FormControl>
-          </ContentLayout>
+        {/* Laporan  */}
+        <Box>
+          {/* input tempat_lapor  */}
+          <Box mb={3}>
+            <ContentLayout title="Tempat Lapor *">
+              <FormControl fullWidth>
+                <TextField
+                  required
+                  variant="standard"
+                  name="tempat_lapor"
+                  value={formik.values.tempat_lapor}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.tempat_lapor &&
+                    Boolean(formik.errors.tempat_lapor)
+                  }
+                  helperText={
+                    formik.touched.tempat_lapor && formik.errors.tempat_lapor
+                  }
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
+          {/* input tanggal_lapor jam_lapor  */}
+          <Box mb={3}>
+            <ContentLayout title="Tanggal dan Jam Lapor *">
+              <FormControl>
+                <MobileDatePicker
+                  label="Tanggal"
+                  inputFormat="DD-MM-YYYY"
+                  value={formik.values.tanggal_lapor}
+                  onChange={(value) => {
+                    formik.setFieldValue("tanggal_lapor", new Date(value));
+                  }}
+                  onBlur={formik.handleBlur}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      helperText={
+                        formik.touched.tanggal_lapor &&
+                        formik.errors.tanggal_lapor
+                      }
+                      error={
+                        formik.touched.tanggal_lapor &&
+                        Boolean(formik.errors.tanggal_lapor)
+                      }
+                    />
+                  )}
+                />
+              </FormControl>{" "}
+              <FormControl>
+                <MobileTimePicker
+                  label="Jam"
+                  value={formik.values.jam_lapor}
+                  onChange={(value) => {
+                    formik.setFieldValue("jam_lapor", new Date(value));
+                  }}
+                  onBlur={formik.handleBlur}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      helperText={
+                        formik.touched.jam_lapor && formik.errors.jam_lapor
+                      }
+                      error={
+                        formik.touched.jam_lapor &&
+                        Boolean(formik.errors.jam_lapor)
+                      }
+                    />
+                  )}
+                />
+              </FormControl>
+            </ContentLayout>
+          </Box>
         </Box>
 
         {/* submit  */}

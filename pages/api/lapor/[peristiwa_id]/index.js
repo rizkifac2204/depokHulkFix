@@ -112,6 +112,19 @@ export default handler()
           .status(404)
           .json({ message: "Tidak Ditemukan", type: "error" });
 
+      const dataTerlapor = await db("lapor_terlapor").where(
+        "peristiwa_id",
+        peristiwa_id
+      );
+
+      const dataSaksi = await db("lapor_saksi").where(
+        "peristiwa_id",
+        peristiwa_id
+      );
+
+      result.terlapor = dataTerlapor;
+      result.saksi = dataSaksi;
+
       res.json(result);
     } catch (error) {
       getLogger.error(error);

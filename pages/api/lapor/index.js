@@ -53,6 +53,56 @@ async function prosesSimpanPelapor(req, res) {
   });
 }
 
+async function prosesSimpanTerlapor(req, res, peristiwa_id) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // get post
+      const { terlapor } = req.body;
+
+      terlapor.map(async (item, ind) => {
+        if (item.nama) {
+          await db("lapor_terlapor").insert({
+            peristiwa_id,
+            nama: item.nama,
+            alamat: item.alamat || null,
+            telp: item.telp || null,
+          });
+        }
+      });
+
+      resolve();
+    } catch (error) {
+      getLogger.error(error);
+      reject({ message: "Gagal Menyimpan Pelapor." });
+    }
+  });
+}
+
+async function prosesSimpanSaksi(req, res, peristiwa_id) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // get post
+      const { saksi } = req.body;
+
+      saksi.map(async (item, ind) => {
+        if (item.nama) {
+          await db("lapor_saksi").insert({
+            peristiwa_id,
+            nama: item.nama,
+            alamat: item.alamat || null,
+            telp: item.telp || null,
+          });
+        }
+      });
+
+      resolve();
+    } catch (error) {
+      getLogger.error(error);
+      reject({ message: "Gagal Menyimpan Pelapor." });
+    }
+  });
+}
+
 async function prosesHapusPelapor(id) {
   await db("lapor_pelapor").where("id", id).del();
 }
@@ -103,6 +153,8 @@ export default handler()
         tempat_lapor,
         tanggal_lapor,
         jam_lapor,
+        terlapor,
+        saksi,
       } = req.body;
 
       // pelapor id bisa diambil dari data object post jika ada, atau membuat baru
@@ -142,6 +194,9 @@ export default handler()
           type: "error",
         });
       }
+
+      await prosesSimpanTerlapor(req, res, proses[0]);
+      await prosesSimpanSaksi(req, res, proses[0]);
 
       // success
       res.json({ message: "Berhasil Menginput Data", type: "success" });

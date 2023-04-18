@@ -67,44 +67,22 @@ export default function LaporDetailSection({ detail }) {
             </Box>
 
             <Grid container>
-              <Grid item xs={4}>
-                <Typography variant="h6">Terlapor I</Typography>
-                <ContentLayout title="Nama">
-                  : {detail.nama || "-"}
-                </ContentLayout>
-                <ContentLayout title="Alamat">
-                  : {detail.alamat || "-"}
-                </ContentLayout>
-                <ContentLayout title="Telp">
-                  : {detail.telp || "-"}
-                </ContentLayout>
-              </Grid>
-
-              <Grid item xs={4}>
-                <Typography variant="h6">Terlapor II</Typography>
-                <ContentLayout title="Nama">
-                  : {detail.nama || "-"}
-                </ContentLayout>
-                <ContentLayout title="Alamat">
-                  : {detail.alamat || "-"}
-                </ContentLayout>
-                <ContentLayout title="Telp">
-                  : {detail.telp || "-"}
-                </ContentLayout>
-              </Grid>
-
-              <Grid item xs={4}>
-                <Typography variant="h6">Terlapor III</Typography>
-                <ContentLayout title="Nama">
-                  : {detail.nama || "-"}
-                </ContentLayout>
-                <ContentLayout title="Alamat">
-                  : {detail.alamat || "-"}
-                </ContentLayout>
-                <ContentLayout title="Telp">
-                  : {detail.telp || "-"}
-                </ContentLayout>
-              </Grid>
+              {detail.saksi.length !== 0
+                ? detail.terlapor.map((item, index) => (
+                    <Grid item xs={4} key={index}>
+                      <Typography variant="h6">Terlapor {index + 1}</Typography>
+                      <ContentLayout title="Nama">
+                        : {item.nama || "-"}
+                      </ContentLayout>
+                      <ContentLayout title="Alamat">
+                        : {item.alamat || "-"}
+                      </ContentLayout>
+                      <ContentLayout title="Telp">
+                        : {item.telp || "-"}
+                      </ContentLayout>
+                    </Grid>
+                  ))
+                : "Tidak Ada Terlapor"}
             </Grid>
 
             <Divider sx={{ mt: 2 }} />
@@ -145,31 +123,22 @@ export default function LaporDetailSection({ detail }) {
             </Box>
 
             <Grid container>
-              <Grid item xs={4}>
-                <Typography variant="h6">Saksi I</Typography>
-                <ContentLayout title="Nama">
-                  : {detail.nama || "-"}
-                </ContentLayout>
-                <ContentLayout title="Alamat">
-                  : {detail.alamat || "-"}
-                </ContentLayout>
-                <ContentLayout title="Telp">
-                  : {detail.telp || "-"}
-                </ContentLayout>
-              </Grid>
-
-              <Grid item xs={4}>
-                <Typography variant="h6">Saksi II</Typography>
-                <ContentLayout title="Nama">
-                  : {detail.nama || "-"}
-                </ContentLayout>
-                <ContentLayout title="Alamat">
-                  : {detail.alamat || "-"}
-                </ContentLayout>
-                <ContentLayout title="Telp">
-                  : {detail.telp || "-"}
-                </ContentLayout>
-              </Grid>
+              {detail.saksi.length !== 0
+                ? detail.saksi.map((item, index) => (
+                    <Grid item xs={4} key={index}>
+                      <Typography variant="h6">Saksi {index + 1}</Typography>
+                      <ContentLayout title="Nama">
+                        : {item.nama || "-"}
+                      </ContentLayout>
+                      <ContentLayout title="Alamat">
+                        : {item.alamat || "-"}
+                      </ContentLayout>
+                      <ContentLayout title="Telp">
+                        : {item.telp || "-"}
+                      </ContentLayout>
+                    </Grid>
+                  ))
+                : "Tidak Ada Saksi"}
             </Grid>
 
             <Divider sx={{ mt: 2 }} />
