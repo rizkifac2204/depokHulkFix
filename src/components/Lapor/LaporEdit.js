@@ -150,9 +150,48 @@ function FormLaporEdit({ detail }) {
             ? new Date(detail.tanggal_lapor)
             : "",
           jam_lapor: detail.jam_lapor ? SetJam(detail.jam_lapor) : "",
-          terlapor: detail.pelapor ? detail.pelapor : [],
-          saksi: detail.saksi ? detail.saksi : [],
-          // masalah disni
+          changeTerlapor: false,
+          changeSaksi: false,
+          terlapor: detail.terlapor
+            ? [
+                {
+                  nama: detail.terlapor[0]?.nama || "",
+                  alamat: detail.terlapor[0]?.alamat || "",
+                  telp: detail.terlapor[0]?.telp || "",
+                },
+                {
+                  nama: detail.terlapor[1]?.nama || "",
+                  alamat: detail.terlapor[1]?.alamat || "",
+                  telp: detail.terlapor[1]?.telp || "",
+                },
+                {
+                  nama: detail.terlapor[2]?.nama || "",
+                  alamat: detail.terlapor[2]?.alamat || "",
+                  telp: detail.terlapor[2]?.telp || "",
+                },
+              ]
+            : [
+                { nama: "", alamat: "", telp: "" },
+                { nama: "", alamat: "", telp: "" },
+                { nama: "", alamat: "", telp: "" },
+              ],
+          saksi: detail.saksi
+            ? [
+                {
+                  nama: detail.saksi[0]?.nama || "",
+                  alamat: detail.saksi[0]?.alamat || "",
+                  telp: detail.saksi[0]?.telp || "",
+                },
+                {
+                  nama: detail.saksi[1]?.nama || "",
+                  alamat: detail.saksi[1]?.alamat || "",
+                  telp: detail.saksi[1]?.telp || "",
+                },
+              ]
+            : [
+                { nama: "", alamat: "", telp: "" },
+                { nama: "", alamat: "", telp: "" },
+              ],
         }
       : {
           pelapor_id: null,
@@ -173,6 +212,8 @@ function FormLaporEdit({ detail }) {
           tempat_lapor: "",
           tanggal_lapor: "",
           jam_lapor: "",
+          changeTerlapor: false,
+          changeSaksi: false,
           terlapor: [
             { nama: "", alamat: "", telp: "" },
             { nama: "", alamat: "", telp: "" },
@@ -188,6 +229,13 @@ function FormLaporEdit({ detail }) {
     onSubmit: (values, { setSubmitting }) =>
       handleSubmit(values, setSubmitting, detail.id),
   });
+
+  function terlaporChanged() {
+    formik.setFieldValue("changeTerlapor", true);
+  }
+  function saksiChanged() {
+    formik.setFieldValue("changeSaksi", true);
+  }
 
   return (
     <div className="hk-general-settings">
@@ -457,7 +505,10 @@ function FormLaporEdit({ detail }) {
                       name={`terlapor[${index}].nama`}
                       value={formik.values.terlapor[index].nama || ""}
                       onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      onBlur={(e) => {
+                        formik.handleBlur(e);
+                        terlaporChanged();
+                      }}
                     />
                   </FormControl>
                 </ContentLayout>
@@ -468,7 +519,10 @@ function FormLaporEdit({ detail }) {
                       name={`terlapor[${index}].alamat`}
                       value={formik.values.terlapor[index].alamat || ""}
                       onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      onBlur={(e) => {
+                        formik.handleBlur(e);
+                        terlaporChanged();
+                      }}
                     />
                   </FormControl>
                 </ContentLayout>
@@ -479,7 +533,10 @@ function FormLaporEdit({ detail }) {
                       name={`terlapor[${index}].telp`}
                       value={formik.values.terlapor[index].telp || ""}
                       onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      onBlur={(e) => {
+                        formik.handleBlur(e);
+                        terlaporChanged();
+                      }}
                     />
                   </FormControl>
                 </ContentLayout>
@@ -609,7 +666,10 @@ function FormLaporEdit({ detail }) {
                       name={`saksi[${index}].nama`}
                       value={formik.values.saksi[index].nama || ""}
                       onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      onBlur={(e) => {
+                        formik.handleBlur(e);
+                        saksiChanged();
+                      }}
                     />
                   </FormControl>
                 </ContentLayout>
@@ -620,7 +680,10 @@ function FormLaporEdit({ detail }) {
                       name={`saksi[${index}].alamat`}
                       value={formik.values.saksi[index].alamat || ""}
                       onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      onBlur={(e) => {
+                        formik.handleBlur(e);
+                        saksiChanged();
+                      }}
                     />
                   </FormControl>
                 </ContentLayout>
@@ -631,7 +694,10 @@ function FormLaporEdit({ detail }) {
                       name={`saksi[${index}].telp`}
                       value={formik.values.saksi[index].telp || ""}
                       onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      onBlur={(e) => {
+                        formik.handleBlur(e);
+                        saksiChanged();
+                      }}
                     />
                   </FormControl>
                 </ContentLayout>

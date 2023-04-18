@@ -32,7 +32,7 @@ export default function LaporDetailSection({ detail }) {
               : {detail.tempat_lahir || "-"}
               {` / `}
               {detail.tanggal_lahir
-                ? formatedDate(detail.tanggal_lahir, true)
+                ? formatedDate(detail.tanggal_lahir, false)
                 : "-"}
             </ContentLayout>
             <ContentLayout title="c. Jenis Kelamin">
