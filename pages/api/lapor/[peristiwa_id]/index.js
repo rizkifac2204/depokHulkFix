@@ -2,6 +2,7 @@ import db from "libs/db";
 import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 import moment from "moment";
+import { DeleteUpload } from "services/uploadService";
 
 function filterData(builder, user_id, level) {
   if (level > 4) {
@@ -18,6 +19,7 @@ async function prosesPelapor(req, res) {
         nama,
         tempat_lahir,
         tanggal_lahir,
+        kewarganegaraan,
         jenis_kelamin,
         pekerjaan,
         alamat,
@@ -37,6 +39,7 @@ async function prosesPelapor(req, res) {
               ? moment(tanggal_lahir).format("MM/DD/YYYY")
               : null,
             jenis_kelamin: jenis_kelamin || null,
+            kewarganegaraan: kewarganegaraan || null,
             pekerjaan: pekerjaan || null,
             alamat: alamat || null,
             telp: telp || null,
@@ -58,6 +61,7 @@ async function prosesPelapor(req, res) {
               ? moment(tanggal_lahir).format("MM/DD/YYYY")
               : null,
             jenis_kelamin: jenis_kelamin || null,
+            kewarganegaraan: kewarganegaraan || null,
             pekerjaan: pekerjaan || null,
             alamat: alamat || null,
             telp: telp || null,
@@ -172,8 +176,14 @@ export default handler()
         peristiwa_id
       );
 
+      const dataBukti = await db("lapor_bukti").where(
+        "peristiwa_id",
+        peristiwa_id
+      );
+
       result.terlapor = dataTerlapor;
       result.saksi = dataSaksi;
+      result.bukti = dataBukti;
 
       res.json(result);
     } catch (error) {
@@ -257,11 +267,22 @@ export default handler()
     try {
       const { peristiwa_id } = req.query;
 
+      const cek = await db
+        .select("file")
+        .from("lapor_bukti")
+        .where("peristiwa_id", peristiwa_id);
+
+      const files = cek.map(function (value) {
+        return value.file;
+      });
+
       const proses = await db("lapor_peristiwa")
         .where("id", peristiwa_id)
         .del();
       if (!proses)
         return res.status(400).json({ message: "Gagal Hapus", type: "error" });
+
+      DeleteUpload("./public/lapor", files);
 
       res.json({ message: "Berhasil Hapus", type: "success" });
     } catch (error) {

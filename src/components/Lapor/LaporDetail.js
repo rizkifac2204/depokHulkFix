@@ -9,6 +9,7 @@ import { formatedDate } from "utils/formatDate";
 // component
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
 import ContentLayout from "components/GlobalComponents/ContentLayout";
+import FormLaporBukti from "./LaporBukti";
 
 export default function LaporDetailSection({ detail }) {
   return (
@@ -151,11 +152,7 @@ export default function LaporDetailSection({ detail }) {
             </Box>
 
             <Box>
-              <ContentLayout title="Nama">: {detail.nama || "-"}</ContentLayout>
-            </Box>
-
-            <Box>
-              <ContentLayout title="Nama">: {detail.nama || "-"}</ContentLayout>
+              <FormLaporBukti detail={detail} />
             </Box>
 
             <Divider sx={{ mt: 2 }} />

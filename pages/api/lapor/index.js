@@ -17,6 +17,7 @@ async function prosesSimpanPelapor(req, res) {
         nama,
         tempat_lahir,
         tanggal_lahir,
+        kewarganegaraan,
         jenis_kelamin,
         pekerjaan,
         alamat,
@@ -35,6 +36,7 @@ async function prosesSimpanPelapor(req, res) {
             ? moment(tanggal_lahir).format("MM/DD/YYYY")
             : null,
           jenis_kelamin: jenis_kelamin || null,
+          kewarganegaraan: kewarganegaraan || null,
           pekerjaan: pekerjaan || null,
           alamat: alamat || null,
           telp: telp || null,
@@ -153,8 +155,6 @@ export default handler()
         tempat_lapor,
         tanggal_lapor,
         jam_lapor,
-        terlapor,
-        saksi,
       } = req.body;
 
       // pelapor id bisa diambil dari data object post jika ada, atau membuat baru

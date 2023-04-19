@@ -131,6 +131,7 @@ function FormLaporEdit({ detail }) {
             ? new Date(detail.tanggal_lahir)
             : "",
           jenis_kelamin: detail.jenis_kelamin ? detail.jenis_kelamin : "",
+          kewarganegaraan: detail.kewarganegaraan ? detail.kewarganegaraan : "",
           pekerjaan: detail.pekerjaan ? detail.pekerjaan : "",
           alamat: detail.alamat ? detail.alamat : "",
           telp: detail.telp ? detail.telp : "",
@@ -198,6 +199,7 @@ function FormLaporEdit({ detail }) {
           nama: null,
           tempat_lahir: "",
           tanggal_lahir: "",
+          kewarganegaraan: "",
           jenis_kelamin: "",
           pekerjaan: "",
           alamat: "",
@@ -412,6 +414,29 @@ function FormLaporEdit({ detail }) {
               <FormHelperText style={{ color: "red" }}>
                 {formik.touched.jenis_kelamin && formik.errors.jenis_kelamin}
               </FormHelperText>
+            </ContentLayout>
+          </Box>
+          {/* input kewarganegaraan  */}
+          <Box mb={3}>
+            <ContentLayout title="Kewarganegaraan *">
+              <FormControl fullWidth>
+                <TextField
+                  required
+                  variant="standard"
+                  name="kewarganegaraan"
+                  value={formik.values.kewarganegaraan}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.kewarganegaraan &&
+                    Boolean(formik.errors.kewarganegaraan)
+                  }
+                  helperText={
+                    formik.touched.kewarganegaraan &&
+                    formik.errors.kewarganegaraan
+                  }
+                />
+              </FormControl>
             </ContentLayout>
           </Box>
           {/* input pekerjaan  */}
