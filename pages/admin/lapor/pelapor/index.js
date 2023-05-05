@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 // library
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -11,19 +10,35 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Alert from "@mui/material/Alert";
+import Typography from "@mui/material/Typography";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 // ICON
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import EditIcon from "@mui/icons-material/Edit";
 // components
 import { CustomToolbar } from "components/GlobalComponents/TableComponents";
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
+import LaporAwalDetail from "components/Lapor/Awal/LaporAwalDetail";
+
+function getTTL(params) {
+  return (
+    <>
+      <Typography>
+        {params.row.tempat_lahir}
+        <br />
+        <Typography variant="caption" color="primary">
+          {params.row.tanggal_lahir}
+        </Typography>
+      </Typography>
+    </>
+  );
+}
 
 async function deleteData(id) {
   if (id) {
     try {
-      const res = await axios.delete(`/api/lapor/${id}`);
+      const res = await axios.delete(`/api/lapor/pelapor/${id}`);
       return res.data;
     } catch (err) {
       throw new Error(err?.response?.data?.message || "Terjadi Kesalahan");
@@ -31,21 +46,25 @@ async function deleteData(id) {
   }
 }
 
-function Lapor() {
+function Pelapor() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [pageSize, setPageSize] = useState(10);
+  const [detail, setDetail] = useState({
+    open: false,
+    data: {},
+  });
 
   const {
-    data: lapors,
+    data: pelapors,
     isError,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["lapors"],
+    queryKey: ["pelapors"],
     queryFn: ({ signal }) =>
       axios
-        .get(`/api/lapor`, { signal })
+        .get(`/api/lapor/pelapor`, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);
@@ -56,7 +75,7 @@ function Lapor() {
     mutationFn: deleteData,
     onSuccess: (data, variable, context) => {
       toast.success(data.message || "Sukses");
-      queryClient.invalidateQueries(["lapors"]);
+      queryClient.invalidateQueries(["pelapors"]);
     },
     onError: (err, variables) => {
       toast.error(err.message);
@@ -80,25 +99,34 @@ function Lapor() {
 
   const columns = [
     {
-      field: "nomor",
-      headerName: "Nomor",
-      minWidth: 180,
-    },
-    {
       field: "nama",
-      headerName: "Pelapor",
+      headerName: "Nama",
       minWidth: 200,
     },
     {
-      field: "tanggal_lapor",
-      headerName: "Tanggal Laporan",
-      minWidth: 200,
+      field: "Lahir",
+      headerName: "TTL",
+      renderCell: getTTL,
+      minWidth: 130,
     },
     {
-      field: "peristiwa",
-      headerName: "Peristiwa",
+      field: "jenis_kelamin",
+      headerName: "Gender",
+    },
+    {
+      field: "telp",
+      headerName: "Telp/HP",
       minWidth: 180,
-      flex: 1,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      minWidth: 180,
+    },
+    {
+      field: "pekerjaan",
+      headerName: "Pekerjaan",
+      minWidth: 180,
     },
     {
       field: "actions",
@@ -111,13 +139,15 @@ function Lapor() {
             key={0}
             icon={<VisibilityIcon />}
             label="Detail"
-            onClick={() => router.push("/admin/lapor/" + values.id)}
+            onClick={() => router.push(`/admin/lapor/pelapor/${values.id}`)}
           />,
           <GridActionsCellItem
             key={1}
-            icon={<EditOutlinedIcon />}
+            icon={<EditIcon />}
             label="Edit"
-            onClick={() => router.push(`/admin/lapor/${values.id}/edit`)}
+            onClick={() =>
+              router.push(`/admin/lapor/pelapor/${values.id}/edit`)
+            }
           />,
           <GridActionsCellItem
             key={2}
@@ -133,44 +163,53 @@ function Lapor() {
   return (
     <>
       <Head>
-        <title>{`Lapor - Bawaslu Depok  Apps`}</title>
+        <title>{`Laporan Awal - Bawaslu Depok  Apps`}</title>
       </Head>
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} lg={12}>
               <CustomCard>
-                <div style={{ display: "flex", height: "100%" }}>
-                  <div style={{ flexGrow: 1 }}>
-                    <DataGrid
-                      experimentalFeatures={{ newEditingApi: true }}
-                      autoHeight
-                      pageSize={pageSize}
-                      onPageSizeChange={(newPageSize) =>
-                        setPageSize(newPageSize)
-                      }
-                      rowsPerPageOptions={[1, 2, 5, 10]}
-                      components={{
-                        Toolbar: CustomToolbar,
-                      }}
-                      componentsProps={{
-                        toolbar: {
-                          multiSearch: true,
-                        },
-                      }}
-                      loading={isLoading}
-                      rows={lapors ? lapors : []}
-                      columns={columns}
-                    />
-                  </div>
-                </div>
+                <DataGrid
+                  autoHeight
+                  pageSize={pageSize}
+                  onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                  rowsPerPageOptions={[1, 2, 5, 10]}
+                  components={{
+                    Toolbar: CustomToolbar,
+                  }}
+                  componentsProps={{
+                    toolbar: {
+                      multiSearch: true,
+                    },
+                  }}
+                  loading={isLoading}
+                  rows={pelapors ? pelapors : []}
+                  columns={columns}
+                  getRowClassName={(params) =>
+                    `super-app-theme--${params.row.dibaca}`
+                  }
+                  disableRowSelectionOnClick
+                />
               </CustomCard>
             </Grid>
           </Grid>
         </Box>
       </Container>
+
+      <LaporAwalDetail
+        open={detail.open}
+        detail={detail.data}
+        onClose={() =>
+          setDetail({
+            open: false,
+            data: {},
+          })
+        }
+        invalidateQueries={() => queryClient.invalidateQueries(["pelapors"])}
+      />
     </>
   );
 }
 
-export default Lapor;
+export default Pelapor;

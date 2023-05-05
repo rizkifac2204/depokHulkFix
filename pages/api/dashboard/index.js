@@ -25,6 +25,12 @@ export default handler().get(async (req, res) => {
       })
       .first();
 
+    // ambil jumlah laporan awal
+    const awal = await db
+      .from("lapor_awal")
+      .count("id", { as: "jumlah" })
+      .first();
+
     const subqueryPelapor = await db("lapor_peristiwa")
       .whereNull("deleted_at")
       .modify((builder) => {
@@ -70,6 +76,7 @@ export default handler().get(async (req, res) => {
     res.json({
       message: "Succes",
       jumlahUser: user.jumlah,
+      jumlahAwal: awal.jumlah,
       jumlahLaporan: laporan.jumlah,
       jumlahPelapor: pelapor.jumlah,
       jumlahTerlapor: terlapor.jumlah,

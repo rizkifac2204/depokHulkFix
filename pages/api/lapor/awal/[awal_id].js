@@ -37,4 +37,20 @@ export default handler()
       getLogger.error(error);
       res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
     }
+  })
+  .put(async (req, res) => {
+    try {
+      const { awal_id } = req.query;
+
+      const proses = await db("lapor_awal")
+        .where("id", awal_id)
+        .update({ dibaca: true });
+      if (!proses)
+        return res.status(400).json({ message: "Gagal Proses", type: "error" });
+
+      res.json({ message: "Berhasil Proses", type: "success" });
+    } catch (error) {
+      getLogger.error(error);
+      res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
+    }
   });

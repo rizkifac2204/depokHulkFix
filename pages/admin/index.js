@@ -92,7 +92,17 @@ function Dashboard() {
             <Grid item xs={12} sm={12} md={8}>
               <CustomCard title={"Data Laporan"} showDivider={true}>
                 <Grid container spacing={3}>
-                  <Grid item xs={12} sm={12} md={4}>
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Box mt={2}>
+                      <Typography variant="h5">
+                        {dashboard?.jumlahAwal || "-"}
+                      </Typography>
+                      <Box>
+                        <Typography variant="caption">Laporan Awal</Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={3}>
                     <Box mt={2}>
                       <Typography variant="h5">
                         {dashboard?.jumlahLaporan || "-"}
@@ -104,7 +114,7 @@ function Dashboard() {
                       </Box>
                     </Box>
                   </Grid>
-                  <Grid item xs={12} sm={12} md={4}>
+                  <Grid item xs={12} sm={6} md={3}>
                     <Box mt={2}>
                       <Typography variant="h5">
                         {dashboard?.jumlahPelapor || "-"}
@@ -116,7 +126,7 @@ function Dashboard() {
                       </Box>
                     </Box>
                   </Grid>
-                  <Grid item xs={12} sm={12} md={4}>
+                  <Grid item xs={12} sm={6} md={3}>
                     <Box mt={2}>
                       <Typography variant="h5">
                         {dashboard?.jumlahTerlapor || "-"}

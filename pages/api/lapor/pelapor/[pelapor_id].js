@@ -78,6 +78,9 @@ export default handler()
       res.json({ message: "Terhapus", type: "success" });
     } catch (error) {
       getLogger.error(error);
-      res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
+      const msg = error.message.includes("foreign")
+        ? "Tidak Dapat Menghapus Pelapor Jika memiliki Data Laporan, Mohon Hapus Data Laporan Terlebih Dahulu"
+        : "Terjadi Kesalahan...";
+      res.status(500).json({ message: msg, type: "error" });
     }
   });

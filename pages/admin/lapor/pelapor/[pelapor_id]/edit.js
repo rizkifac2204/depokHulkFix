@@ -1,4 +1,3 @@
-import React from "react";
 import Head from "next/head";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -10,14 +9,15 @@ import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 
 // components
-import FormLaporEdit from "components/Lapor/LaporEdit";
 import SmallTitleBar from "components/GlobalComponents/PageTitleBar/SmallTitleBar";
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
 import Wait from "components/GlobalComponents/Wait";
+// components
+import PelaporFormEdit from "components/Lapor/Pelapor/PelaporFormEdit";
 
-function LaporEdit() {
+function PelaporDetail() {
   const router = useRouter();
-  const { peristiwa_id } = router.query;
+  const { pelapor_id } = router.query;
 
   const {
     data: detail,
@@ -25,11 +25,11 @@ function LaporEdit() {
     isLoading,
     error,
   } = useQuery({
-    enabled: !!peristiwa_id,
-    queryKey: ["lapor", peristiwa_id],
+    enabled: !!pelapor_id,
+    queryKey: ["pelapor", pelapor_id],
     queryFn: ({ signal }) =>
       axios
-        .get(`/api/lapor/${peristiwa_id}`, { signal })
+        .get(`/api/lapor/pelapor/${pelapor_id}`, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);
@@ -48,18 +48,18 @@ function LaporEdit() {
   return (
     <div>
       <Head>
-        <title>{`Edit Laporan - Bawaslu Depok  Apps`}</title>
+        <title>{`Edit Pelapor - Bawaslu Depok  Apps`}</title>
       </Head>
       <SmallTitleBar
-        title="Formulir Edit Laporan Model B.1"
+        title="Formulir Edit Pelapor"
         center={false}
-        buttonLink={`/admin/lapor/${detail.id}`}
+        buttonLink={`/admin/lapor/pelapor/${detail.id}`}
         buttonText={`Detail`}
       />
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>
           <CustomCard>
-            <FormLaporEdit detail={detail} />
+            <PelaporFormEdit detail={detail} />
           </CustomCard>
         </Box>
       </Container>
@@ -67,4 +67,4 @@ function LaporEdit() {
   );
 }
 
-export default LaporEdit;
+export default PelaporDetail;

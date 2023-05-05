@@ -98,6 +98,15 @@ const MenuListItem = [
     content: "",
     child_routes: [
       {
+        path: "/admin/lapor/awal",
+        menu_title: "laporanAwal",
+        icon: <></>,
+        isMenuOpen: false,
+        fullPageMenu: false,
+        third_child_routes: null,
+        limit_access_level: [1, 2, 3, 4, 5],
+      },
+      {
         path: "/admin/lapor",
         menu_title: "dataLaporan",
         icon: <></>,
@@ -109,6 +118,15 @@ const MenuListItem = [
       {
         path: "/admin/lapor/add",
         menu_title: "formulirB.1",
+        icon: <></>,
+        isMenuOpen: false,
+        fullPageMenu: false,
+        third_child_routes: null,
+        limit_access_level: [1, 2, 3, 4, 5],
+      },
+      {
+        path: "/admin/lapor/pelapor",
+        menu_title: "dataPelapor",
         icon: <></>,
         isMenuOpen: false,
         fullPageMenu: false,

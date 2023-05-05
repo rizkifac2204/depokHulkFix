@@ -147,7 +147,8 @@ export default handler()
           "lapor_pelapor.pekerjaan",
           "lapor_pelapor.alamat",
           "lapor_pelapor.telp",
-          "lapor_pelapor.email"
+          "lapor_pelapor.email",
+          "lapor_pelapor.kewarganegaraan"
         )
         .from("lapor_peristiwa")
         .innerJoin("user", "user.id", "lapor_peristiwa.user_id")

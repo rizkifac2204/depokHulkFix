@@ -1,9 +1,7 @@
-import { useState, useRef } from "react";
 import Head from "next/head";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { useReactToPrint } from "react-to-print";
 import { toast } from "react-toastify";
 
 // MUI
@@ -16,40 +14,30 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 // ICONS
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import PrintIcon from "@mui/icons-material/Print";
-import FingerprintIcon from "@mui/icons-material/Fingerprint";
-import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
 import EditIcon from "@mui/icons-material/Edit";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 // components
-import LaporDetailSection from "components/Lapor/LaporDetail";
 import SmallTitleBar from "components/GlobalComponents/PageTitleBar/SmallTitleBar";
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
 import Wait from "components/GlobalComponents/Wait";
+import PelaporDetailSection from "components/Lapor/Pelapor/PelaporDetail";
 
-import BuktiLaporan from "components/Lapor/Print/BuktiLaporan";
-import DataLaporan from "components/Lapor/Print/DataLaporan";
-
-function LaporDetail() {
+function PelaporDetail() {
   const router = useRouter();
-  const { peristiwa_id } = router.query;
+  const { pelapor_id } = router.query;
   const queryClient = useQueryClient();
-  const printRef = useRef();
-  const printBuktiRef = useRef();
 
   const {
-    data: detail,
+    data: pelapor,
     isError,
     isLoading,
     error,
   } = useQuery({
-    enabled: !!peristiwa_id,
-    queryKey: ["lapor", peristiwa_id],
+    enabled: !!pelapor_id,
+    queryKey: ["pelapor", pelapor_id],
     queryFn: ({ signal }) =>
       axios
-        .get(`/api/lapor/${peristiwa_id}`, { signal })
+        .get(`/api/lapor/pelapor/${pelapor_id}`, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);
@@ -64,7 +52,7 @@ function LaporDetail() {
         autoClose: false,
       });
       axios
-        .delete(`/api/lapor/` + peristiwa_id)
+        .delete(`/api/lapor/pelapor/` + pelapor_id)
         .then((res) => {
           toast.update(toastProses, {
             render: res.data.message,
@@ -72,8 +60,8 @@ function LaporDetail() {
             isLoading: false,
             autoClose: 2000,
           });
-          queryClient.invalidateQueries(["lapors"]);
-          router.push("/admin/lapor");
+          queryClient.invalidateQueries(["pelapors"]);
+          router.push("/admin/lapor/pelapor");
         })
         .catch((err) => {
           toast.update(toastProses, {
@@ -86,49 +74,13 @@ function LaporDetail() {
     }
   }
 
-  // PRINT
-  const processPrint = useReactToPrint({
-    content: () => printRef.current,
-  });
-  const processPrintBukti = useReactToPrint({
-    content: () => printBuktiRef.current,
-  });
-  const handlePrint = (param) => {
-    param === "bukti" ? processPrintBukti() : processPrint();
-  };
-
   const actions = [
-    { icon: <DeleteIcon />, name: "Hapus", action: handleDelete },
     {
       icon: <EditIcon />,
       name: "Edit",
-      action: () => router.push(`/admin/lapor/${peristiwa_id}/edit`),
+      action: () => router.push(`/admin/lapor/pelapor/${pelapor_id}/edit`),
     },
-    {
-      icon: <PrintIcon />,
-      name: "Print Laporan",
-      action: () => handlePrint("data"),
-    },
-    {
-      icon: <FingerprintIcon />,
-      name: "Print Tanda Bukti",
-      action: () => handlePrint("bukti"),
-    },
-    {
-      icon: <FileCopyIcon />,
-      name: "Surat Panggilan",
-      action: () => console.log("Surat Panggilan"),
-    },
-    {
-      icon: <LocalLibraryIcon />,
-      name: "Surat Undangan Klarifikasi",
-      action: () => console.log("Surat Undangan Klarifikasi"),
-    },
-    {
-      icon: <AttachFileIcon />,
-      name: "BA Klarifikasi",
-      action: () => console.log("BA KALRIFIKASI"),
-    },
+    { icon: <DeleteIcon />, name: "Hapus", action: handleDelete },
   ];
 
   if (isLoading) return <Wait loading={true} />;
@@ -143,13 +95,13 @@ function LaporDetail() {
   return (
     <div>
       <Head>
-        <title>{`Detail Laporan - Bawaslu Depok  Apps`}</title>
+        <title>{`Detail Pelapor - Bawaslu Depok  Apps`}</title>
       </Head>
-      <SmallTitleBar title={`Nomor ${detail.nomor}`} />
+      <SmallTitleBar title={`${pelapor.nama}`} />
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>
           <CustomCard>
-            <LaporDetailSection detail={detail} />
+            <PelaporDetailSection detail={pelapor} />
             <Box sx={{ transform: "translateZ(0px)", flexGrow: 1 }}>
               <SpeedDial
                 ariaLabel="SpeedDial"
@@ -169,11 +121,8 @@ function LaporDetail() {
           </CustomCard>
         </Box>
       </Container>
-
-      <BuktiLaporan detail={detail} ref={printBuktiRef} />
-      <DataLaporan detail={detail} ref={printRef} />
     </div>
   );
 }
 
-export default LaporDetail;
+export default PelaporDetail;
