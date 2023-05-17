@@ -16,11 +16,14 @@ export function SetQRCode({ text }) {
       "cleanup";
     };
   }, [text]);
-  return (
-    <div>
-      <img src={src} alt="QrCode"></img>
-    </div>
-  );
+  if (src)
+    return (
+      <div>
+        <Image src={src} width={180} height={180} alt="QrCode" />
+      </div>
+    );
+
+  return null;
 }
 
 export function WithDynamicImage({
@@ -29,8 +32,6 @@ export function WithDynamicImage({
 }) {
   const [initImage, setInitImage] = useState(defaultImage);
   const isImage = /(jpg|gif|png|JPG|GIF|PNG|JPEG|jpeg)$/.test(image);
-
-  if (!isImage) return <Chip label={`${image} Bukan Gambar`} />;
 
   useEffect(() => {
     if (!image) return <></>;
@@ -56,17 +57,17 @@ export function WithDynamicImage({
     };
   }, [image]);
 
+  if (!isImage) return <Chip label={`${image} Bukan Gambar`} />;
+
   return (
-    <>
-      <a href={initImage.src} target="_blank">
-        <Image
-          src={initImage}
-          alt={altText}
-          priority
-          width={280}
-          height={200}
-        />
-      </a>
-    </>
+    <Image
+      src={initImage}
+      alt={altText}
+      priority
+      width="0"
+      height="0"
+      sizes="100vw"
+      style={{ width: "auto", height: "150px" }}
+    />
   );
 }

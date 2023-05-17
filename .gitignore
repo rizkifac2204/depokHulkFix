@@ -38,6 +38,7 @@ next-env.d.ts
 
 #custom
 /public/upload
+/public/lapor
 /public/foto
 /logs
 .auth_info_baileys

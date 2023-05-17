@@ -54,7 +54,7 @@ function Dashboard() {
   return (
     <>
       <Head>
-        <title>{`Dashboard - Bawaslu Depok  Apps`}</title>
+        <title>{`Dashboard - Bawaslu Depok Apps`}</title>
       </Head>
 
       <div className="webanalyics-dashboard">

@@ -239,7 +239,7 @@ function ProfileTandaJasa() {
   return (
     <>
       <Head>
-        <title>{`Profile Riwayat Tanda Jasa - Bawaslu Depok  Apps`}</title>
+        <title>{`Profile Riwayat Tanda Jasa - Bawaslu Depok Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Riwayat Tanda Jasa" />

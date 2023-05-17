@@ -273,7 +273,7 @@ function ProfileOrganisasi() {
   return (
     <>
       <Head>
-        <title>{`Profile Riwayat Organisasi - Bawaslu Depok  Apps`}</title>
+        <title>{`Profile Riwayat Organisasi - Bawaslu Depok Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Riwayat Organisasi" />

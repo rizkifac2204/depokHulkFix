@@ -260,7 +260,7 @@ function ProfileSuasi() {
   return (
     <>
       <Head>
-        <title>{`Profile Data Suami/Istri - Bawaslu Depok  Apps`}</title>
+        <title>{`Profile Data Suami/Istri - Bawaslu Depok Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Suami / Istri" />

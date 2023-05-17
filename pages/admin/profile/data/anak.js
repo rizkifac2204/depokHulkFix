@@ -265,7 +265,7 @@ function ProfileAnak() {
   return (
     <>
       <Head>
-        <title>{`Profile Data Anak - Bawaslu Depok  Apps`}</title>
+        <title>{`Profile Data Anak - Bawaslu Depok Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Anak" />

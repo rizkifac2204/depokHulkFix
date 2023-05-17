@@ -15,57 +15,57 @@ export default handler().get(async (req, res) => {
 
     // ambil jumlah laporan
     const laporan = await db
-      .from("lapor_peristiwa")
+      .from("pelanggaran_laporan")
       .count("id", { as: "jumlah" })
       .whereNull("deleted_at")
       .modify((builder) => {
         if (level > 4) {
-          builder.where(`lapor_peristiwa.user_id`, user_id);
+          builder.where(`pelanggaran_laporan.user_id`, user_id);
         }
       })
       .first();
 
     // ambil jumlah laporan awal
     const awal = await db
-      .from("lapor_awal")
+      .from("pelanggaran_awal")
       .count("id", { as: "jumlah" })
       .first();
 
-    const subqueryPelapor = await db("lapor_peristiwa")
+    const subqueryPelapor = await db("pelanggaran_laporan")
       .whereNull("deleted_at")
       .modify((builder) => {
-        builder.where(`lapor_peristiwa.user_id`, user_id);
+        builder.where(`pelanggaran_laporan.user_id`, user_id);
       })
       .select("pelapor_id");
     // ambil jumlah pelapor
     const pelapor = await db
-      .from("lapor_pelapor")
+      .from("pelanggaran_pelapor")
       .count("id", { as: "jumlah" })
       .whereNull("deleted_at")
       .modify((builder) => {
         if (level > 4)
           builder.where(
-            "lapor_pelapor.id",
+            "pelanggaran_pelapor.id",
             "in",
             subqueryPelapor.map((item) => item.pelapor_id)
           );
       })
       .first();
 
-    const subqueryTerlapor = await db("lapor_peristiwa")
+    const subqueryTerlapor = await db("pelanggaran_laporan")
       .whereNull("deleted_at")
       .modify((builder) => {
-        builder.where(`lapor_peristiwa.user_id`, user_id);
+        builder.where(`pelanggaran_laporan.user_id`, user_id);
       })
       .select("id");
     // ambil jumlah terlapor
     const terlapor = await db
-      .from("lapor_terlapor")
+      .from("pelanggaran_terlapor")
       .count("id", { as: "jumlah" })
       .modify((builder) => {
         if (level > 4)
           builder.where(
-            `lapor_terlapor.peristiwa_id`,
+            `pelanggaran_terlapor.laporan_id`,
             "in",
             subqueryTerlapor.map((item) => item.id)
           );

@@ -163,7 +163,7 @@ function Pelapor() {
   return (
     <>
       <Head>
-        <title>{`Laporan Awal - Bawaslu Depok  Apps`}</title>
+        <title>{`Laporan Awal - Bawaslu Depok Apps`}</title>
       </Head>
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>

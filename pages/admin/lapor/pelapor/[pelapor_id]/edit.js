@@ -48,7 +48,7 @@ function PelaporDetail() {
   return (
     <div>
       <Head>
-        <title>{`Edit Pelapor - Bawaslu Depok  Apps`}</title>
+        <title>{`Edit Pelapor - Bawaslu Depok Apps`}</title>
       </Head>
       <SmallTitleBar
         title="Formulir Edit Pelapor"

@@ -8,7 +8,7 @@ export default handlerPublic().post(async (req, res) => {
     const { nama, telp, email, uraian } = req.body;
 
     // proses insert
-    const proses = await db("lapor_awal").insert([
+    const proses = await db("pelanggaran_awal").insert([
       {
         nama,
         telp: telp || null,

@@ -123,7 +123,7 @@ function SimpegEdit() {
   return (
     <>
       <Head>
-        <title>{`Edit Pegawai - Bawaslu Depok  Apps`}</title>
+        <title>{`Edit Pegawai - Bawaslu Depok Apps`}</title>
       </Head>
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>

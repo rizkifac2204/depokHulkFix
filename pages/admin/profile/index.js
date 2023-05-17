@@ -42,7 +42,7 @@ function Profile() {
   return (
     <div className="hk-user-profile">
       <Head>
-        <title>{`Profile - Bawaslu Depok  Apps`}</title>
+        <title>{`Profile - Bawaslu Depok Apps`}</title>
       </Head>
       <Container>
         <Box px={{ xs: "12px", lg: 0 }} className="page-space">

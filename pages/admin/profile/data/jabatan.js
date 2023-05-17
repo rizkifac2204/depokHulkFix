@@ -308,7 +308,7 @@ function ProfileJabatan() {
   return (
     <>
       <Head>
-        <title>{`Profile Riwayat Jabatan - Bawaslu Depok  Apps`}</title>
+        <title>{`Profile Riwayat Jabatan - Bawaslu Depok Apps`}</title>
       </Head>
       <LayoutRiwayatDanKeluarga>
         <SmallTitleBar title="Data Riwayat Jabatan" />

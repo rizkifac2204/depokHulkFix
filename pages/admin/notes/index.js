@@ -147,7 +147,7 @@ function Notes() {
   return (
     <div>
       <Head>
-        <title>{`Catatan Pribadi - Bawaslu Depok  Apps`}</title>
+        <title>{`Catatan Pribadi - Bawaslu Depok Apps`}</title>
       </Head>
       <SmallTitleBar title="Catatan Pribadi" />
       <Container maxWidth={false} sx={{ mt: 2 }}>

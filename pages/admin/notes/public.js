@@ -38,7 +38,7 @@ function Notes() {
   return (
     <div>
       <Head>
-        <title>{`Catatan Publik - Bawaslu Depok  Apps`}</title>
+        <title>{`Catatan Publik - Bawaslu Depok Apps`}</title>
       </Head>
       <SmallTitleBar title="Catatan Publik" />
       <Container maxWidth={false} sx={{ mt: 2 }}>

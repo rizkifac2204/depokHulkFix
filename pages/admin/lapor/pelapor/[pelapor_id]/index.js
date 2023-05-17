@@ -95,7 +95,7 @@ function PelaporDetail() {
   return (
     <div>
       <Head>
-        <title>{`Detail Pelapor - Bawaslu Depok  Apps`}</title>
+        <title>{`Detail Pelapor - Bawaslu Depok Apps`}</title>
       </Head>
       <SmallTitleBar title={`${pelapor.nama}`} />
       <Container maxWidth={false}>
