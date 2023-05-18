@@ -164,7 +164,12 @@ function LaporDetail() {
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>
           <CustomCard>
-            <LaporanDetailSection detail={detail} />
+            <LaporanDetailSection
+              detail={detail}
+              invalidateQueries={() =>
+                queryClient.invalidateQueries(["laporan", laporan_id])
+              }
+            />
             <Box sx={{ transform: "translateZ(0px)", flexGrow: 1 }}>
               <SpeedDial
                 ariaLabel="SpeedDial"

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { Fragment } from "react";
+import React from "react";
 // mui
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -11,9 +11,14 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 
-import { WithDynamicImage } from "components/GlobalComponents/Attributes";
 // utils
 import { formatedDate } from "utils/formatDate";
+// components
+import { SetQRCode } from "components/GlobalComponents/Attributes";
+import PrintSectionTerlapor from "components/Pelanggaran/Components/PrintSectionTerlapor";
+import PrintSectionPeristiwa from "components/Pelanggaran/Components/PrintSectionPeritiwa";
+import PrintSectionSaksi from "components/Pelanggaran/Components/PrintSectionSaksi";
+import PrintSectionBukti from "components/Pelanggaran/Components/PrintSectionBukti";
 
 const themeLight = createTheme({
   palette: {
@@ -135,35 +140,7 @@ const LaporanPrintData = React.forwardRef(({ detail }, ref) => {
                 </TableCell>
               </TableRow>
 
-              {detail.terlapor.map((item, index) => (
-                <Fragment key={index}>
-                  <TableRow>
-                    <TableCell colSpan={2}>
-                      <Typography variant="subtitle1">
-                        Terlapor {index + 1}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>a. Nama</TableCell>
-                    <TableCell>
-                      : <b>{item?.nama}</b>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>b. Alamat</TableCell>
-                    <TableCell>
-                      : <b>{item?.alamat}</b>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>c. Telp/HP</TableCell>
-                    <TableCell>
-                      : <b>{item?.telp}</b>
-                    </TableCell>
-                  </TableRow>
-                </Fragment>
-              ))}
+              <PrintSectionTerlapor data={detail.terlapor} />
 
               <TableRow>
                 <TableCell colSpan={2}>
@@ -173,30 +150,7 @@ const LaporanPrintData = React.forwardRef(({ detail }, ref) => {
                 </TableCell>
               </TableRow>
 
-              <TableRow>
-                <TableCell>a. Peristiwa</TableCell>
-                <TableCell>
-                  : <b>{detail?.peristiwa}</b>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>b. Tempat Kejadian</TableCell>
-                <TableCell>
-                  : <b>{detail?.tempat_kejadian}</b>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>c. Hari dan Tanggal Kejadian</TableCell>
-                <TableCell>
-                  : <b>{formatedDate(detail.tanggal_kejadian, true)}</b>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>c. Hari dan Tanggal Diketahui</TableCell>
-                <TableCell>
-                  : <b>{formatedDate(detail.tanggal_diketahui, true)}</b>
-                </TableCell>
-              </TableRow>
+              <PrintSectionPeristiwa detail={detail} />
 
               <TableRow>
                 <TableCell colSpan={2}>
@@ -204,35 +158,7 @@ const LaporanPrintData = React.forwardRef(({ detail }, ref) => {
                 </TableCell>
               </TableRow>
 
-              {detail.saksi.map((item, index) => (
-                <Fragment key={index}>
-                  <TableRow>
-                    <TableCell colSpan={2}>
-                      <Typography variant="subtitle1">
-                        Saksi {index + 1}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>a. Nama</TableCell>
-                    <TableCell>
-                      : <b>{item?.nama}</b>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>b. Alamat</TableCell>
-                    <TableCell>
-                      : <b>{item?.alamat}</b>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>c. Telp/HP</TableCell>
-                    <TableCell>
-                      : <b>{item?.telp}</b>
-                    </TableCell>
-                  </TableRow>
-                </Fragment>
-              ))}
+              <PrintSectionSaksi data={detail.saksi} />
 
               <TableRow>
                 <TableCell colSpan={2}>
@@ -240,31 +166,7 @@ const LaporanPrintData = React.forwardRef(({ detail }, ref) => {
                 </TableCell>
               </TableRow>
 
-              {detail.bukti.map((item, index) => (
-                <Fragment key={index}>
-                  <TableRow>
-                    <TableCell colSpan={2}>
-                      <Typography variant="subtitle1">
-                        Bukti {index + 1}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>a. Nama bukti</TableCell>
-                    <TableCell>
-                      : <b>{item?.keterangan}</b>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell colSpan={2}>
-                      <WithDynamicImage
-                        altText={item.keterangan}
-                        image={item.file}
-                      />
-                    </TableCell>
-                  </TableRow>
-                </Fragment>
-              ))}
+              <PrintSectionBukti data={detail.bukti} />
 
               <TableRow>
                 <TableCell colSpan={2}>
@@ -321,13 +223,15 @@ const LaporanPrintData = React.forwardRef(({ detail }, ref) => {
 
         <Box mt={5} sx={{ display: "flex", justifyContent: "space-evenly" }}>
           <Box>
-            <Typography variant="body">Penerima Laporan</Typography>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            ..............................
+            <Typography variant="body">{detail.nama_bawaslu}</Typography>
+            <Box sx={{ ml: -3 }}>
+              <SetQRCode
+                text={
+                  process.env.NEXT_PUBLIC_HOST + "/laporan/" + textForQrCode
+                }
+              />
+            </Box>
+            {detail.nama_admin}
           </Box>
           <Box sx={{ position: "relative", width: 100, height: 90, mr: 3 }}>
             <Typography variant="body">Pelapor</Typography>
@@ -336,8 +240,14 @@ const LaporanPrintData = React.forwardRef(({ detail }, ref) => {
             <br />
             <br />
             <br />
-            ..............................
+            <br />
+            <br />
+            {detail.nama}
           </Box>
+        </Box>
+        <Box sx={{ fontSize: 10, m: 1 }}>
+          (Kode merupakan bukti Sah dari Sistem Bawaslu Kota Depok <br /> selama
+          dapat terbaca dan terscan dengan benar)
         </Box>
       </Card>
     </ThemeProvider>

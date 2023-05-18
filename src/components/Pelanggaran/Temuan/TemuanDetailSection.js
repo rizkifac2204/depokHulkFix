@@ -3,15 +3,16 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 
-// utils
-import { formatedDate } from "utils/formatDate";
-
 // component
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
 import ContentLayout from "components/GlobalComponents/ContentLayout";
-import TemuanBukti from "./TemuanBukti";
 
-export default function TemuanDetailSection({ detail }) {
+import SectionTerlapor from "../Components/SectionTerlapor";
+import SectionPeristiwa from "../Components/SectionPeristiwa";
+import SectionSaksi from "../Components/SectionSaksi";
+import SectionBukti from "../Components/SectionBukti";
+
+export default function TemuanDetailSection({ detail, invalidateQueries }) {
   return (
     <div>
       <CustomCard
@@ -20,7 +21,7 @@ export default function TemuanDetailSection({ detail }) {
         showDivider={true}
       >
         <Grid container mt={4}>
-          {/* pelapor  */}
+          {/* penemu  */}
           <Grid item xs={12}>
             <Box mb={2}>
               <Typography variant="h5">
@@ -47,26 +48,7 @@ export default function TemuanDetailSection({ detail }) {
               <Typography variant="h5">2. Identitas Terlapor</Typography>
             </Box>
 
-            <Grid container>
-              {detail.saksi.length !== 0
-                ? detail.terlapor.map((item, index) => (
-                    <Grid item xs={4} key={index}>
-                      <Typography variant="h6">Terlapor {index + 1}</Typography>
-                      <ContentLayout title="Nama">
-                        : {item.nama || "-"}
-                      </ContentLayout>
-                      <ContentLayout title="Alamat">
-                        : {item.alamat || "-"}
-                      </ContentLayout>
-                      <ContentLayout title="Telp">
-                        : {item.telp || "-"}
-                      </ContentLayout>
-                    </Grid>
-                  ))
-                : "Tidak Ada Terlapor"}
-            </Grid>
-
-            <Divider sx={{ mt: 2 }} />
+            <SectionTerlapor data={detail.terlapor} />
           </Grid>
 
           {/* Peristiwa  */}
@@ -75,26 +57,7 @@ export default function TemuanDetailSection({ detail }) {
               <Typography variant="h5">3. Peristiwa yang ditemukan</Typography>
             </Box>
 
-            <ContentLayout title="a. Peristiwa">
-              : {detail.peristiwa || "-"}
-            </ContentLayout>
-            <ContentLayout title="b. Tempat Kejadian">
-              : {detail.tempat_kejadian || "-"}
-            </ContentLayout>
-            <ContentLayout title="c. Hari dan Tanggal Kejadian">
-              :{" "}
-              {detail.tanggal_kejadian
-                ? formatedDate(detail.tanggal_kejadian, true)
-                : "-"}
-            </ContentLayout>
-            <ContentLayout title="d. Hari dan Tanggal Diketahui">
-              :{" "}
-              {detail.tanggal_diketahui
-                ? formatedDate(detail.tanggal_diketahui, true)
-                : "-"}
-            </ContentLayout>
-
-            <Divider sx={{ mt: 2 }} />
+            <SectionPeristiwa detail={detail} />
           </Grid>
 
           {/* saksi-saksi  */}
@@ -103,26 +66,7 @@ export default function TemuanDetailSection({ detail }) {
               <Typography variant="h5">4. Saksi - saksi</Typography>
             </Box>
 
-            <Grid container>
-              {detail.saksi.length !== 0
-                ? detail.saksi.map((item, index) => (
-                    <Grid item xs={4} key={index}>
-                      <Typography variant="h6">Saksi {index + 1}</Typography>
-                      <ContentLayout title="Nama">
-                        : {item.nama || "-"}
-                      </ContentLayout>
-                      <ContentLayout title="Alamat">
-                        : {item.alamat || "-"}
-                      </ContentLayout>
-                      <ContentLayout title="Telp">
-                        : {item.telp || "-"}
-                      </ContentLayout>
-                    </Grid>
-                  ))
-                : "Tidak Ada Saksi"}
-            </Grid>
-
-            <Divider sx={{ mt: 2 }} />
+            <SectionSaksi data={detail.saksi} />
           </Grid>
 
           {/* bukti-bukti  */}
@@ -131,11 +75,11 @@ export default function TemuanDetailSection({ detail }) {
               <Typography variant="h5">5. Bukti</Typography>
             </Box>
 
-            <Box>
-              <TemuanBukti detail={detail} />
-            </Box>
-
-            <Divider sx={{ mt: 2 }} />
+            <SectionBukti
+              detail={detail}
+              invalidateQueries={invalidateQueries}
+              param="laporan"
+            />
           </Grid>
 
           {/* uraian  */}

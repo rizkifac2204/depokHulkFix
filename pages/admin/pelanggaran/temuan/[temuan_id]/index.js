@@ -41,7 +41,6 @@ function LaporDetail() {
     isError,
     isLoading,
     error,
-    isFetching,
   } = useQuery({
     enabled: !!temuan_id,
     queryKey: ["temuan", temuan_id],
@@ -70,7 +69,6 @@ function LaporDetail() {
             isLoading: false,
             autoClose: 2000,
           });
-          queryClient.invalidateQueries(["temuans"]);
           router.push("/admin/pelanggaran/temuan");
         })
         .catch((err) => {
@@ -139,7 +137,12 @@ function LaporDetail() {
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>
           <CustomCard>
-            <TemuanDetailSection detail={detail} />
+            <TemuanDetailSection
+              detail={detail}
+              invalidateQueries={() =>
+                queryClient.invalidateQueries(["temuan", temuan_id])
+              }
+            />
             <Box sx={{ transform: "translateZ(0px)", flexGrow: 1 }}>
               <SpeedDial
                 ariaLabel="SpeedDial"
@@ -160,7 +163,7 @@ function LaporDetail() {
         </Box>
       </Container>
 
-      {JSON.stringify(isFetching)}
+      {/* {JSON.stringify(isFetching)} */}
 
       <TemuanPrintData detail={detail} ref={printRef} />
     </div>

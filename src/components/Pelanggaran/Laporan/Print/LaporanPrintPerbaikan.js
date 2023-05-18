@@ -138,8 +138,8 @@ const LaporanPrintPerbaikan = React.forwardRef(({ detail }, ref) => {
             text={process.env.NEXT_PUBLIC_HOST + "/laporan/" + textForQrCode}
           />
           <Box sx={{ fontSize: 10, m: 1 }}>
-            (Kode merupakan bukti Sah dari Sistem PPID Bawaslu <br /> selama
-            dapat terbaca dan terscan dengan benar)
+            (Kode merupakan bukti Sah dari Sistem Bawaslu Kota Depok <br />{" "}
+            selama dapat terbaca dan terscan dengan benar)
           </Box>
         </Box>
       </Card>

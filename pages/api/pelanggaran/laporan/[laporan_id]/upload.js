@@ -12,31 +12,27 @@ export const config = {
 export default handler()
   .post(Upload().single("file"), async (req, res) => {
     try {
-      // jika sukses upload, maka file akan terdeteksi
-      if (!req.file) {
-        return res
-          .status(400)
-          .json({ message: "File Tidak Sesuai Ketentuan", type: "error" });
-      }
+      // Boleh Tidak Upload
 
       // dapatkan body untuk tabel
       const { laporan_id } = req.query;
       const { keterangan } = req.body;
-      const { filename } = req.file;
+      const { filename } = req.file || {};
 
       const proses = await db("pelanggaran_bukti").insert({
         laporan_id,
         temuan_id: null,
         keterangan,
-        file: filename,
+        file: filename || null,
       });
 
       if (!proses) {
-        DeleteUpload("./public/" + req.headers.destinationfile, req.file);
+        if (req.file)
+          DeleteUpload("./public/" + req.headers.destinationfile, req.file);
         return res.status(400).json({ message: "Gagal Proses", type: "error" });
       }
 
-      res.json({ file: filename, message: "Berhasil Upload" });
+      res.json({ file: filename, message: "Berhasil Proses" });
     } catch (error) {
       getLogger.error(error);
       res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });

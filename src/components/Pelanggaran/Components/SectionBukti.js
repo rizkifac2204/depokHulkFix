@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useQueryClient } from "@tanstack/react-query";
 
 import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
@@ -42,9 +41,8 @@ function CircularProgressWithLabel(props) {
   );
 }
 
-function TemuanBukti({ detail }) {
+function SectionBukti({ detail, invalidateQueries, param }) {
   const [keterangan, setKeterangan] = useState("");
-  const queryClient = useQueryClient();
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -60,7 +58,7 @@ function TemuanBukti({ detail }) {
     formData.append("keterangan", keterangan);
     isFile ? setIsUploading(true) : setIsSubmitting(true);
     axios
-      .post(`/api/pelanggaran/temuan/${detail.id}/upload`, formData, {
+      .post(`/api/pelanggaran/${param}/${detail.id}/upload`, formData, {
         headers: {
           "content-type": "multipart/form-data",
           destinationfile: "lapor",
@@ -72,6 +70,7 @@ function TemuanBukti({ detail }) {
       .then((res) => {
         setKeterangan("");
         toast.success(res.data.message);
+        invalidateQueries();
       })
       .catch((err) => {
         console.log(err);
@@ -89,7 +88,7 @@ function TemuanBukti({ detail }) {
         autoClose: false,
       });
       axios
-        .delete(`/api/pelanggaran/temuan/${detail.id}/upload`, {
+        .delete(`/api/pelanggaran/${param}/${detail.id}/upload`, {
           params: {
             id: item.id,
             file: item.file,
@@ -113,7 +112,7 @@ function TemuanBukti({ detail }) {
             autoClose: 2000,
           });
         })
-        .then(() => queryClient.invalidateQueries(["temuan", detail.id]));
+        .then(() => invalidateQueries());
     }
   };
 
@@ -123,7 +122,6 @@ function TemuanBukti({ detail }) {
         {detail.bukti.length !== 0 &&
           detail.bukti.map((item) => (
             <li key={item.id}>
-              {" "}
               <IconButton
                 size="small"
                 title="Delete File"
@@ -131,15 +129,18 @@ function TemuanBukti({ detail }) {
               >
                 <DeleteOutlineOutlinedIcon fontSize="small" />
               </IconButton>
-              - {item.keterangan} -{" "}
+              {item.keterangan}
               {item.file ? (
-                <a
-                  href={"/api/services/file/public/lapor/" + item.file}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {item.file}
-                </a>
+                <>
+                  {" - "}
+                  <a
+                    href={"/api/services/file/public/lapor/" + item.file}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {item.file}
+                  </a>
+                </>
               ) : null}
             </li>
           ))}
@@ -192,8 +193,10 @@ function TemuanBukti({ detail }) {
           </span>
         </Tooltip>
       </Paper>
+
+      <Divider sx={{ mt: 2 }} />
     </>
   );
 }
 
-export default TemuanBukti;
+export default SectionBukti;

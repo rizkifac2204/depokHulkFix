@@ -150,7 +150,9 @@ export default handler()
           "pelanggaran_pelapor.alamat",
           "pelanggaran_pelapor.telp",
           "pelanggaran_pelapor.email",
-          "pelanggaran_pelapor.kewarganegaraan"
+          "pelanggaran_pelapor.kewarganegaraan",
+          "user.nama_admin",
+          "bawaslu.nama_bawaslu"
         )
         .from("pelanggaran_laporan")
         .innerJoin("user", "user.id", "pelanggaran_laporan.user_id")
