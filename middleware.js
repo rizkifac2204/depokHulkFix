@@ -19,6 +19,9 @@ export async function middleware(req, res) {
 
   if (pathname.startsWith("/admin")) {
     if (!verifiedToken) return NextResponse.redirect(`${origin}/login`);
+
+    if (pathname === "/admin/pelanggaran")
+      return NextResponse.redirect(`${origin}/admin/pelanggaran/laporan`);
   }
 
   return NextResponse.next();

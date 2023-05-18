@@ -15,7 +15,7 @@ import Wait from "components/GlobalComponents/Wait";
 // components
 import PelaporFormEdit from "components/Pelanggaran/Pelapor/PelaporFormEdit";
 
-function PelaporDetail() {
+function PelaporEdit() {
   const router = useRouter();
   const { pelapor_id } = router.query;
 
@@ -67,4 +67,4 @@ function PelaporDetail() {
   );
 }
 
-export default PelaporDetail;
+export default PelaporEdit;

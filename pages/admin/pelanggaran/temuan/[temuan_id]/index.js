@@ -30,7 +30,7 @@ import Wait from "components/GlobalComponents/Wait";
 import TemuanDetailSection from "components/Pelanggaran/Temuan/TemuanDetailSection";
 import TemuanPrintData from "components/Pelanggaran/Temuan/Print/TemuanPrintData";
 
-function LaporDetail() {
+function TemuanDetail() {
   const router = useRouter();
   const { temuan_id } = router.query;
   const queryClient = useQueryClient();
@@ -163,11 +163,9 @@ function LaporDetail() {
         </Box>
       </Container>
 
-      {/* {JSON.stringify(isFetching)} */}
-
       <TemuanPrintData detail={detail} ref={printRef} />
     </div>
   );
 }
 
-export default LaporDetail;
+export default TemuanDetail;

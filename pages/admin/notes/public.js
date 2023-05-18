@@ -26,7 +26,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import SmallTitleBar from "components/GlobalComponents/PageTitleBar/SmallTitleBar";
 
-function Notes() {
+function NotesPublic() {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -268,4 +268,4 @@ function Notes() {
   );
 }
 
-export default Notes;
+export default NotesPublic;

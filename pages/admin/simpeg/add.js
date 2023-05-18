@@ -10,7 +10,7 @@ import FormSimpegAdd from "components/Simpeg/Form/FormSimpegAdd";
 import SmallTitleBar from "components/GlobalComponents/PageTitleBar/SmallTitleBar";
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
 
-function TambahUser() {
+function SimpegAdd() {
   return (
     <div>
       <Head>
@@ -28,4 +28,4 @@ function TambahUser() {
   );
 }
 
-export default TambahUser;
+export default SimpegAdd;

@@ -110,7 +110,6 @@ export default handler()
   })
   .put(async (req, res) => {
     try {
-      const { id: user_id } = req.session.user;
       const { temuan_id } = req.query;
       // get post
       const {
@@ -128,7 +127,6 @@ export default handler()
       } = req.body;
 
       const dataUpdate = {
-        user_id,
         nomor: nomor || null,
         nama: nama || null,
         jabatan: jabatan || null,

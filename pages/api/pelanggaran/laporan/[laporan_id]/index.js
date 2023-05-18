@@ -196,7 +196,6 @@ export default handler()
   })
   .put(async (req, res) => {
     try {
-      const { id: user_id } = req.session.user;
       const { laporan_id } = req.query;
       // get post
       const {
@@ -216,7 +215,6 @@ export default handler()
       const dataPelapor = await prosesPelapor(req);
 
       const dataUpdate = {
-        user_id,
         pelapor_id: dataPelapor.id,
         nomor: nomor || null,
         peristiwa: peristiwa || null,

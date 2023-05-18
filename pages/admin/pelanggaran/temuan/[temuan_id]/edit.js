@@ -1,3 +1,4 @@
+import React from "react";
 import Head from "next/head";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -9,15 +10,14 @@ import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 
 // components
+import TemuanFormEdit from "components/Pelanggaran/Temuan/TemuanFormEdit";
 import SmallTitleBar from "components/GlobalComponents/PageTitleBar/SmallTitleBar";
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
 import Wait from "components/GlobalComponents/Wait";
-// components
-import PelaporFormEdit from "components/Lapor/Pelapor/PelaporFormEdit";
 
-function PelaporDetail() {
+function TemuanEdit() {
   const router = useRouter();
-  const { pelapor_id } = router.query;
+  const { temuan_id } = router.query;
 
   const {
     data: detail,
@@ -25,11 +25,11 @@ function PelaporDetail() {
     isLoading,
     error,
   } = useQuery({
-    enabled: !!pelapor_id,
-    queryKey: ["pelapor", pelapor_id],
+    enabled: !!temuan_id,
+    queryKey: ["temuan", temuan_id],
     queryFn: ({ signal }) =>
       axios
-        .get(`/api/lapor/pelapor/${pelapor_id}`, { signal })
+        .get(`/api/pelanggaran/temuan/${temuan_id}`, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);
@@ -48,18 +48,18 @@ function PelaporDetail() {
   return (
     <div>
       <Head>
-        <title>{`Edit Pelapor - Bawaslu Depok Apps`}</title>
+        <title>{`Edit Temuan - Bawaslu Depok Apps`}</title>
       </Head>
       <SmallTitleBar
-        title="Formulir Edit Pelapor"
+        title="Formulir Edit Temuan Model B.2"
         center={false}
-        buttonLink={`/admin/lapor/pelapor/${detail.id}`}
+        buttonLink={`/admin/pelanggaran/temuan/${detail.id}`}
         buttonText={`Detail`}
       />
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>
           <CustomCard>
-            <PelaporFormEdit detail={detail} />
+            <TemuanFormEdit detail={detail} />
           </CustomCard>
         </Box>
       </Container>
@@ -67,4 +67,4 @@ function PelaporDetail() {
   );
 }
 
-export default PelaporDetail;
+export default TemuanEdit;

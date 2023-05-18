@@ -15,7 +15,7 @@ import SmallTitleBar from "components/GlobalComponents/PageTitleBar/SmallTitleBa
 import CustomCard from "components/GlobalComponents/Card/CustomCard";
 import Wait from "components/GlobalComponents/Wait";
 
-function LaporEdit() {
+function LaporanEdit() {
   const router = useRouter();
   const { laporan_id } = router.query;
 
@@ -67,4 +67,4 @@ function LaporEdit() {
   );
 }
 
-export default LaporEdit;
+export default LaporanEdit;

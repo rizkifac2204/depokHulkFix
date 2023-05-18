@@ -34,7 +34,7 @@ import LaporanPrintPenyampaian from "components/Pelanggaran/Laporan/Print/Lapora
 import LaporanPrintPerbaikan from "components/Pelanggaran/Laporan/Print/LaporanPrintPerbaikan";
 import LaporanPrintData from "components/Pelanggaran/Laporan/Print/LaporanPrintData";
 
-function LaporDetail() {
+function LaporanDetail() {
   const router = useRouter();
   const { laporan_id } = router.query;
   const queryClient = useQueryClient();
@@ -197,4 +197,4 @@ function LaporDetail() {
   );
 }
 
-export default LaporDetail;
+export default LaporanDetail;

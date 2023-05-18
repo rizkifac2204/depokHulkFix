@@ -180,18 +180,20 @@ function SectionBukti({ detail, invalidateQueries, param }) {
         )}
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
         {isSubmitting && <CircularProgressWithLabel value={progress} />}
-        <Tooltip title="Simpan Keterangan">
-          <span>
-            <Button
-              variant="text"
-              disabled={keterangan === ""}
-              size="small"
-              onClick={(e) => handleUpload(e, false)}
-            >
-              Simpan Tanpa Upload
-            </Button>
-          </span>
-        </Tooltip>
+        {!isSubmitting && (
+          <Tooltip title="Simpan Keterangan">
+            <span>
+              <Button
+                variant="text"
+                disabled={keterangan === ""}
+                size="small"
+                onClick={(e) => handleUpload(e, false)}
+              >
+                Simpan Tanpa Upload
+              </Button>
+            </span>
+          </Tooltip>
+        )}
       </Paper>
 
       <Divider sx={{ mt: 2 }} />

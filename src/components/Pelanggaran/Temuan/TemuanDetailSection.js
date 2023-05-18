@@ -16,8 +16,8 @@ export default function TemuanDetailSection({ detail, invalidateQueries }) {
   return (
     <div>
       <CustomCard
-        title={`Detail Laporan`}
-        caption={`Rincian Laporan Nomor ${detail.nomor}`}
+        title={`Detail Temuan`}
+        caption={`Rincian Temuan Nomor ${detail.nomor}`}
         showDivider={true}
       >
         <Grid container mt={4}>
@@ -78,7 +78,7 @@ export default function TemuanDetailSection({ detail, invalidateQueries }) {
             <SectionBukti
               detail={detail}
               invalidateQueries={invalidateQueries}
-              param="laporan"
+              param="temuan"
             />
           </Grid>
 
