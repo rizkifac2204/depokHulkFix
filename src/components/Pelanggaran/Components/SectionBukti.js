@@ -173,7 +173,7 @@ function SectionBukti({ detail, invalidateQueries, param }) {
               onChange={(e) => handleUpload(e, true)}
               disabled={keterangan === ""}
             >
-              <input hidden accept="image/*" type="file" />
+              <input hidden type="file" />
               <UploadIcon />
             </IconButton>
           </Tooltip>

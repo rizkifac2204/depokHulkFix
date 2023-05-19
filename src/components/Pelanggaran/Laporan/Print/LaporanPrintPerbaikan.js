@@ -13,7 +13,7 @@ import TableRow from "@mui/material/TableRow";
 
 import { SetQRCode } from "components/GlobalComponents/Attributes";
 // utils
-import { formatedDate } from "utils/formatDate";
+import { formatedDate, getTime } from "utils/formatDate";
 
 const themeLight = createTheme({
   palette: {
@@ -113,13 +113,23 @@ const LaporanPrintPerbaikan = React.forwardRef(({ detail }, ref) => {
               <TableRow>
                 <TableCell>Hari dan Tanggal</TableCell>
                 <TableCell>
-                  : <b>{formatedDate(detail?.tanggal_lapor, true)}</b>
+                  :{" "}
+                  <b>
+                    {detail?.updated_at
+                      ? formatedDate(detail?.updated_at, true)
+                      : "-"}
+                  </b>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Waktu</TableCell>
                 <TableCell>
-                  : <b>{detail.jam_lapor}</b>
+                  :{" "}
+                  <b>
+                    {detail?.updated_at
+                      ? getTime(detail?.updated_at, true)
+                      : "-"}
+                  </b>
                 </TableCell>
               </TableRow>
               <TableRow>

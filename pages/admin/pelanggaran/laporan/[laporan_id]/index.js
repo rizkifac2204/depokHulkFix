@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
-
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -18,18 +17,15 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import PrintIcon from "@mui/icons-material/Print";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
-import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
 import EditIcon from "@mui/icons-material/Edit";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
 import BuildIcon from "@mui/icons-material/Build";
 
 // components
 import SmallTitleBar from "components/GlobalComponents/PageTitleBar/SmallTitleBar";
-import CustomCard from "components/GlobalComponents/Card/CustomCard";
 import Wait from "components/GlobalComponents/Wait";
 
 import LaporanDetailSection from "components/Pelanggaran/Laporan/LaporanDetailSection";
+import PelanggaranBerkas from "components/Pelanggaran/Components/PelanggaranBerkas";
 import LaporanPrintPenyampaian from "components/Pelanggaran/Laporan/Print/LaporanPrintPenyampaian";
 import LaporanPrintPerbaikan from "components/Pelanggaran/Laporan/Print/LaporanPrintPerbaikan";
 import LaporanPrintData from "components/Pelanggaran/Laporan/Print/LaporanPrintData";
@@ -53,6 +49,23 @@ function LaporanDetail() {
     queryFn: ({ signal }) =>
       axios
         .get(`/api/pelanggaran/laporan/${laporan_id}`, { signal })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw new Error(err.response.data.message);
+        }),
+  });
+
+  const {
+    data: berkas,
+    isError: isErrorBerkas,
+    isLoading: isLoadingBerkas,
+    error: errorBerkas,
+  } = useQuery({
+    enabled: !!detail?.id,
+    queryKey: ["laporan", laporan_id, "berkas"],
+    queryFn: ({ signal }) =>
+      axios
+        .get(`/api/pelanggaran/laporan/${laporan_id}/berkas`, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);
@@ -107,10 +120,10 @@ function LaporanDetail() {
   };
 
   const actions = [
-    { icon: <DeleteIcon />, name: "Hapus", action: handleDelete },
+    { icon: <DeleteIcon />, name: "Hapus Laporan", action: handleDelete },
     {
       icon: <EditIcon />,
-      name: "Edit",
+      name: "Edit Laporan",
       action: () =>
         router.push(`/admin/pelanggaran/laporan/${laporan_id}/edit`),
     },
@@ -128,21 +141,6 @@ function LaporanDetail() {
       icon: <BuildIcon />,
       name: "Print Tanda Bukti Perbaikan",
       action: () => handlePrint("perbaikan"),
-    },
-    {
-      icon: <FileCopyIcon />,
-      name: "Surat Panggilan",
-      action: () => console.log("Surat Panggilan"),
-    },
-    {
-      icon: <LocalLibraryIcon />,
-      name: "Surat Undangan Klarifikasi",
-      action: () => console.log("Surat Undangan Klarifikasi"),
-    },
-    {
-      icon: <AttachFileIcon />,
-      name: "BA Klarifikasi",
-      action: () => console.log("BA KALRIFIKASI"),
     },
   ];
 
@@ -163,32 +161,39 @@ function LaporanDetail() {
       <SmallTitleBar title={`Laporan Nomor ${detail.nomor}`} />
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>
-          <CustomCard>
-            <LaporanDetailSection
-              detail={detail}
-              invalidateQueries={() =>
-                queryClient.invalidateQueries(["laporan", laporan_id])
-              }
-            />
-            <Box sx={{ transform: "translateZ(0px)", flexGrow: 1 }}>
-              <SpeedDial
-                ariaLabel="SpeedDial"
-                sx={{ position: "absolute", bottom: 0, right: 0 }}
-                icon={<SpeedDialIcon />}
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    onClick={action.action}
-                  />
-                ))}
-              </SpeedDial>
-            </Box>
-          </CustomCard>
+          <LaporanDetailSection
+            detail={detail}
+            invalidateQueries={() =>
+              queryClient.invalidateQueries(["laporan", laporan_id])
+            }
+          />
+        </Box>
+        <Box mt={2} px={{ xs: "12px", lg: 0 }}>
+          <PelanggaranBerkas
+            data={berkas}
+            detail={detail}
+            invalidateQueries={() =>
+              queryClient.invalidateQueries(["laporan", laporan_id, "berkas"])
+            }
+            param="laporan"
+          />
         </Box>
       </Container>
+
+      <SpeedDial
+        ariaLabel="SpeedDial"
+        icon={<SpeedDialIcon />}
+        sx={{ position: "fixed", bottom: 16, right: 16 }}
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            onClick={action.action}
+          />
+        ))}
+      </SpeedDial>
 
       <LaporanPrintPenyampaian detail={detail} ref={printPenyampaianRef} />
       <LaporanPrintPerbaikan detail={detail} ref={printPerbaikanRef} />

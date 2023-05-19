@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
-
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
@@ -24,9 +23,9 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 // components
 import SmallTitleBar from "components/GlobalComponents/PageTitleBar/SmallTitleBar";
-import CustomCard from "components/GlobalComponents/Card/CustomCard";
 import Wait from "components/GlobalComponents/Wait";
 
+import PelanggaranBerkas from "components/Pelanggaran/Components/PelanggaranBerkas";
 import TemuanDetailSection from "components/Pelanggaran/Temuan/TemuanDetailSection";
 import TemuanPrintData from "components/Pelanggaran/Temuan/Print/TemuanPrintData";
 
@@ -47,6 +46,23 @@ function TemuanDetail() {
     queryFn: ({ signal }) =>
       axios
         .get(`/api/pelanggaran/temuan/${temuan_id}`, { signal })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw new Error(err.response.data.message);
+        }),
+  });
+
+  const {
+    data: berkas,
+    isError: isErrorBerkas,
+    isLoading: isLoadingBerkas,
+    error: errorBerkas,
+  } = useQuery({
+    enabled: !!detail?.id,
+    queryKey: ["temuan", temuan_id, "berkas"],
+    queryFn: ({ signal }) =>
+      axios
+        .get(`/api/pelanggaran/temuan/${temuan_id}/berkas`, { signal })
         .then((res) => res.data)
         .catch((err) => {
           throw new Error(err.response.data.message);
@@ -91,10 +107,10 @@ function TemuanDetail() {
   };
 
   const actions = [
-    { icon: <DeleteIcon />, name: "Hapus", action: handleDelete },
+    { icon: <DeleteIcon />, name: "Hapus Temuan", action: handleDelete },
     {
       icon: <EditIcon />,
-      name: "Edit",
+      name: "Edit Temuan",
       action: () => router.push(`/admin/pelanggaran/temuan/${temuan_id}/edit`),
     },
     {
@@ -136,32 +152,39 @@ function TemuanDetail() {
       <SmallTitleBar title={`Temuan Nomor ${detail.nomor}`} />
       <Container maxWidth={false}>
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>
-          <CustomCard>
-            <TemuanDetailSection
-              detail={detail}
-              invalidateQueries={() =>
-                queryClient.invalidateQueries(["temuan", temuan_id])
-              }
-            />
-            <Box sx={{ transform: "translateZ(0px)", flexGrow: 1 }}>
-              <SpeedDial
-                ariaLabel="SpeedDial"
-                sx={{ position: "absolute", bottom: 0, right: 0 }}
-                icon={<SpeedDialIcon />}
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    onClick={action.action}
-                  />
-                ))}
-              </SpeedDial>
-            </Box>
-          </CustomCard>
+          <TemuanDetailSection
+            detail={detail}
+            invalidateQueries={() =>
+              queryClient.invalidateQueries(["temuan", temuan_id])
+            }
+          />
+        </Box>
+        <Box mt={2} px={{ xs: "12px", lg: 0 }}>
+          <PelanggaranBerkas
+            data={berkas}
+            detail={detail}
+            invalidateQueries={() =>
+              queryClient.invalidateQueries(["temuan", temuan_id, "berkas"])
+            }
+            param="temuan"
+          />
         </Box>
       </Container>
+
+      <SpeedDial
+        ariaLabel="SpeedDial"
+        icon={<SpeedDialIcon />}
+        sx={{ position: "fixed", bottom: 16, right: 16 }}
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            onClick={action.action}
+          />
+        ))}
+      </SpeedDial>
 
       <TemuanPrintData detail={detail} ref={printRef} />
     </div>

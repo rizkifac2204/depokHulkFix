@@ -236,7 +236,7 @@ export default handler()
       // proses update
       const proses = await db("pelanggaran_laporan")
         .where("id", laporan_id)
-        .update(dataUpdate);
+        .update({ ...dataUpdate, updated_at: db.fn.now() });
 
       // failed
       if (!proses) {

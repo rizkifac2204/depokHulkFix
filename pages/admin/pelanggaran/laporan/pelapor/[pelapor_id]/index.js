@@ -94,7 +94,7 @@ function PelaporDetail() {
     );
 
   return (
-    <div>
+    <>
       <Head>
         <title>{`Detail Pelapor - Bawaslu Depok Apps`}</title>
       </Head>
@@ -103,26 +103,25 @@ function PelaporDetail() {
         <Box mt={2} px={{ xs: "12px", lg: 0 }}>
           <CustomCard>
             <PelaporDetailSection detail={pelapor} />
-            <Box sx={{ transform: "translateZ(0px)", flexGrow: 1 }}>
-              <SpeedDial
-                ariaLabel="SpeedDial"
-                sx={{ position: "absolute", bottom: 0, right: 0 }}
-                icon={<SpeedDialIcon />}
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    tooltipTitle={action.name}
-                    onClick={action.action}
-                  />
-                ))}
-              </SpeedDial>
-            </Box>
           </CustomCard>
         </Box>
       </Container>
-    </div>
+
+      <SpeedDial
+        ariaLabel="SpeedDial"
+        sx={{ position: "fixed", bottom: 16, right: 16 }}
+        icon={<SpeedDialIcon />}
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            onClick={action.action}
+          />
+        ))}
+      </SpeedDial>
+    </>
   );
 }
 
