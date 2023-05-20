@@ -239,6 +239,7 @@ function NavListItem(props) {
                           <ListItemText
                             primary={formatMenuTitle(subMenu.menu_title)}
                             style={{ paddingLeft: 8 }}
+                            sx={{ cursor: "pointer" }}
                           />
                           {subMenu.isMenuOpen ? (
                             <Icon style={{ fontSize: 20, width: 25 }}>

@@ -2,7 +2,7 @@ import db from "libs/db";
 import getLogger from "middlewares/getLogger";
 import { isEditable, isMyself } from "middlewares/simpegAttrs";
 
-export default async function editableProcessRequired(req, res, next) {
+export default async function middlewareSimpeg(req, res, next) {
   try {
     const { id } = req.query;
     const { id: user_id, level, bawaslu_id, verifikator } = req.session.user;

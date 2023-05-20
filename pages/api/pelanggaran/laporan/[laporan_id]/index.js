@@ -3,12 +3,7 @@ import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 import moment from "moment";
 import { DeleteUpload } from "services/uploadService";
-
-function filterData(builder, user_id, level) {
-  if (level > 4) {
-    builder.where("pelanggaran_laporan.user_id", user_id);
-  }
-}
+import { subQueryFilterPelanggaran } from "middlewares/middlewarePelanggaran";
 
 async function prosesPelapor(req) {
   return new Promise(async (resolve, reject) => {
@@ -135,10 +130,10 @@ async function prosesSimpanSaksi(req, laporan_id) {
 }
 
 export default handler()
-  .get(async (req, res) => {
+  .get(subQueryFilterPelanggaran, async (req, res) => {
     try {
       const { laporan_id } = req.query;
-      const { id: user_id, level } = req.session.user;
+
       const result = await db
         .select(
           "pelanggaran_laporan.*",
@@ -162,8 +157,8 @@ export default handler()
           "pelanggaran_pelapor.id",
           "pelanggaran_laporan.pelapor_id"
         )
-        .modify((builder) => filterData(builder, user_id, level))
         .where("pelanggaran_laporan.id", laporan_id)
+        .whereIn(`pelanggaran_laporan.user_id`, req.subqueryPelanggaran)
         .first();
 
       if (!result)

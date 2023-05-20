@@ -3,7 +3,7 @@ import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 import { DeleteUpload } from "services/uploadService";
 import { isEditable, isMyself } from "middlewares/simpegAttrs";
-import editableUserRequired from "middlewares/editableUserRequired";
+import middlewareSimpeg from "middlewares/middlewareSimpeg";
 
 export default handler()
   .get(async (req, res) => {
@@ -36,7 +36,7 @@ export default handler()
       res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
     }
   })
-  .delete(editableUserRequired, async (req, res) => {
+  .delete(middlewareSimpeg, async (req, res) => {
     try {
       const { id } = req.query;
 

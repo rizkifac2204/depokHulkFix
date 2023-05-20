@@ -84,7 +84,7 @@ const MenuListItem = [
         isMenuOpen: false,
         fullPageMenu: false,
         third_child_routes: null,
-        limit_access_level: [1, 2, 3, 4, 5, 6],
+        limit_access_level: [1, 2, 3, 4, 5],
       },
     ],
   },
@@ -161,7 +161,7 @@ const MenuListItem = [
         isMenuOpen: false,
         fullPageMenu: false,
         third_child_routes: null,
-        limit_access_level: [1, 2, 3, 4, 5],
+        limit_access_level: [1, 2, 3, 4],
       },
       {
         menu_title: "peraturan",

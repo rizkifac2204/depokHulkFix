@@ -101,7 +101,7 @@ function PelanggaranBerkas({ data, detail, invalidateQueries, param }) {
       .post(`/api/pelanggaran/${param}/${detail.id}/berkas`, formData, {
         headers: {
           "content-type": "multipart/form-data",
-          destinationfile: "berkas-pelanggaran",
+          destinationfile: "pelanggaran/berkas",
         },
         onUploadProgress: (event) => {
           setProgress(Math.round((event.loaded * 100) / event.total));
@@ -133,7 +133,7 @@ function PelanggaranBerkas({ data, detail, invalidateQueries, param }) {
           params: {
             id: item.id,
             file: item.file,
-            path: "berkas-pelanggaran",
+            path: "pelanggaran/berkas",
           },
         })
         .then((res) => {
@@ -204,7 +204,7 @@ function PelanggaranBerkas({ data, detail, invalidateQueries, param }) {
                   <TableCell align="right">
                     <a
                       href={
-                        "/api/services/file/public/berkas-pelanggaran/" +
+                        "/api/services/file/public/pelanggaran/berkas/" +
                         item.file
                       }
                       target="_blank"

@@ -34,7 +34,7 @@ function NotFound() {
               <Grid item xs={12} className="">
                 <div className="page-404-img">
                   <Image
-                    src={"/Pictures/404-img.png"}
+                    src={"/Images/404-img.png"}
                     alt="site logo"
                     width={500}
                     height={300}

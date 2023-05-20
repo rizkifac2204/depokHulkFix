@@ -1,34 +1,32 @@
 import db from "libs/db";
 import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
+import { subQueryFilterPelanggaran } from "middlewares/middlewarePelanggaran";
 
-export default handler().get(async (req, res) => {
+export default handler().get(subQueryFilterPelanggaran, async (req, res) => {
   try {
     const { id: user_id, level } = req.session.user;
 
-    // ambil jumlah user
+    // USER PENGGUNA
     const user = await db
       .from("user")
       .count("id", { as: "jumlah" })
       .where("bawaslu_id", "!=", 0)
       .first();
 
-    // ambil jumlah laporan
+    // LAPORAN AWAL
+    const awal = await db
+      .from("pelanggaran_awal")
+      .count("id", { as: "jumlah" })
+      .first();
+
+    // LAPORAN
+    // jumlah
     const laporan = await db
       .from("pelanggaran_laporan")
       .count("id", { as: "jumlah" })
       .whereNull("deleted_at")
-      .modify((builder) => {
-        if (level > 4) {
-          builder.where(`pelanggaran_laporan.user_id`, user_id);
-        }
-      })
-      .first();
-
-    // ambil jumlah laporan awal
-    const awal = await db
-      .from("pelanggaran_awal")
-      .count("id", { as: "jumlah" })
+      .whereIn(`pelanggaran_laporan.user_id`, req.subqueryPelanggaran)
       .first();
 
     const subqueryPelapor = await db("pelanggaran_laporan")

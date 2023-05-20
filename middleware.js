@@ -20,8 +20,21 @@ export async function middleware(req, res) {
   if (pathname.startsWith("/admin")) {
     if (!verifiedToken) return NextResponse.redirect(`${origin}/login`);
 
+    // PROFILE
+    // ---
+
+    // SIMPEG
+    // blokir tambah user untuk pkd kebawah
+    if (pathname === "/admin/simpeg/add" && verifiedToken.level > 5)
+      return NextResponse.rewrite(`${origin}/404`);
+
+    // PELANGGARAN
+    // redirect tidak ada file
     if (pathname === "/admin/pelanggaran")
       return NextResponse.redirect(`${origin}/admin/pelanggaran/laporan`);
+    // blokir laporan awal untuk kecamatan kebawah
+    if (pathname === "/admin/pelanggaran/awal" && verifiedToken.level > 4)
+      return NextResponse.rewrite(`${origin}/404`);
   }
 
   return NextResponse.next();

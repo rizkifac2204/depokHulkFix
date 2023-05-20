@@ -2,12 +2,7 @@ import db from "libs/db";
 import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 import moment from "moment";
-
-function filterData(builder, user_id, level) {
-  if (level > 4) {
-    builder.where("pelanggaran_laporan.user_id", user_id);
-  }
-}
+import { subQueryFilterPelanggaran } from "middlewares/middlewarePelanggaran";
 
 async function prosesSimpanPelapor(req, res) {
   return new Promise(async (resolve, reject) => {
@@ -112,9 +107,8 @@ async function prosesSimpanSaksi(req, res, laporan_id) {
 }
 
 export default handler()
-  .get(async (req, res) => {
+  .get(subQueryFilterPelanggaran, async (req, res) => {
     try {
-      const { id: user_id, level } = req.session.user;
       const result = await db
         .select(
           "pelanggaran_laporan.*",
@@ -130,7 +124,7 @@ export default handler()
         )
         .innerJoin("user", "user.id", "pelanggaran_laporan.user_id")
         .innerJoin("bawaslu", "user.bawaslu_id", "bawaslu.id")
-        .modify((builder) => filterData(builder, user_id, level));
+        .whereIn(`pelanggaran_laporan.user_id`, req.subqueryPelanggaran);
 
       res.json(result);
     } catch (error) {

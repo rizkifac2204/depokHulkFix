@@ -1,7 +1,7 @@
 import db from "libs/db";
 import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
-import editableProcessRequired from "middlewares/editableUserRequired";
+import middlewareSimpeg from "middlewares/middlewareSimpeg";
 
 export default handler()
   .get(async (req, res) => {
@@ -20,7 +20,7 @@ export default handler()
       res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
     }
   })
-  .put(editableProcessRequired, async (req, res) => {
+  .put(middlewareSimpeg, async (req, res) => {
     try {
       const { id } = req.query;
       const {

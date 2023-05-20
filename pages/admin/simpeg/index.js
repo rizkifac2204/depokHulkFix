@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
-import Link from "next/link";
+import { useRouter } from "next/router";
 // library
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -34,6 +34,7 @@ async function deleteData(id) {
 }
 
 function Simpeg() {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const theme = useTheme();
   const hideOnLg = useMediaQuery(theme.breakpoints.up("lg"));
@@ -134,8 +135,7 @@ function Simpeg() {
               key={0}
               icon={<VisibilityIcon />}
               label="Profile"
-              components={Link}
-              href={`/admin/profile`}
+              onClick={() => router.push("/admin/profile")}
             />,
           ];
         }
@@ -145,15 +145,13 @@ function Simpeg() {
               key={1}
               icon={<VisibilityIcon />}
               label="Detail"
-              components={Link}
-              href={`/admin/simpeg/${values.id}`}
+              onClick={() => router.push(`/admin/simpeg/${values.id}`)}
             />,
             <GridActionsCellItem
               key={2}
               icon={<EditOutlinedIcon />}
               label="Edit"
-              components={Link}
-              href={`/admin/simpeg/${values.id}/edit`}
+              onClick={() => router.push(`/admin/simpeg/${values.id}/edit`)}
             />,
             <GridActionsCellItem
               key={3}
@@ -168,8 +166,7 @@ function Simpeg() {
               key={4}
               icon={<VisibilityIcon />}
               label="Detail"
-              components={Link}
-              href={`/admin/simpeg/${values.id}`}
+              onClick={() => router.push(`/admin/simpeg/${values.id}`)}
             />,
           ];
         }
