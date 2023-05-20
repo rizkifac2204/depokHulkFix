@@ -158,7 +158,7 @@ export default function FullWidthTabs(props) {
                 <Box lineHeight={0.8} pr={1}>
                   <Image
                     alt="search"
-                    src="/Pictures/search.png"
+                    src="/Images/search.png"
                     width="45"
                     height="45"
                   />

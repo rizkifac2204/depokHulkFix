@@ -42,7 +42,7 @@ function SimpegDetail({ user }) {
         <div
           className="mod-profile-header"
           style={{
-            backgroundImage: "url('/Pictures/blog-8.jpg')",
+            backgroundImage: "url('/Images/blog-8.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center center",
           }}

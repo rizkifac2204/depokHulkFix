@@ -56,12 +56,7 @@ export function SocialIcons() {
         component={Link}
         href="#"
       >
-        <Image
-          alt="Twitter"
-          src="/Pictures/twitter.svg"
-          width={20}
-          height={20}
-        />
+        <Image alt="Twitter" src="/Images/twitter.svg" width={20} height={20} />
       </Fab>
       <Fab
         size="small"
@@ -72,7 +67,7 @@ export function SocialIcons() {
       >
         <Image
           alt="instagram"
-          src="/Pictures/instagram.svg"
+          src="/Images/instagram.svg"
           width={20}
           height={20}
         />
@@ -84,7 +79,7 @@ export function SocialIcons() {
         component={Link}
         href="#"
       >
-        <Image alt="tiktok" src="/Pictures/tiktok.svg" width={20} height={20} />
+        <Image alt="tiktok" src="/Images/tiktok.svg" width={20} height={20} />
       </Fab>
     </Box>
   );

@@ -2,7 +2,7 @@ import QRCode from "qrcode";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
-import defaultImage from "../../../public/Pictures/404-img.png";
+import defaultImage from "../../../public/Images/404-img.png";
 import Chip from "@mui/material/Chip";
 
 export function SetQRCode({ text }) {
@@ -26,17 +26,14 @@ export function SetQRCode({ text }) {
   return null;
 }
 
-export function WithDynamicImage({
-  image = defaultImage,
-  altText = "Pemohon",
-}) {
+export function WithDynamicImage({ image = defaultImage, altText = "Bukti" }) {
   const [initImage, setInitImage] = useState(defaultImage);
   const isImage = /(jpg|gif|png|JPG|GIF|PNG|JPEG|jpeg)$/.test(image);
 
   useEffect(() => {
     if (!image) return <></>;
     let mounted = true;
-    const url = `/api/services/file/public/lapor/${image}`;
+    const url = `/api/services/file/public/${image}`;
     if (mounted)
       axios
         .get(url, {

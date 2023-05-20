@@ -46,7 +46,7 @@ const TemuanPrintData = React.forwardRef(({ detail }, ref) => {
         <Box sx={{ display: "flex", flexWrap: "nowrap", px: 2, mb: 2 }}>
           <Box sx={{ position: "relative", width: 100, height: 90, mr: 3 }}>
             <Image
-              src="/Pictures/logo-buttom.png"
+              src="/Images/logo-buttom.png"
               alt="Logo"
               fill
               priority

@@ -61,7 +61,7 @@ export default function IconSidebar(props) {
         >
           <Box component={Link} href="/admin" lineHeight={0.8}>
             <Image
-              src={"/Pictures/logo-sm.png"}
+              src={"/Images/logo-sm.png"}
               alt="site logo"
               width="27"
               height="30"

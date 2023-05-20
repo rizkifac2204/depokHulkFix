@@ -21,7 +21,7 @@ function Peraturan() {
         <iframe
           ref={ref}
           onLoad={onLoad}
-          src="/doc/peraturanbawaslunomor7tahun2022.pdf"
+          src="/pelanggaran/peraturanbawaslunomor7tahun2022.pdf"
           width="100%"
           height="700px"
         />

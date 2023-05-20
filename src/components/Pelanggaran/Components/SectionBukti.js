@@ -61,7 +61,7 @@ function SectionBukti({ detail, invalidateQueries, param }) {
       .post(`/api/pelanggaran/${param}/${detail.id}/upload`, formData, {
         headers: {
           "content-type": "multipart/form-data",
-          destinationfile: "lapor",
+          destinationfile: "pelanggaran/bukti",
         },
         onUploadProgress: (event) => {
           setProgress(Math.round((event.loaded * 100) / event.total));
@@ -92,7 +92,7 @@ function SectionBukti({ detail, invalidateQueries, param }) {
           params: {
             id: item.id,
             file: item.file,
-            path: "lapor",
+            path: "pelanggaran/bukti",
           },
         })
         .then((res) => {
@@ -134,7 +134,9 @@ function SectionBukti({ detail, invalidateQueries, param }) {
                 <>
                   {" - "}
                   <a
-                    href={"/api/services/file/public/lapor/" + item.file}
+                    href={
+                      "/api/services/file/public/pelanggaran/bukti/" + item.file
+                    }
                     target="_blank"
                     rel="noreferrer"
                   >

@@ -6,13 +6,13 @@ import Skeleton from "@mui/material/Skeleton";
 
 export default function Thumb({ file, altText = "Pemohon" }) {
   const [loading, setLoading] = useState(false);
-  const [thumb, setThumb] = useState("/Pictures/avatar-4.jpg");
+  const [thumb, setThumb] = useState("/Images/avatar-4.jpg");
   const [alt, setAlt] = useState(altText);
 
   useEffect(() => {
     if (!file) return;
     setLoading(true);
-    setThumb("/Pictures/avatar-4.jpg");
+    setThumb("/Images/avatar-4.jpg");
     if (typeof file === "object") {
       var reader = new FileReader();
       reader.onloadend = function () {
@@ -41,7 +41,7 @@ export default function Thumb({ file, altText = "Pemohon" }) {
   if (!file)
     return (
       <Image
-        src={`/Pictures/avatar-4.jpg`}
+        src={`/Images/avatar-4.jpg`}
         alt={"Akun"}
         width={120}
         height={120}

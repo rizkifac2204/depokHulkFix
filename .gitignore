@@ -37,9 +37,8 @@ next-env.d.ts
 
 
 #custom
-/public/upload
-/public/lapor
-/public/berkas-pelanggaran
+/public/pelanggaran/berkas
+/public/pelanggaran/bukti
 /public/foto
 /logs
 .auth_info_baileys

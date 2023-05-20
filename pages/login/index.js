@@ -114,7 +114,7 @@ function Login() {
                       alt="img"
                       width="100"
                       height="25"
-                      src={`/Pictures/logo-light.png`}
+                      src={`/Images/logo-light.png`}
                       priority
                     />
                   ) : (
@@ -122,7 +122,7 @@ function Login() {
                       alt="img"
                       width="100"
                       height="25"
-                      src={`/Pictures/logo-dark.png`}
+                      src={`/Images/logo-dark.png`}
                       priority
                     />
                   )}

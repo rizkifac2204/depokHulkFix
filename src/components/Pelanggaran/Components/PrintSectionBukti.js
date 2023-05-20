@@ -28,7 +28,7 @@ function PrintSectionBukti({ data }) {
                 {item.file ? (
                   <WithDynamicImage
                     altText={item.keterangan}
-                    image={item.file}
+                    image={`pelanggaran/bukti/${item.file}`}
                   />
                 ) : null}
               </TableCell>

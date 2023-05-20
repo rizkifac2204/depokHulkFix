@@ -20,7 +20,7 @@ const mainFeaturedPost = {
   title: "Selamat Datang Di Aplikasi Bawaslu Kota Depok",
   description:
     "Sahabat dapat melaporkan Dugaan Pelanggaran pada Formulir yang sudah kami sediakan",
-  image: "/api/services/file/public/Pictures/bg-bawaslu.jpg",
+  image: "/api/services/file/public/Images/bg-bawaslu.jpg",
   imageText: "bawaslu kota depok",
   link: "https://kotadepok.bawaslu.go.id",
 };
@@ -29,14 +29,14 @@ const featuredPosts = [
   {
     title: "Website Bawaslu",
     description: "Lihat Berita-berita dan kabar terbaru dari Bawaslu.",
-    image: "/api/services/file/public/Pictures/website.png",
+    image: "/api/services/file/public/Images/website.png",
     imageLabel: "Image Text",
   },
   {
     title: "PPID",
     description:
       "Lihat informasi dan Ajukan Permohonan Informasi yang sahabat ingin ketahui disini.",
-    image: "/api/services/file/public/Pictures/ppid.png",
+    image: "/api/services/file/public/Images/ppid.png",
     imageLabel: "Image Text",
     link: "https://ppid.kotadepok.bawaslu.go.id",
   },
