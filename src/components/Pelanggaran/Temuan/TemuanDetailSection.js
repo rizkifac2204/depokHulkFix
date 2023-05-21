@@ -11,12 +11,16 @@ import SectionTerlapor from "../Components/SectionTerlapor";
 import SectionPeristiwa from "../Components/SectionPeristiwa";
 import SectionSaksi from "../Components/SectionSaksi";
 import SectionBukti from "../Components/SectionBukti";
+// utils
+import { formatedDate } from "utils/formatDate";
 
 export default function TemuanDetailSection({ detail, invalidateQueries }) {
   return (
     <CustomCard
-      title={`Detail Temuan`}
-      caption={`Rincian Temuan Nomor ${detail.nomor}`}
+      title={`Detail Temuan Nomor ${detail.nomor}`}
+      caption={`Dibuat Oleh ${detail.nama_admin} - ${formatedDate(
+        detail.created_at
+      )}`}
       showDivider={true}
     >
       <Grid container mt={4}>
@@ -28,12 +32,14 @@ export default function TemuanDetailSection({ detail, invalidateQueries }) {
             </Typography>
           </Box>
 
-          <ContentLayout title="a. Nama">: {detail.nama || "-"}</ContentLayout>
+          <ContentLayout title="a. Nama">
+            : {detail.petugas_nama || "-"}
+          </ContentLayout>
           <ContentLayout title="b. Jabatan">
-            : {detail.jabatan || "-"}
+            : {detail.petugas_jabatan || "-"}
           </ContentLayout>
           <ContentLayout title="c. Alamat">
-            : {detail.alamat || "-"}
+            : {detail.petugas_alamat || "-"}
           </ContentLayout>
 
           <Divider sx={{ mt: 2 }} />

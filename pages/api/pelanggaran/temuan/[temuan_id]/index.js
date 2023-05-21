@@ -64,12 +64,23 @@ export default handler()
       const result = await db
         .select(
           "pelanggaran_temuan.*",
-          "user.nama_admin",
-          "bawaslu.nama_bawaslu"
+          "admin.nama_admin",
+          "bawaslu.nama_bawaslu",
+          "petugas.nama_admin as petugas_nama",
+          "user_alamat.alamat as petugas_alamat",
+          "user_umum.jabatan as petugas_jabatan"
         )
         .from("pelanggaran_temuan")
-        .innerJoin("user", "user.id", "pelanggaran_temuan.user_id")
-        .innerJoin("bawaslu", "user.bawaslu_id", "bawaslu.id")
+        .join("user as admin", "admin.id", "=", "pelanggaran_temuan.user_id")
+        .join("bawaslu", "bawaslu.id", "=", "admin.bawaslu_id")
+        .join(
+          "user as petugas",
+          "petugas.id",
+          "=",
+          "pelanggaran_temuan.petugas_id"
+        )
+        .leftJoin("user_alamat", "petugas.id", "=", "user_alamat.user_id")
+        .leftJoin("user_umum", "petugas.id", "=", "user_umum.user_id")
         .where("pelanggaran_temuan.id", temuan_id)
         .whereIn(`pelanggaran_temuan.user_id`, req.subqueryPelanggaran)
         .first();
@@ -108,9 +119,7 @@ export default handler()
       // get post
       const {
         nomor,
-        nama,
-        jabatan,
-        alamat,
+        petugas,
         peristiwa,
         tempat_kejadian,
         tanggal_kejadian,
@@ -122,9 +131,7 @@ export default handler()
 
       const dataUpdate = {
         nomor: nomor || null,
-        nama: nama || null,
-        jabatan: jabatan || null,
-        alamat: alamat || null,
+        petugas_id: petugas.petugas_id,
         peristiwa: peristiwa || null,
         tempat_kejadian: tempat_kejadian || null,
         tanggal_kejadian: tanggal_kejadian
@@ -170,12 +177,20 @@ export default handler()
     try {
       const { temuan_id } = req.query;
 
-      const cek = await db
+      const getBukti = await db
         .select("file")
         .from("pelanggaran_bukti")
         .where("temuan_id", temuan_id);
 
-      const files = cek.map(function (value) {
+      const getBerkas = await db
+        .select("file")
+        .from("pelanggaran_berkas")
+        .where("temuan_id", temuan_id);
+
+      const bukti = getBukti.map(function (value) {
+        return value.file;
+      });
+      const berkas = getBerkas.map(function (value) {
         return value.file;
       });
 
@@ -185,7 +200,8 @@ export default handler()
       if (!proses)
         return res.status(400).json({ message: "Gagal Hapus", type: "error" });
 
-      DeleteUpload("./public/lapor", files);
+      DeleteUpload("./public/pelanggaran/bukti", bukti);
+      DeleteUpload("./public/pelanggaran/berkas", berkas);
 
       res.json({ message: "Berhasil Hapus", type: "success" });
     } catch (error) {

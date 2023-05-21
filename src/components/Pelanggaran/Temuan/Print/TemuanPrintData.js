@@ -86,19 +86,19 @@ const TemuanPrintData = React.forwardRef(({ detail }, ref) => {
               <TableRow>
                 <TableCell>a. Nama</TableCell>
                 <TableCell>
-                  : <b>{detail?.nama}</b>
+                  : <b>{detail?.petugas_nama}</b>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>b. Jabatan</TableCell>
                 <TableCell>
-                  : <b>{detail?.jabatan}</b>
+                  : <b>{detail?.petugas_jabatan}</b>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>c. Alamat</TableCell>
                 <TableCell>
-                  : <b>{detail?.alamat}</b>
+                  : <b>{detail?.petugas_alamat}</b>
                 </TableCell>
               </TableRow>
 

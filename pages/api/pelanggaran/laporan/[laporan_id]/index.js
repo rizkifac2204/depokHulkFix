@@ -263,12 +263,20 @@ export default handler()
     try {
       const { laporan_id } = req.query;
 
-      const cek = await db
+      const getBukti = await db
         .select("file")
         .from("pelanggaran_bukti")
         .where("laporan_id", laporan_id);
 
-      const files = cek.map(function (value) {
+      const getBerkas = await db
+        .select("file")
+        .from("pelanggaran_berkas")
+        .where("laporan_id", laporan_id);
+
+      const bukti = getBukti.map(function (value) {
+        return value.file;
+      });
+      const berkas = getBerkas.map(function (value) {
         return value.file;
       });
 
@@ -278,7 +286,8 @@ export default handler()
       if (!proses)
         return res.status(400).json({ message: "Gagal Hapus", type: "error" });
 
-      DeleteUpload("./public/lapor", files);
+      DeleteUpload("./public/pelanggaran/bukti", bukti);
+      DeleteUpload("./public/pelanggaran/berkas", berkas);
 
       res.json({ message: "Berhasil Hapus", type: "success" });
     } catch (error) {

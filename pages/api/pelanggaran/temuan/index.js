@@ -62,12 +62,23 @@ export default handler()
       const result = await db
         .select(
           "pelanggaran_temuan.*",
-          "user.nama_admin",
-          "bawaslu.nama_bawaslu"
+          "admin.nama_admin",
+          "bawaslu.nama_bawaslu",
+          "petugas.nama_admin as petugas_nama",
+          "user_alamat.alamat as petugas_alamat",
+          "user_umum.jabatan as petugas_jabatan"
         )
         .from("pelanggaran_temuan")
-        .innerJoin("user", "user.id", "pelanggaran_temuan.user_id")
-        .innerJoin("bawaslu", "user.bawaslu_id", "bawaslu.id")
+        .join("user as admin", "admin.id", "=", "pelanggaran_temuan.user_id")
+        .join("bawaslu", "bawaslu.id", "=", "admin.bawaslu_id")
+        .join(
+          "user as petugas",
+          "petugas.id",
+          "=",
+          "pelanggaran_temuan.petugas_id"
+        )
+        .leftJoin("user_alamat", "petugas.id", "=", "user_alamat.user_id")
+        .leftJoin("user_umum", "petugas.id", "=", "user_umum.user_id")
         .whereIn(`pelanggaran_temuan.user_id`, req.subqueryPelanggaran);
 
       res.json(result);
@@ -86,9 +97,7 @@ export default handler()
       // get post
       const {
         nomor,
-        nama,
-        jabatan,
-        alamat,
+        petugas,
         peristiwa,
         tempat_kejadian,
         tanggal_kejadian,
@@ -100,10 +109,8 @@ export default handler()
       const proses = await db("pelanggaran_temuan").insert([
         {
           user_id,
+          petugas_id: petugas.petugas_id,
           nomor: nomor || null,
-          nama: nama || null,
-          jabatan: jabatan || null,
-          alamat: alamat || null,
           peristiwa: peristiwa || null,
           tempat_kejadian: tempat_kejadian || null,
           tanggal_kejadian: tanggal_kejadian

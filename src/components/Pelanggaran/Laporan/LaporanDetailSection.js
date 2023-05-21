@@ -18,8 +18,10 @@ import SectionBukti from "../Components/SectionBukti";
 export default function LaporanDetailSection({ detail, invalidateQueries }) {
   return (
     <CustomCard
-      title={`Detail Laporan`}
-      caption={`Rincian Laporan Nomor ${detail.nomor}`}
+      title={`Detail Laporan Nomor ${detail.nomor}`}
+      caption={`Dibuat Oleh ${detail.nama_admin} - ${formatedDate(
+        detail.created_at
+      )}`}
       showDivider={true}
     >
       <Grid container mt={4}>

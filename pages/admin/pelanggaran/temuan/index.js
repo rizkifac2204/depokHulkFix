@@ -84,12 +84,12 @@ function Temuan() {
       minWidth: 180,
     },
     {
-      field: "nama",
+      field: "petugas_nama",
       headerName: "Nama Petugas",
       minWidth: 200,
     },
     {
-      field: "jabatan",
+      field: "petugas_jabatan",
       headerName: "Jabatan",
       minWidth: 200,
     },

@@ -6,7 +6,6 @@ import axios from "axios";
 
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -650,8 +649,6 @@ function LaporanFormAdd() {
             </FormControl>
           </ContentLayout>
         </Box>
-
-        <Divider sx={{ my: 5 }} />
 
         {/* Laporan  */}
         <Box>

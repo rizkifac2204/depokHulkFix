@@ -6,18 +6,12 @@ import axios from "axios";
 
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import FormHelperText from "@mui/material/FormHelperText";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
 import Alert from "@mui/material/Alert";
-import RadioGroup from "@mui/material/RadioGroup";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 
 // components
@@ -26,9 +20,7 @@ import ContentLayout from "components/GlobalComponents/ContentLayout";
 const validationSchema = yup.object({
   nomor: yup.string().required("Harus Diisi"),
   // penemu
-  nama: yup.string().required("Harus Diisi"),
-  jabatan: yup.string().required("Harus Diisi"),
-  alamat: yup.string().required("Harus Diisi"),
+  petugas: yup.object().required("Harus Diisi").nullable(),
   // peristiwa
   peristiwa: yup.string().required("Harus Diisi"),
   tempat_kejadian: yup.string().required("Harus Diisi"),
@@ -61,7 +53,7 @@ function TemuanFormAdd() {
   const formik = useFormik({
     initialValues: {
       nomor: "",
-      nama: "",
+      petugas: null,
       jabatan: "",
       alamat: "",
       peristiwa: "",
@@ -84,6 +76,34 @@ function TemuanFormAdd() {
     onSubmit: (values, { setSubmitting }) =>
       handleSubmit(values, setSubmitting),
   });
+
+  // GET PETUGAS
+  const {
+    data: petugas,
+    isError: isErrorPetugas,
+    isLoading: isLoadingPetugas,
+    isFetching: isFetchingPetugas,
+  } = useQuery({
+    initialData: [],
+    queryKey: ["petugas"],
+    queryFn: ({ signal }) =>
+      axios
+        .get(`/api/pelanggaran/temuan/petugas`, { signal })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw new Error(err.response.data.message);
+        }),
+  });
+
+  function setAutoValue(newValue) {
+    if (newValue !== null) {
+      formik.setFieldValue("jabatan", newValue.jabatan || "-");
+      formik.setFieldValue("alamat", newValue.alamat || "-");
+    } else {
+      formik.setFieldValue("jabatan", "");
+      formik.setFieldValue("alamat", "");
+    }
+  }
 
   return (
     <div className="hk-general-settings">
@@ -113,25 +133,83 @@ function TemuanFormAdd() {
           <Box mb={3}>
             <ContentLayout title="Nama *">
               <FormControl fullWidth>
-                <TextField
-                  required
-                  variant="standard"
-                  name="nama"
-                  value={formik.values.nama}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.nama && Boolean(formik.errors.nama)}
-                  helperText={formik.touched.nama && formik.errors.nama}
+                <Autocomplete
+                  value={formik.values.petugas}
+                  onChange={(event, newValue) => {
+                    if (typeof newValue === "string") {
+                      formik.setFieldValue("petugas", null);
+                    } else if (newValue && newValue.inputValue) {
+                      // Create a new value from the user input
+                      formik.setFieldValue("petugas", null);
+                    } else {
+                      formik.setFieldValue("petugas", newValue);
+                      setAutoValue(newValue);
+                    }
+                  }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+
+                    const { inputValue } = params;
+                    // Suggest the creation of a new value
+                    const isExisting = options.some(
+                      (option) => inputValue === option.nama
+                    );
+                    if (inputValue !== "" && !isExisting) {
+                      filtered.push({
+                        inputValue,
+                        nama: `Tidak Ditemukan Petugas ${inputValue}`,
+                      });
+                    }
+
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="petugas"
+                  options={petugas ? petugas : []}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    if (typeof option === "string") {
+                      return option;
+                    }
+                    // Add "xxx" option created dynamically
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.nama;
+                  }}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.id ? option.id : 0}>
+                      {option.nama}
+                    </li>
+                  )}
+                  // sx={{ width: 300 }}
+                  freeSolo
+                  renderInput={(params) => (
+                    <TextField
+                      required
+                      {...params}
+                      variant="standard"
+                      helperText={
+                        formik.touched.petugas && formik.errors.petugas
+                      }
+                      error={
+                        formik.touched.petugas && Boolean(formik.errors.petugas)
+                      }
+                    />
+                  )}
                 />
               </FormControl>
             </ContentLayout>
           </Box>
           {/* input jabatan  */}
           <Box mb={3}>
-            <ContentLayout title="Jabatan *">
+            <ContentLayout title="Jabatan">
               <FormControl fullWidth>
                 <TextField
-                  required
+                  disabled
                   variant="standard"
                   name="jabatan"
                   value={formik.values.jabatan}
@@ -147,10 +225,10 @@ function TemuanFormAdd() {
           </Box>
           {/* input alamat  */}
           <Box mb={3}>
-            <ContentLayout title="Alamat *">
+            <ContentLayout title="Alamat">
               <FormControl fullWidth>
                 <TextField
-                  required
+                  disabled
                   multiline
                   variant="standard"
                   name="alamat"
@@ -392,8 +470,6 @@ function TemuanFormAdd() {
             </FormControl>
           </ContentLayout>
         </Box>
-
-        <Divider sx={{ my: 5 }} />
 
         {/* submit  */}
         <Box mb={3}>

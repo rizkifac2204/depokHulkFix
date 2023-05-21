@@ -1,17 +1,18 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 
 // components
 import ContentLayout from "components/GlobalComponents/ContentLayout";
@@ -19,9 +20,7 @@ import ContentLayout from "components/GlobalComponents/ContentLayout";
 const validationSchema = yup.object({
   nomor: yup.string().required("Harus Diisi"),
   // penemu
-  nama: yup.string().required("Harus Diisi"),
-  jabatan: yup.string().required("Harus Diisi"),
-  alamat: yup.string().required("Harus Diisi"),
+  petugas: yup.object().required("Harus Diisi").nullable(),
   // peristiwa
   peristiwa: yup.string().required("Harus Diisi"),
   tempat_kejadian: yup.string().required("Harus Diisi"),
@@ -48,14 +47,46 @@ const handleSubmit = (values, setSubmitting, id) => {
     });
 };
 
+const filter = createFilterOptions();
+
 function TemuanFormEdit({ detail }) {
+  // GET PETUGAS
+  const {
+    data: petugas,
+    isError: isErrorPetugas,
+    isLoading: isLoadingPetugas,
+    isFetching: isFetchingPetugas,
+  } = useQuery({
+    initialData: [],
+    queryKey: ["petugas"],
+    queryFn: ({ signal }) =>
+      axios
+        .get(`/api/pelanggaran/temuan/petugas`, { signal })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw new Error(err.response.data.message);
+        }),
+  });
+
+  function setAutoValue(newValue) {
+    if (newValue !== null) {
+      formik.setFieldValue("jabatan", newValue.jabatan || "-");
+      formik.setFieldValue("alamat", newValue.alamat || "-");
+    } else {
+      formik.setFieldValue("jabatan", "");
+      formik.setFieldValue("alamat", "");
+    }
+  }
+
   const formik = useFormik({
     initialValues: detail
       ? {
           nomor: detail.nomor ? detail.nomor : "",
-          nama: detail.nama ? detail.nama : "",
-          jabatan: detail.jabatan ? detail.jabatan : "",
-          alamat: detail.alamat ? detail.alamat : "",
+          petugas: petugas
+            ? petugas.find((x) => x.petugas_id === detail.petugas_id)
+            : null,
+          jabatan: detail.petugas_jabatan ? detail.petugas_jabatan : "",
+          alamat: detail.petugas_alamat ? detail.petugas_alamat : "",
           peristiwa: detail.peristiwa ? detail.peristiwa : "",
           tempat_kejadian: detail.tempat_kejadian ? detail.tempat_kejadian : "",
           tanggal_kejadian: detail.tanggal_kejadian
@@ -110,7 +141,7 @@ function TemuanFormEdit({ detail }) {
         }
       : {
           nomor: "",
-          nama: "",
+          petugas: null,
           jabatan: "",
           alamat: "",
           peristiwa: "",
@@ -168,27 +199,90 @@ function TemuanFormEdit({ detail }) {
           <h3>1. Data Pengawas yang menemukan:</h3>
           {/* input nama  */}
           <Box mb={3}>
-            <ContentLayout title="Nama *">
-              <FormControl fullWidth>
-                <TextField
-                  required
-                  variant="standard"
-                  name="nama"
-                  value={formik.values.nama}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.nama && Boolean(formik.errors.nama)}
-                  helperText={formik.touched.nama && formik.errors.nama}
-                />
-              </FormControl>
+            <ContentLayout title="Nama Petugas *">
+              {isLoadingPetugas && "Loading..."}
+              {isErrorPetugas && "Gagal Mengambil Data"}
+              {petugas ? (
+                <FormControl fullWidth>
+                  <Autocomplete
+                    value={formik.values.petugas || null}
+                    onChange={(event, newValue) => {
+                      if (typeof newValue === "string") {
+                        formik.setFieldValue("petugas", null);
+                      } else if (newValue && newValue.inputValue) {
+                        // Create a new value from the user input
+                        formik.setFieldValue("petugas", null);
+                      } else {
+                        formik.setFieldValue("petugas", newValue);
+                        setAutoValue(newValue);
+                      }
+                    }}
+                    filterOptions={(options, params) => {
+                      const filtered = filter(options, params);
+
+                      const { inputValue } = params;
+                      // Suggest the creation of a new value
+                      const isExisting = options.some(
+                        (option) => inputValue === option.nama
+                      );
+                      if (inputValue !== "" && !isExisting) {
+                        filtered.push({
+                          inputValue,
+                          nama: `Tidak Ditemukan Petugas ${inputValue}`,
+                        });
+                      }
+
+                      return filtered;
+                    }}
+                    selectOnFocus
+                    clearOnBlur
+                    handleHomeEndKeys
+                    id="petugas"
+                    options={petugas ? petugas : []}
+                    getOptionLabel={(option) => {
+                      // Value selected with enter, right from the input
+                      if (typeof option === "string") {
+                        return option;
+                      }
+                      // Add "xxx" option created dynamically
+                      if (option.inputValue) {
+                        return option.inputValue;
+                      }
+                      // Regular option
+                      return option.nama;
+                    }}
+                    renderOption={(props, option) => (
+                      <li {...props} key={option.id ? option.id : 0}>
+                        {option.nama}
+                      </li>
+                    )}
+                    // sx={{ width: 300 }}
+                    freeSolo
+                    renderInput={(params) => (
+                      <TextField
+                        required
+                        {...params}
+                        variant="standard"
+                        helperText={
+                          formik.touched.petugas && formik.errors.petugas
+                        }
+                        error={
+                          formik.touched.petugas &&
+                          Boolean(formik.errors.petugas)
+                        }
+                      />
+                    )}
+                  />
+                </FormControl>
+              ) : null}
             </ContentLayout>
           </Box>
           {/* input jabatan  */}
           <Box mb={3}>
-            <ContentLayout title="Jabatan *">
+            <ContentLayout title="Jabatan">
               <FormControl fullWidth>
                 <TextField
-                  required
+                  disabled
                   variant="standard"
                   name="jabatan"
                   value={formik.values.jabatan}
@@ -204,10 +298,10 @@ function TemuanFormEdit({ detail }) {
           </Box>
           {/* input alamat  */}
           <Box mb={3}>
-            <ContentLayout title="Alamat *">
+            <ContentLayout title="Alamat">
               <FormControl fullWidth>
                 <TextField
-                  required
+                  disabled
                   multiline
                   variant="standard"
                   name="alamat"
@@ -463,8 +557,6 @@ function TemuanFormEdit({ detail }) {
             </FormControl>
           </ContentLayout>
         </Box>
-
-        <Divider sx={{ my: 5 }} />
 
         {/* submit  */}
         <Box mb={3}>
