@@ -1,21 +1,16 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import Head from "next/head";
 
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import Backdrop from "@mui/material/Backdrop";
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
-
-import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import ZoomInOutlinedIcon from "@mui/icons-material/ZoomInOutlined";
-import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
-import UndoOutlinedIcon from "@mui/icons-material/UndoOutlined";
+import Snackbar from "@mui/material/Snackbar";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -25,219 +20,193 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import SmallTitleBar from "components/GlobalComponents/PageTitleBar/SmallTitleBar";
+import { formatedDate, getTime } from "utils/formatDate";
+import NotesPerDate from "components/Notes/Components/NotesPerDate";
 
 function NotesPublic() {
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const [detail, setDetail] = useState({});
+  const [snack, setSnack] = useState({
+    open: false,
+    message: null,
+    severity: null,
+    key: new Date().getTime(),
+  });
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleOpen = (data) => {
+    setDetail(data);
+    setTimeout(() => {
+      setOpen(true);
+    });
   };
   const handleClose = () => {
-    setOpen(false);
+    setDetail({});
+    setTimeout(() => {
+      setOpen(false);
+    });
   };
+
+  const {
+    data: notes,
+    isError,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["notes", "public"],
+    queryFn: ({ signal }) =>
+      axios
+        .get(`/api/notes/public`, { signal })
+        .then((res) => res.data)
+        .catch((err) => {
+          throw new Error(err.response.data.message);
+        }),
+  });
+
+  const groups = notes
+    ? notes.reduce((groups, note) => {
+        const date = note.created_at.split("T")[0];
+        if (!groups[date]) {
+          groups[date] = [];
+        }
+        groups[date].push(note);
+        return groups;
+      }, {})
+    : [];
+
+  const notesPerDate = Object.keys(groups).map((date) => {
+    return {
+      date,
+      notes: groups[date],
+    };
+  });
+
+  function handleDelete(id) {
+    const ask = confirm("Yakin Hapus Data?");
+    if (ask) {
+      axios
+        .delete(`/api/notes/${id}`)
+        .then((res) => {
+          setSnack({
+            open: true,
+            message: res.data.message,
+            severity: "warning",
+            key: new Date().getTime(),
+          });
+          queryClient.invalidateQueries(["notes", "public"]);
+        })
+        .catch((err) => {
+          console.log(err);
+          const msg = err?.response?.data?.message
+            ? err.response.data.message
+            : "Gagal Proses";
+          setSnack({
+            open: true,
+            message: msg,
+            severity: "error",
+            key: new Date().getTime(),
+          });
+        });
+    }
+  }
+
+  function toggleShare(data) {
+    axios
+      .put(`/api/notes/${data.id}`, data)
+      .then((res) => {
+        setSnack({
+          open: true,
+          message: res.data.message,
+          severity: "success",
+          key: new Date().getTime(),
+        });
+        queryClient.invalidateQueries(["notes", "public"]);
+      })
+      .catch((err) => {
+        console.log(err);
+        const msg = err?.response?.data?.message
+          ? err.response.data.message
+          : "Gagal Proses";
+        setSnack({
+          open: true,
+          message: msg,
+          severity: "error",
+          key: new Date().getTime(),
+        });
+      });
+  }
+
+  async function copyTextToClipboard(text) {
+    if ("clipboard" in navigator) {
+      return await navigator.clipboard.writeText(text);
+    } else {
+      return document.execCommand("copy", true, text);
+    }
+  }
+
+  function handleCopy(id) {
+    const url =
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:3000/notes/${id}`
+        : `${process.env.NEXT_PUBLIC_HOST}/notes/${id}`;
+    copyTextToClipboard(url)
+      .then(() => {
+        setSnack({
+          open: true,
+          message: "Copied",
+          severity: "success",
+          key: new Date().getTime(),
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  if (isLoading)
+    return (
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={true}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
+
+  if (isError)
+    return (
+      <Alert
+        sx={{ mt: 2 }}
+        severity="error"
+      >{`An error has occurred: ${error.message}`}</Alert>
+    );
+
   return (
     <div>
       <Head>
-        <title>{`Catatan Publik - Bawaslu Depok Apps`}</title>
+        <title>{`Catatan Pribadi - Bawaslu Depok Apps`}</title>
       </Head>
       <SmallTitleBar title="Catatan Publik" />
       <Container maxWidth={false} sx={{ mt: 2 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography gutterBottom variant="h5" component="div">
-              21 Januari 2023
-            </Typography>
-            <Divider />
-          </Grid>
+        <Box>
+          {notes && notes.length === 0 ? (
+            <Alert sx={{ mt: 2 }} severity="info">
+              Anda Belum Mempunyai Catatan
+            </Alert>
+          ) : null}
 
-          <Grid item xs={12} sm={4} md={3}>
-            <Card>
-              <CardContent>
-                <Box display="flex" justifyContent="flex-end">
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Pukul 10:30
-                  </Typography>
-                </Box>
-
-                <Typography gutterBottom variant="h5" component="div">
-                  Judul
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Isi Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari
-                  Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi
-                  Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari
-                  Catatan ...
-                </Typography>
-
-                <Divider sx={{ mb: 2 }} />
-
-                <Typography variant="caption" gutterBottom>
-                  Fazri M Fahmi - Kecamatan Bojongsari
-                </Typography>
-              </CardContent>
-              <CardActions disableSpacing sx={{ py: 0 }}>
-                <IconButton aria-label="copy link">
-                  <ContentCopyOutlinedIcon />
-                </IconButton>
-                <IconButton
-                  aria-label="share"
-                  sx={{ marginLeft: "auto" }}
-                  onClick={handleClickOpen}
-                >
-                  <ZoomInOutlinedIcon />
-                </IconButton>
-              </CardActions>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={4} md={3}>
-            <Card>
-              <CardContent>
-                <Box display="flex" justifyContent="flex-end">
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Pukul 10:30
-                  </Typography>
-                </Box>
-
-                <Typography gutterBottom variant="h5" component="div">
-                  Judul
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Isi Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari
-                  Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi
-                  Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari
-                  Catatan ...
-                </Typography>
-
-                <Divider sx={{ mb: 2 }} />
-
-                <Typography variant="caption" gutterBottom>
-                  Fazri M Fahmi - Kecamatan Bojongsari
-                </Typography>
-              </CardContent>
-              <CardActions disableSpacing sx={{ py: 0 }}>
-                <IconButton aria-label="delete">
-                  <DeleteForeverOutlinedIcon />
-                </IconButton>
-                <IconButton aria-label="delete">
-                  <UndoOutlinedIcon />
-                </IconButton>
-                <IconButton aria-label="copy link">
-                  <ContentCopyOutlinedIcon />
-                </IconButton>
-                <IconButton
-                  aria-label="share"
-                  sx={{ marginLeft: "auto" }}
-                  onClick={handleClickOpen}
-                >
-                  <ZoomInOutlinedIcon />
-                </IconButton>
-              </CardActions>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={4} md={3}>
-            <Card>
-              <CardContent>
-                <Box display="flex" justifyContent="flex-end">
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Pukul 10:30
-                  </Typography>
-                </Box>
-
-                <Typography gutterBottom variant="h5" component="div">
-                  Judul
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Isi Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari
-                  Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi
-                  Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari
-                  Catatan ...
-                </Typography>
-
-                <Divider sx={{ mb: 2 }} />
-
-                <Typography variant="caption" gutterBottom>
-                  Fazri M Fahmi - Kecamatan Bojongsari
-                </Typography>
-              </CardContent>
-              <CardActions disableSpacing sx={{ py: 0 }}>
-                <IconButton aria-label="copy link">
-                  <ContentCopyOutlinedIcon />
-                </IconButton>
-                <IconButton
-                  aria-label="share"
-                  sx={{ marginLeft: "auto" }}
-                  onClick={handleClickOpen}
-                >
-                  <ZoomInOutlinedIcon />
-                </IconButton>
-              </CardActions>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={4} md={3}>
-            <Card>
-              <CardContent>
-                <Box display="flex" justifyContent="flex-end">
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Pukul 10:30
-                  </Typography>
-                </Box>
-
-                <Typography gutterBottom variant="h5" component="div">
-                  Judul
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Isi Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari
-                  Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi
-                  Dari Catatan Isi Dari Catatan Isi Dari Catatan Isi Dari
-                  Catatan ...
-                </Typography>
-
-                <Divider sx={{ mb: 2 }} />
-
-                <Typography variant="caption" gutterBottom>
-                  Fazri M Fahmi - Kecamatan Bojongsari
-                </Typography>
-              </CardContent>
-              <CardActions disableSpacing sx={{ py: 0 }}>
-                <IconButton aria-label="delete">
-                  <DeleteForeverOutlinedIcon />
-                </IconButton>
-                <IconButton aria-label="delete">
-                  <UndoOutlinedIcon />
-                </IconButton>
-                <IconButton aria-label="copy link">
-                  <ContentCopyOutlinedIcon />
-                </IconButton>
-                <IconButton
-                  aria-label="share"
-                  sx={{ marginLeft: "auto" }}
-                  onClick={handleClickOpen}
-                >
-                  <ZoomInOutlinedIcon />
-                </IconButton>
-              </CardActions>
-            </Card>
-          </Grid>
-        </Grid>
+          {notesPerDate.map((item, idx) => (
+            <Fragment key={idx}>
+              <NotesPerDate
+                data={item}
+                handleDelete={handleDelete}
+                toggleShare={toggleShare}
+                handleCopy={handleCopy}
+                handleOpen={handleOpen}
+              />
+            </Fragment>
+          ))}
+        </Box>
       </Container>
 
       <Dialog
@@ -246,24 +215,57 @@ function NotesPublic() {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Judul Catatan"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} autoFocus>
-            Close
-          </Button>
-        </DialogActions>
+        {Object.keys(detail).length !== 0 ? (
+          <>
+            <DialogTitle id="alert-dialog-title">
+              {detail.judul || "-"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {detail.catatan}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+              }}
+            >
+              <Box sx={{ m: 2 }}>
+                <Typography variant="caption" gutterBottom>
+                  Oleh : {detail.nama_admin} - {detail.nama_bawaslu}
+                </Typography>
+                <br />
+                <Typography variant="caption" gutterBottom>
+                  {formatedDate(detail.created_at, true)} {" Pukul "}
+                  {getTime(detail.created_at)}
+                </Typography>
+              </Box>
+              <Button onClick={handleClose} autoFocus>
+                Tutup
+              </Button>
+            </DialogActions>
+          </>
+        ) : null}
       </Dialog>
+
+      <Snackbar
+        key={snack?.key ? snack.key : undefined}
+        open={snack?.open}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        autoHideDuration={2000}
+        onClose={(event, reason) => {
+          if (reason === "clickaway") {
+            return;
+          }
+          setSnack((prev) => ({ ...prev, open: false }));
+        }}
+      >
+        <Alert severity={snack?.severity} sx={{ width: "100%" }}>
+          {snack?.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

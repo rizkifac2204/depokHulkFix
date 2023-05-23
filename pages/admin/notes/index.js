@@ -8,20 +8,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import Backdrop from "@mui/material/Backdrop";
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
 import Snackbar from "@mui/material/Snackbar";
-
-import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import ZoomInOutlinedIcon from "@mui/icons-material/ZoomInOutlined";
-import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
+import Chip from "@mui/material/Chip";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -32,13 +22,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import SmallTitleBar from "components/GlobalComponents/PageTitleBar/SmallTitleBar";
 import { formatedDate, getTime } from "utils/formatDate";
-
-function truncateString(str, num = 100) {
-  if (str.length <= num) {
-    return str;
-  }
-  return str.slice(0, num) + "...";
-}
+import NotesPerDate from "components/Notes/Components/NotesPerDate";
 
 function Notes() {
   const queryClient = useQueryClient();
@@ -47,10 +31,11 @@ function Notes() {
   const [snack, setSnack] = useState({
     open: false,
     message: null,
-    severity: "success",
+    severity: null,
+    key: new Date().getTime(),
   });
 
-  const handleClickOpen = (data) => {
+  const handleOpen = (data) => {
     setDetail(data);
     setTimeout(() => {
       setOpen(true);
@@ -79,6 +64,24 @@ function Notes() {
         }),
   });
 
+  const groups = notes
+    ? notes.reduce((groups, note) => {
+        const date = note.created_at.split("T")[0];
+        if (!groups[date]) {
+          groups[date] = [];
+        }
+        groups[date].push(note);
+        return groups;
+      }, {})
+    : [];
+
+  const notesPerDate = Object.keys(groups).map((date) => {
+    return {
+      date,
+      notes: groups[date],
+    };
+  });
+
   function handleDelete(id) {
     const ask = confirm("Yakin Hapus Data?");
     if (ask) {
@@ -89,6 +92,7 @@ function Notes() {
             open: true,
             message: res.data.message,
             severity: "warning",
+            key: new Date().getTime(),
           });
           queryClient.invalidateQueries(["notes"]);
         })
@@ -97,12 +101,17 @@ function Notes() {
           const msg = err?.response?.data?.message
             ? err.response.data.message
             : "Gagal Proses";
-          setSnack({ open: true, message: msg, severity: "error" });
+          setSnack({
+            open: true,
+            message: msg,
+            severity: "error",
+            key: new Date().getTime(),
+          });
         });
     }
   }
 
-  function handleToggleShare(data) {
+  function toggleShare(data) {
     axios
       .put(`/api/notes/${data.id}`, data)
       .then((res) => {
@@ -110,6 +119,7 @@ function Notes() {
           open: true,
           message: res.data.message,
           severity: "success",
+          key: new Date().getTime(),
         });
         queryClient.invalidateQueries(["notes"]);
       })
@@ -118,12 +128,40 @@ function Notes() {
         const msg = err?.response?.data?.message
           ? err.response.data.message
           : "Gagal Proses";
-        setSnack({ open: true, message: msg, severity: "error" });
+        setSnack({
+          open: true,
+          message: msg,
+          severity: "error",
+          key: new Date().getTime(),
+        });
       });
   }
 
+  async function copyTextToClipboard(text) {
+    if ("clipboard" in navigator) {
+      return await navigator.clipboard.writeText(text);
+    } else {
+      return document.execCommand("copy", true, text);
+    }
+  }
+
   function handleCopy(id) {
-    console.log(id);
+    const url =
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:3000/notes/${id}`
+        : `${process.env.NEXT_PUBLIC_HOST}/notes/${id}`;
+    copyTextToClipboard(url)
+      .then(() => {
+        setSnack({
+          open: true,
+          message: "Copied",
+          severity: "success",
+          key: new Date().getTime(),
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   if (isLoading)
@@ -151,76 +189,25 @@ function Notes() {
       </Head>
       <SmallTitleBar title="Catatan Pribadi" />
       <Container maxWidth={false} sx={{ mt: 2 }}>
-        <Grid container spacing={2}>
-          {notes.map((item) => (
-            <Fragment key={item.tanggal}>
-              <Grid item xs={12}>
-                <Typography gutterBottom variant="h5" component="div">
-                  {formatedDate(item.tanggal, true)}
-                </Typography>
-                <Divider />
-              </Grid>
-              {item.listdata.map((data, idx) => (
-                <Grid item xs={12} sm={4} md={3} key={idx}>
-                  <Card>
-                    <CardContent>
-                      <Box display="flex" justifyContent="flex-end">
-                        <Typography
-                          variant="caption"
-                          color="text.secondary"
-                          gutterBottom
-                        >
-                          {getTime(data.created_at)}
-                        </Typography>
-                      </Box>
+        <Box>
+          {notes && notes.length === 0 ? (
+            <Alert sx={{ mt: 2 }} severity="info">
+              Anda Belum Mempunyai Catatan
+            </Alert>
+          ) : null}
 
-                      <Typography gutterBottom variant="h5" component="div">
-                        {data.judul || "-"}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {truncateString(data.catatan)}
-                      </Typography>
-                      <Divider sx={{ mb: 1 }} />
-
-                      <Typography variant="caption" gutterBottom>
-                        {data.nama_admin} - {data.nama_bawaslu}
-                      </Typography>
-                    </CardContent>
-                    <CardActions disableSpacing sx={{ py: 0 }}>
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => handleDelete(data.id)}
-                      >
-                        <DeleteForeverOutlinedIcon />
-                      </IconButton>
-                      <IconButton
-                        aria-label="share"
-                        onClick={() => handleToggleShare(data)}
-                      >
-                        <ShareOutlinedIcon
-                          color={Boolean(data.share) ? "secondary" : ""}
-                        />
-                      </IconButton>
-                      <IconButton
-                        aria-label="copy link"
-                        onClick={() => handleCopy(data.id)}
-                      >
-                        <ContentCopyOutlinedIcon />
-                      </IconButton>
-                      <IconButton
-                        aria-label="share"
-                        sx={{ marginLeft: "auto" }}
-                        onClick={() => handleClickOpen(data)}
-                      >
-                        <ZoomInOutlinedIcon />
-                      </IconButton>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
+          {notesPerDate.map((item, idx) => (
+            <Fragment key={idx}>
+              <NotesPerDate
+                data={item}
+                handleDelete={handleDelete}
+                toggleShare={toggleShare}
+                handleCopy={handleCopy}
+                handleOpen={handleOpen}
+              />
             </Fragment>
           ))}
-        </Grid>
+        </Box>
       </Container>
 
       <Dialog
@@ -255,8 +242,13 @@ function Notes() {
                   {formatedDate(detail.created_at, true)} {" Pukul "}
                   {getTime(detail.created_at)}
                   <br />
-                  {Boolean(detail.share) ? "Dibagikan" : "Pribadi"}
                 </Typography>
+                <Chip
+                  size="small"
+                  variant="outlined"
+                  label={Boolean(detail.share) ? "Dibagikan" : "Pribadi"}
+                  {...(Boolean(detail.share) && { color: "secondary" })}
+                />
               </Box>
               <Button onClick={handleClose} autoFocus>
                 Tutup
@@ -267,21 +259,19 @@ function Notes() {
       </Dialog>
 
       <Snackbar
-        open={snack.open}
+        key={snack?.key ? snack.key : undefined}
+        open={snack?.open}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         autoHideDuration={2000}
-        onClose={() => {
-          setSnack({ open: false, message: null });
+        onClose={(event, reason) => {
+          if (reason === "clickaway") {
+            return;
+          }
+          setSnack((prev) => ({ ...prev, open: false }));
         }}
       >
-        <Alert
-          onClose={() => {
-            setSnack({ open: false, message: null });
-          }}
-          severity={snack.severity}
-          sx={{ width: "100%" }}
-        >
-          {snack.message}
+        <Alert severity={snack?.severity} sx={{ width: "100%" }}>
+          {snack?.message}
         </Alert>
       </Snackbar>
     </div>

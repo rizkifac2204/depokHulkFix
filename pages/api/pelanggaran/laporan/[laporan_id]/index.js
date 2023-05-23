@@ -3,7 +3,7 @@ import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 import moment from "moment";
 import { DeleteUpload } from "services/uploadService";
-import { subQueryFilterPelanggaran } from "middlewares/middlewarePelanggaran";
+import middlewareArrayUserAllowed from "middlewares/middlewareArrayUserAllowed";
 
 async function prosesPelapor(req) {
   return new Promise(async (resolve, reject) => {
@@ -130,7 +130,7 @@ async function prosesSimpanSaksi(req, laporan_id) {
 }
 
 export default handler()
-  .get(subQueryFilterPelanggaran, async (req, res) => {
+  .get(middlewareArrayUserAllowed, async (req, res) => {
     try {
       const { laporan_id } = req.query;
 
@@ -158,7 +158,7 @@ export default handler()
           "pelanggaran_laporan.pelapor_id"
         )
         .where("pelanggaran_laporan.id", laporan_id)
-        .whereIn(`pelanggaran_laporan.user_id`, req.subqueryPelanggaran)
+        .whereIn(`pelanggaran_laporan.user_id`, req.arrayUserAllowed)
         .first();
 
       if (!result)

@@ -1,9 +1,9 @@
 import db from "libs/db";
 import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
-import { subQueryFilterPelanggaran } from "middlewares/middlewarePelanggaran";
+import middlewareArrayUserAllowed from "middlewares/middlewareArrayUserAllowed";
 
-export default handler().get(subQueryFilterPelanggaran, async (req, res) => {
+export default handler().get(middlewareArrayUserAllowed, async (req, res) => {
   try {
     const { id: user_id, level } = req.session.user;
 
@@ -12,13 +12,13 @@ export default handler().get(subQueryFilterPelanggaran, async (req, res) => {
       .from("pelanggaran_temuan")
       .count("id", { as: "jumlah" })
       .whereNull("deleted_at")
-      .whereIn(`pelanggaran_temuan.user_id`, req.subqueryPelanggaran)
+      .whereIn(`pelanggaran_temuan.user_id`, req.arrayUserAllowed)
       .first();
 
     // terlapor
     const subqueryTerlapor = await db("pelanggaran_temuan")
       .whereNull("deleted_at")
-      .whereIn(`pelanggaran_temuan.user_id`, req.subqueryPelanggaran)
+      .whereIn(`pelanggaran_temuan.user_id`, req.arrayUserAllowed)
       .select("id");
     const terlapor = await db
       .from("pelanggaran_terlapor")

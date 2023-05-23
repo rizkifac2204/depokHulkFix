@@ -1,9 +1,9 @@
 import db from "libs/db";
 import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
-import { subQueryFilterPelanggaran } from "middlewares/middlewarePelanggaran";
+import middlewareArrayUserAllowed from "middlewares/middlewareArrayUserAllowed";
 
-export default handler().get(subQueryFilterPelanggaran, async (req, res) => {
+export default handler().get(middlewareArrayUserAllowed, async (req, res) => {
   try {
     const { id: user_id, level } = req.session.user;
 
@@ -12,20 +12,20 @@ export default handler().get(subQueryFilterPelanggaran, async (req, res) => {
       .from("pelanggaran_laporan")
       .count("id", { as: "jumlah" })
       .whereNull("deleted_at")
-      .whereIn(`pelanggaran_laporan.user_id`, req.subqueryPelanggaran)
+      .whereIn(`pelanggaran_laporan.user_id`, req.arrayUserAllowed)
       .first();
 
     // pelapor
     const pelapor = await db("pelanggaran_laporan")
       .select("pelapor_id")
       .count("id", { as: "jumlah" })
-      .whereIn(`pelanggaran_laporan.user_id`, req.subqueryPelanggaran)
+      .whereIn(`pelanggaran_laporan.user_id`, req.arrayUserAllowed)
       .groupBy("pelapor_id");
 
     // terlapor
     const subqueryTerlapor = await db("pelanggaran_laporan")
       .whereNull("deleted_at")
-      .whereIn(`pelanggaran_laporan.user_id`, req.subqueryPelanggaran)
+      .whereIn(`pelanggaran_laporan.user_id`, req.arrayUserAllowed)
       .select("id");
     const terlapor = await db
       .from("pelanggaran_terlapor")

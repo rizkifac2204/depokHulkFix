@@ -2,47 +2,24 @@ import db from "libs/db";
 import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 
-const getData = async (date) => {
-  const result = await db
-    .select(
-      "notes.*",
-      "user.nama_admin",
-      "level.nama_level",
-      "bawaslu.nama_bawaslu"
-    )
-    .from("notes")
-    .innerJoin("user", "notes.user_id", "user.id")
-    .innerJoin("bawaslu", "user.bawaslu_id", "bawaslu.id")
-    .innerJoin("level", "user.level_id", "level.id")
-    .where(db.raw("date(notes.created_at)"), date)
-    .orderBy("notes.created_at", "desc");
-
-  return result;
-};
-
 export default handler()
   .get(async (req, res) => {
     try {
       const { id: user_id } = req.session.user;
 
-      const data = await db
+      const result = await db
         .select(
-          db.raw("count(*) as jumlah"),
-          db.raw("date(created_at) as tanggal")
+          "notes.*",
+          "user.nama_admin",
+          "level.nama_level",
+          "bawaslu.nama_bawaslu"
         )
         .from("notes")
-        .where("user_id", user_id)
-        .groupBy(db.raw("date(created_at)"))
-        .orderBy("tanggal", "desc");
-
-      const result = await Promise.all(
-        data.map(async (item) => {
-          return {
-            ...item,
-            listdata: await getData(item.tanggal),
-          };
-        })
-      );
+        .innerJoin("user", "notes.user_id", "user.id")
+        .innerJoin("bawaslu", "user.bawaslu_id", "bawaslu.id")
+        .innerJoin("level", "user.level_id", "level.id")
+        .where("notes.user_id", user_id)
+        .orderBy("notes.created_at", "desc");
 
       res.json(result);
     } catch (error) {

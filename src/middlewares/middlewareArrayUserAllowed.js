@@ -1,7 +1,7 @@
 import db from "libs/db";
 import getLogger from "middlewares/getLogger";
 
-export async function subQueryFilterPelanggaran(req, res, next) {
+export default async function middlewareArrayUserAllowed(req, res, next) {
   try {
     const { id: user_id, level, bawaslu_id, verifikator } = req.session.user;
     const subquery = await db("user")
@@ -15,7 +15,7 @@ export async function subQueryFilterPelanggaran(req, res, next) {
           this.andWhere("level_id", ">", level);
         }
       });
-    req.subqueryPelanggaran = subquery.map((item) => item.id);
+    req.arrayUserAllowed = subquery.map((item) => item.id);
     next();
   } catch (err) {
     getLogger.error(err);

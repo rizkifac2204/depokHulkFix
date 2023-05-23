@@ -2,7 +2,7 @@ import db from "libs/db";
 import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
 import moment from "moment";
-import { subQueryFilterPelanggaran } from "middlewares/middlewarePelanggaran";
+import middlewareArrayUserAllowed from "middlewares/middlewareArrayUserAllowed";
 
 async function prosesSimpanTerlapor(req, temuan_id) {
   return new Promise(async (resolve, reject) => {
@@ -57,7 +57,7 @@ async function prosesSimpanSaksi(req, temuan_id) {
 }
 
 export default handler()
-  .get(subQueryFilterPelanggaran, async (req, res) => {
+  .get(middlewareArrayUserAllowed, async (req, res) => {
     try {
       const result = await db
         .select(
@@ -79,7 +79,7 @@ export default handler()
         )
         .leftJoin("user_alamat", "petugas.id", "=", "user_alamat.user_id")
         .leftJoin("user_umum", "petugas.id", "=", "user_umum.user_id")
-        .whereIn(`pelanggaran_temuan.user_id`, req.subqueryPelanggaran);
+        .whereIn(`pelanggaran_temuan.user_id`, req.arrayUserAllowed);
 
       res.json(result);
     } catch (error) {

@@ -1,39 +1,36 @@
 import db from "libs/db";
 import handler from "middlewares/handler";
 import getLogger from "middlewares/getLogger";
+import middlewareNotes from "middlewares/middlewareNotes";
+import middlewareArrayUserAllowed from "middlewares/middlewareArrayUserAllowed";
 
 export default handler()
-  .get(async (req, res) => {
+  .get(middlewareArrayUserAllowed, middlewareNotes, async (req, res) => {
     try {
-      const { id } = req.query;
+      if (!req.noteDetail)
+        return res
+          .status(404)
+          .json({ message: "Tidak Ditemukan", type: "error" });
 
-      const result = await db
-        .select(
-          "notes.*",
-          "user.nama_admin",
-          "level.nama_level",
-          "bawaslu.nama_bawaslu"
-        )
-        .from("notes")
-        .innerJoin("user", "notes.user_id", "user.id")
-        .innerJoin("bawaslu", "user.bawaslu_id", "bawaslu.id")
-        .innerJoin("level", "user.level_id", "level.id")
-        .where("notes.id", id)
-        .first();
-
-      res.json(result);
+      res.json(req.noteDetail);
     } catch (error) {
       getLogger.error(error);
       res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
     }
   })
-  .put(async (req, res) => {
+  .put(middlewareArrayUserAllowed, middlewareNotes, async (req, res) => {
     try {
-      const { id } = req.query;
+      const { note_id } = req.query;
+
+      // no akses
+      if (!req.noteDetail)
+        return res
+          .status(404)
+          .json({ message: "Tidak Ada Akses", type: "error" });
 
       // proses insert
       const proses = await db("notes")
-        .where("id", id)
+        .where("id", note_id)
         .update({
           share: db.raw("!share"),
         });
@@ -52,11 +49,17 @@ export default handler()
       res.status(500).json({ message: "Terjadi Kesalahan...", type: "error" });
     }
   })
-  .delete(async (req, res) => {
+  .delete(middlewareArrayUserAllowed, middlewareNotes, async (req, res) => {
     try {
-      const { id } = req.query;
+      const { note_id } = req.query;
 
-      const proses = await db("notes").where("id", id).del();
+      // no akses
+      if (!req.noteDetail)
+        return res
+          .status(404)
+          .json({ message: "Tidak Ada Akses", type: "error" });
+
+      const proses = await db("notes").where("id", note_id).del();
       if (!proses)
         return res.status(400).json({ message: "Gagal Hapus", type: "error" });
 
